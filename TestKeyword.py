@@ -19,17 +19,20 @@ debug_braces=False
 # Test -> if and else
 ################################################################################
 class TestKeyword_scope(unittest.TestCase):
-     pass
+    pass
 ##    def testdefinestament(self):
 ##        a='#define x 10'
 ##        """ #define
-##            /   \
-##           x    10"""
+##               |
+##               x
+##               |
+##               10"""
 ##        root=cparser.parse(a)
 ##        self.assertEqual(root.id,'#define')
 ##        x=root.first
 ##        self.assertEqual(valueof(x),'x')
-##        ten=root.second
+##        self.assertEqual(x.id,'constantidentifier')
+##        ten=x.constantidentifier
 ##        self.assertEqual(valueof(ten),'10')
 
 
@@ -1100,18 +1103,19 @@ class TestKeyword_switchcase(unittest.TestCase):
                 default    : z = 3 ; } '''
         """     swtich
                 /     \
-               (    case
-               |        |--case
-               |        |   / \
-               |        |  A   =
-              choice    |     / \
-                        |    x   1
-                        |--case
-                        |   / \
-                        |  B   =
+               (       {
+               |        |-case A
+               |        |
+               |        |---- =
+              choice    |    / \
+                        |   x   1
+                        |--case B
+                        |
+                        |------=
                         |     / \
                         |   y    2
-                        |- default - =
+                        |- default
+                        |------------=
                                     / \
                                    z    3"""
         root=cparser.parse(a)
@@ -1120,7 +1124,9 @@ class TestKeyword_switchcase(unittest.TestCase):
         choice=root.first
         self.assertEqual(valueof(choice),'choice')
         self.assertEqual(choice.id,'(identifier)')
-        listofchoice=root.second
+        bracket=root.second
+        self.assertEqual(bracket.id,'{')
+        listofchoice=bracket.first
         casea=listofchoice[0]
         self.assertEqual(casea.id,'case')
         a=casea.first
@@ -1155,11 +1161,89 @@ class TestKeyword_switchcase(unittest.TestCase):
         self.assertEqual(valueof(three),'3')
         self.assertEqual(three.id,'(literal)')
 
-##    def test_while_statement_with_condition_and_statement_block(self):
-##        a='''switch ( choice )
-##            {
-##                case ' A ' : x = 1 ; { if ( x == 2 ) y = x ;
-##                case ' B ' : y = 3 ; } default : z = 4 ; }  '''
+    def test_switch_statement_with_condition_and_statement_block(self):
+        a='''switch ( choice )
+            {
+                case ' A ' : x = 1 ;  if ( x == 2 ) { w = v ;
+                case ' B ' : s = t ; } default : z = 4 ; }  '''
+        """     swtich
+                /     \
+               (       {
+               |        |-case A
+               |        |
+               |        |---- =
+              choice    |    / \
+                        |   x   1
+                        |--if------------------------=
+                        |              |        |   /  \
+                        |              ==       |  w    v
+                        |             /  \      |--case-B
+                        |            x    2     |--=
+                        |- default                / \
+                        |------------=           s   t
+                                    / \
+                                   z   4"""
+        root=cparser.parse(a)
+        self.assertEqual(root.id,'switch')
+        self.assertEqual(root.arity,'binary')
+        choice=root.first
+        self.assertEqual(valueof(choice),'choice')
+        self.assertEqual(choice.id,'(identifier)')
+        bracket=root.second
+        self.assertEqual(bracket.id,'{')
+        listofchoice=bracket.first
+        casea=listofchoice[0]
+        self.assertEqual(casea.id,'case')
+        a=casea.first
+        self.assertEqual(valueof(a),'A')
+        self.assertEqual(a.id,'(identifier)')
+        equal=listofchoice[1]
+        x=equal.first
+        self.assertEqual(valueof(x),'x')
+        self.assertEqual(x.id,'(identifier)')
+        one=equal.second
+        self.assertEqual(valueof(one),'1')
+        self.assertEqual(one.id,'(literal)')
+        IF=listofchoice[2]
+        self.assertEqual(IF.id,'if')
+        bracket=IF.first
+        self.assertEqual(bracket.id,'(')
+        equalequal=bracket.first
+        self.assertEqual(equalequal.id,'==')
+        x=equalequal.first
+        self.assertEqual(valueof(x),'x')
+        two=equalequal.second
+        self.assertEqual(valueof(two),'2')
+        brace=IF.second
+        self.assertEqual(brace.id,'{')
+        listofif=brace.first
+        equal=listofif[0]
+        w=equal.first
+        self.assertEqual(valueof(w),'w')
+        v=equal.second
+        self.assertEqual(valueof(v),'v')
+        caseb=listofif[1]
+        self.assertEqual(caseb.id,'case')
+        b=caseb.first
+        self.assertEqual(valueof(b),'B')
+        self.assertEqual(a.id,'(identifier)')
+        equal1=listofif[2]
+        s=equal1.first
+        self.assertEqual(valueof(s),'s')
+        t=equal1.second
+        self.assertEqual(valueof(t),'t')
+        casec=listofchoice[3]
+        self.assertEqual(casec.id,'default')
+        equal3=listofchoice[4]
+        z=equal3.first
+        self.assertEqual(valueof(z),'z')
+        self.assertEqual(z.id,'(identifier)')
+        three=equal3.second
+        self.assertEqual(valueof(three),'4')
+        self.assertEqual(three.id,'(literal)')
+
+
+
 
 
 ################################################################################
