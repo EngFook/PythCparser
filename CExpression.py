@@ -2,11 +2,11 @@
 from symbol import *
 from Tokenizer import *
 ##########################
-key_word=0
+Keyword=0
 tokenizer=0
 def configure_C_Expression(module):
-    global key_word
-    key_word=module
+    global Keyword
+    Keyword=module
 def configure_tokenizer_Expression(module):
     global tokenizer
     tokenizer=module
@@ -68,8 +68,6 @@ def CexpressionGrammar():
             def nud(self):
                 self.leftBindingPower=95
                 self.arity='unary'
-                self.type=False
-                sym=symbol(self.id)
                 token=expression(self.leftBindingPower)
                 self.first=token
                 return self
@@ -89,6 +87,37 @@ def CexpressionGrammar():
             sym.led=led
             sym.nud=nud
             sym.__repr__=REPR
+
+            def REPR(self):
+                if(self.arity=='postunary'):
+                    return '({0}{1})'.format(self.first,self.id )
+                else:
+                    return '({0} {1})'.format(self.id ,self.first)
+
+            def led(self,leftToken):
+                self.arity='postunary'
+                temp=tokenizer.peep()
+                self.first=temp
+                tokenizer.advance()
+                return self
+
+            sym=prefix('--',90)
+            sym.__repr__=REPR
+            sym.nud=nud
+            sym.led=led
+            sym=prefix('++',90)
+            sym.__repr__=REPR
+            sym.nud=nud
+            sym.led=led
+
+            def REPR(self): #for print number or symbol instead of address
+                if(self.arity=='unary'):
+                    return '({0} {1})'.format(self.id ,self.first)
+                elif(self.arity=='binary'):
+                    return '({0} {1} {2})'.format(self.first,self.id, self.second)
+
+            def nud(self):
+                raise SyntaxError('{0} should come after a word.Invalid Logic'.format(self.first))
 
             def led(self,leftToken):
                 token=tokenizer.advance()
@@ -157,49 +186,14 @@ def CexpressionGrammar():
             sym.__repr__=REPR
             sym.led=led
 
-            def REPR(self):
-                if(self.arity=='postunary'):
-                    return '({0}{1})'.format(self.first,self.id )
-                else:
-                    return '({0} {1})'.format(self.id ,self.first)
-
-            def led(self,leftToken):
-                self.arity='postunary'
-                sym=symbol(self.id)
-                temp=tokenizer.peep()
-                self.first=temp
-                tokenizer.advance()
-                return self
-
-            sym=prefix('--',90)
-            sym.__repr__=REPR
-            sym.nud=nud
-            sym.led=led
-            sym=prefix('++',90)
-            sym.__repr__=REPR
-            sym.nud=nud
-            sym.led=led
-            sym=prefix('int',90)
-            sym.__repr__=REPR
-            sym.nud=nud
-            sym.led=led
-            sym=prefix('double',90)
-            sym.__repr__=REPR
-            sym.nud=nud
-            sym.led=led
 
             def REPR(self): #for print number or symbol instead of address
                 if(self.arity=='grouping'):
-                    return '{0}'.format(self.first)
+                    return '{0} {1}'.format(self.id,self.first)
                 else:
-                    if(self.id=='('):
-                        return '({0} {1} {2} {3})'.format(self.first,self.id, self.second,')')
-                    elif(self.id=='['):
-                        return '({0} {1} {2} {3})'.format(self.first,self.id, self.second,']')
+                    return '({0} {1})'.format(self.first,self.second)
 
             def nud(self):
-                sym=symbol(self.id)
-                sym.__repr__=REPR
                 self.arity='grouping'
                 token=expression(0)
                 self.first=token
@@ -208,12 +202,24 @@ def CexpressionGrammar():
 
             def led(self,leftToken):
                     self.arity='postunary'
-                    sym=symbol(self.id)
                     tokenizer.advance()
-                    token=expression(0)
+                    temp=[]
+                    comma=False
+                    check=tokenizer.peepahead()
+                    while(check.id != ')'):
+                      if hasattr(tokenizer.peepahead(),'std'):
+                        token=Keyword.parseStatement()
+                      else:
+                        token=expression(0)
+                      if tokenizer.peepahead().first == ',':
+                        comma=True
+                      temp.append(token)
+                      check=tokenizer.advance()
                     self.first=leftToken
-                    self.second=token
-                    tokenizer.advance()
+                    if(comma):
+                        self.second=temp
+                    else:
+                        self.second=token
                     return self
 
             sym=infix('(',100)
@@ -240,29 +246,6 @@ def CexpressionGrammar():
             sym.__repr__=REPR
             sym.nud=nud
             sym.led=led
-
-
-            def REPR(self):
-                return '({0})'.format(self.first)
-
-            def led(self,leftToken=None):
-                self.arity='comma'
-                sym=symbol(self.id)
-                temp=[leftToken]
-                temp1=sym()
-                while(tokenizer.peepahead().id != ')'):
-                   temp1=tokenizer.advance()
-                   if(temp1.id == '(identifier)' or temp1.id == '(literal)' or temp1.arity == 'unary'):
-                        if(temp1.id == 'int' or temp1.id == 'double'):
-                            temp1=temp1.nud()
-                        temp.append(temp1)
-                self.first=temp
-                return self
-
-            sym=infix(',',60)
-            sym.__repr__=REPR
-            sym.led=led
-            sym.nud=nud
 
 ##            '''def led(self,leftToken=None):
 ##                self.arity='postunary'

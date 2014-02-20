@@ -70,10 +70,6 @@ def parse(str):
 ##        print(token.first," is")
 
 
-##a=parse('''switch ( choice )
-##            {
-##                case ' A ' : x = 1 ;
-##                case ' B ' : y = 2 ;
-##                default    : z = 3 ; } ''')
-a=parse('if ( x == 2 ) { if ( x == 3 ) ; else if ( x == 4 ) ; y = 5 ; } ')
-print(a)
+##a=parse('for ( int x = 0 ; x = 5 ; x ++ ) ;')
+###a=parse('if ( x == 2 ) { if ( x == 3 ) ; else if ( x == 4 ) ; y = 5 ; } ')
+##print(a)

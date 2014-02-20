@@ -10,7 +10,7 @@ debug_All=True
 debug_scope=False
 debug_if_else=False
 debug_do_while=False
-debug_forloop=False
+debug_forloop=True
 debug_switchcase=False
 debug_braces=False
 ################################################################################
@@ -19,21 +19,20 @@ debug_braces=False
 # Test -> if and else
 ################################################################################
 class TestKeyword_scope(unittest.TestCase):
-    pass
-##    def testdefinestament(self):
-##        a='#define x 10'
-##        """ #define
-##               |
-##               x
-##               |
-##               10"""
-##        root=cparser.parse(a)
-##        self.assertEqual(root.id,'#define')
-##        x=root.first
-##        self.assertEqual(valueof(x),'x')
-##        self.assertEqual(x.id,'constantidentifier')
-##        ten=x.constantidentifier
-##        self.assertEqual(valueof(ten),'10')
+    def testdefinestament(self):
+        a='#define x 10'
+        """ #define
+               |
+               x
+               |
+               10"""
+        root=cparser.parse(a)
+        self.assertEqual(root.id,'#define')
+        x=root.first
+        self.assertEqual(valueof(x),'x')
+        self.assertEqual(x.id,'constantidentifier')
+        ten=x.constantidentifier
+        self.assertEqual(valueof(ten),'10')
 
 
 ################################################################################
@@ -950,24 +949,21 @@ class TestKeyword_forloop(unittest.TestCase):
 
 
     def test_for_loop_without_a_body(self):
-        a='for ( int x = 0 ; x = 5 ; x ++ ) ;'
+        a='for ( x = 0 ; x = 5 ; x ++ ) ;'
         """
               for-------------------
                   |         |      |
                   =         |      ++
                  / \        =      |
-               int  0      / \     x
-                |         x   5
-                x
+                x   0      / \     x
+                          x   5
 
                """
         root=cparser.parse(a)
         self.assertEqual(root.id,'for')
         equal=root.first
         self.assertEqual(equal.id,'=')
-        integer=equal.first
-        self.assertEqual(integer.id,'int')
-        x=integer.first
+        x=equal.first
         self.assertEqual(valueof(x),'x')
         zero=equal.second
         self.assertEqual(valueof(zero),'0')
@@ -984,24 +980,21 @@ class TestKeyword_forloop(unittest.TestCase):
 
 
     def test_for_loop_with_a_body(self):
-        a='for ( int x = 0 ; x = 5 ; x ++ ) x + y = z ;'
+        a='for ( x = 0 ; x = 5 ; x ++ ) x + y = z ;'
         """
               for-----------------------------
                   |         |      |        |
                   =         |      ++       =
                  / \        =      |      /  \
-               int  0      / \     x     +    z
-                |         x   5         / \
-                x                      x   y
-
+                x   0      / \     x     +    z
+                          x   5         / \
+                                       x   y
                """
         root=cparser.parse(a)
         self.assertEqual(root.id,'for')
         equal=root.first
         self.assertEqual(equal.id,'=')
-        integer=equal.first
-        self.assertEqual(integer.id,'int')
-        x=integer.first
+        x=equal.first
         self.assertEqual(valueof(x),'x')
         zero=equal.second
         self.assertEqual(valueof(zero),'0')
@@ -1027,15 +1020,15 @@ class TestKeyword_forloop(unittest.TestCase):
         self.assertEqual(valueof(z),'z')
 
     def test_for_loop_with_a_statement_block(self):
-        a='for ( int x = 0 ; x = 5 ; x ++ )  { a = 1 ; b = 2 ; c = 3 ; } '
+        a='for ( x = 0 ; x = 5 ; x ++ )  { a = 1 ; b = 2 ; c = 3 ; } '
         """
               for-----------------------------
                   |         |      |        {
                   =         |      ++       |---=
                  / \        =      |        |  / \
-               int  0      / \     x        | a   1
-                |         x   5             |---=
-                x                           | /   \
+                x   0      / \     x        | a   1
+                          x   5             |---=
+                                            | /   \
                                             |b     2
                                             |---=
                                             | /   \
@@ -1046,9 +1039,7 @@ class TestKeyword_forloop(unittest.TestCase):
         self.assertEqual(root.id,'for')
         equal=root.first
         self.assertEqual(equal.id,'=')
-        integer=equal.first
-        self.assertEqual(integer.id,'int')
-        x=integer.first
+        x=equal.first
         self.assertEqual(valueof(x),'x')
         zero=equal.second
         self.assertEqual(valueof(zero),'0')

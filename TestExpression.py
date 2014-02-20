@@ -525,7 +525,6 @@ class TestExperession(unittest.TestCase):
 
         root=cparser.parse(a)
         self.assertEqual(root.id,'int')
-        self.assertEqual(root.arity,'unary')
         a=root.first
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
@@ -543,7 +542,6 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(root.arity,'postunary')
         integer=root.second
         self.assertEqual(integer.id,'int')
-        self.assertEqual(integer.arity,'unary')
         a=integer.first
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
@@ -555,7 +553,7 @@ class TestExperession(unittest.TestCase):
         a=' function ( a , b ) ;'
         """     (
                /  \
-        function   ,
+        function   |
                    |-a
                    |-b """
 
@@ -565,11 +563,10 @@ class TestExperession(unittest.TestCase):
         function=root.first
         self.assertEqual(valueof(function),'function')
         self.assertEqual(function.id,'(identifier)')
-        comma=root.second
-        a=comma.first[0]
+        a=root.second[0]
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
-        b=comma.first[1]
+        b=root.second[1]
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
 
@@ -577,7 +574,7 @@ class TestExperession(unittest.TestCase):
         a=' function ( int a , double b ) ;'
         """     (
                /  \
-        function   ,
+        function   |
                    |-int-a
                    |-double-b """
 
@@ -587,16 +584,13 @@ class TestExperession(unittest.TestCase):
         function=root.first
         self.assertEqual(valueof(function),'function')
         self.assertEqual(function.id,'(identifier)')
-        comma=root.second
-        integer=comma.first[0]
+        integer=root.second[0]
         self.assertEqual(integer.id,'int')
-        self.assertEqual(integer.arity,'unary')
         a=integer.first
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
-        double=comma.first[1]
+        double=root.second[1]
         self.assertEqual(double.id,'double')
-        self.assertEqual(double.arity,'unary')
         b=double.first
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
@@ -616,7 +610,6 @@ class TestExperession(unittest.TestCase):
 
         root=cparser.parse(a)
         self.assertEqual(root.id,'int')
-        self.assertEqual(root.arity,"unary")
         address=root.first
         self.assertEqual(address.id,'*')
         self.assertEqual(address.arity,"unary")
@@ -639,7 +632,7 @@ class TestExperession(unittest.TestCase):
                  (
                  |
                 / \
-               (   ,
+               (   |
                |   |-int-a
                *   |-double-b
                |
@@ -647,7 +640,6 @@ class TestExperession(unittest.TestCase):
 
         root=cparser.parse(a)
         self.assertEqual(root.id,'int')
-        self.assertEqual(root.arity,"unary")
         address=root.first
         self.assertEqual(address.id,'*')
         self.assertEqual(address.arity,"unary")
@@ -663,18 +655,13 @@ class TestExperession(unittest.TestCase):
         ptr=address1.first
         self.assertEqual(valueof(ptr),'ptr')
         self.assertEqual(ptr.id,'(identifier)')
-        comma=bracket.second
-        self.assertEqual(comma.id,',')
-        self.assertEqual(comma.arity,'comma')
-        int1=comma.first[0]
+        int1=bracket.second[0]
         self.assertEqual(int1.id,'int')
-        self.assertEqual(int1.arity,'unary')
         a=int1.first
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
-        double1=comma.first[1]
+        double1=bracket.second[1]
         self.assertEqual(double1.id,'double')
-        self.assertEqual(double1.arity,'unary')
         b=double1.first
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')

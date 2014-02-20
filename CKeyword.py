@@ -26,17 +26,16 @@ def parseStatement():
 
 def CkeywordGrammar():
             def std(self,leftToken=None):
-                sym=symbol(self.id)
-                token=sym()
-                token.first=tokenizer.advance()
+                self.first=tokenizer.advance()
+                token=self.first
                 token.constantidentifier=tokenizer.advance()
-                token.first.id="constantidentifier"
+                token.id="constantidentifier"
                 if tokenizer.advance().first != '(end)':
                     raise SyntaxError('Cannot be define twice')
-                return token
+                return self
 
             def REPR(self):
-                return '({0} {1} {2})'.format(self.id, self.first,self.constantidentifier)
+                return '({0} {1} {2})'.format(self.id, self.first,self.first.constantidentifier)
 
             sym=keyword('#define')
             sym.std=std
@@ -161,7 +160,12 @@ def CkeywordGrammar():
 ################################################################################
             def std(self,leftToken=None):
                 tokenizer.advance('(')
-                self.first=expression.expression(0)
+                check=tokenizer.peepahead()
+                if hasattr(check,'std'):
+                    raise SyntaxError('Did not expected to declare a type "{0}" '.format(check.id))
+                else:
+                    self.first=expression.expression(0)
+                a=tokenizer.peepahead()
                 tokenizer.advance(';')
                 self.second=expression.expression(0)
                 tokenizer.advance(';')
@@ -290,6 +294,25 @@ def CkeywordGrammar():
             sym.first=None
             sym.second=None
             sym.__repr__=REPR
+
+            def REPR(self):
+                return '({0} {1})'.format(self.id ,self.first)
+
+            def std(self):
+                self.first=expression.expression(90)
+                return self
+
+            sym=keyword('int')
+            sym.std=std
+            sym.first=None
+            sym.__repr__=REPR
+
+            sym=keyword('double')
+            sym.std=std
+            sym.first=None
+            sym.__repr__=REPR
+
+
 ################################################################################
 ################################################################################
 CkeywordGrammar() # all C keywordGrammar
