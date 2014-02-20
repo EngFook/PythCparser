@@ -1,12 +1,16 @@
 import unittest
-import cparser
+import Cparser
+import TestKeyword
 from Tokenizer import *
 def valueof(symObj):
     return symObj.first
 
-#set debug On/Off -> False = Off ; True = On
-#If debug_All is Off, specific debug parts can be set manually.
-debug_All=True
+#set On/Off -> False = Off ; True = On
+#To verify test_result:
+test_result=True
+#To debug_all,set test_result = False:
+debug_all=True
+#To debug specific part, set both test_result and debug_all = False :
 debug_scope=False
 debug_if_else=False
 debug_do_while=False
@@ -14,7 +18,7 @@ debug_forloop=True
 debug_switchcase=False
 debug_braces=False
 ################################################################################
-################################################################################
+##[Underscore_style]############################################################
 ################################################################################
 # Test -> if and else
 ################################################################################
@@ -26,7 +30,7 @@ class TestKeyword_scope(unittest.TestCase):
                x
                |
                10"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'#define')
         x=root.first
         self.assertEqual(valueof(x),'x')
@@ -51,7 +55,7 @@ class TestKeyword_if_else(unittest.TestCase):
               x
 
         """
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -66,7 +70,7 @@ class TestKeyword_if_else(unittest.TestCase):
               x
 
         """
-        self.assertRaises(SyntaxError,cparser.parse,a)
+        self.assertRaises(SyntaxError,Cparser.parse,a)
 
     def test_statement_else_with_body_only_raiseSyntax(self):
         a='else x ;'
@@ -75,7 +79,7 @@ class TestKeyword_if_else(unittest.TestCase):
               x
 
                 """
-        self.assertRaises(SyntaxError,cparser.parse,a)
+        self.assertRaises(SyntaxError,Cparser.parse,a)
 
     def test_statement_if_with_else_raiseSyntax(self):
         a='if ( y ) ; else ( x ) ;'
@@ -88,7 +92,7 @@ class TestKeyword_if_else(unittest.TestCase):
                     |
                     x
                 """
-        self.assertRaises(SyntaxError,cparser.parse,a)
+        self.assertRaises(SyntaxError,Cparser.parse,a)
 
     def test_statement_if_with_a_condition_and_body(self):
         a='if ( x ) y = 1 ;'
@@ -100,7 +104,7 @@ class TestKeyword_if_else(unittest.TestCase):
               x   y   1
 
         """
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -123,7 +127,7 @@ class TestKeyword_if_else(unittest.TestCase):
             /  \        /  \
           y      4     z    2"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         else1=root.third
         self.assertEqual(else1.id,'else')
@@ -152,7 +156,7 @@ class TestKeyword_if_else(unittest.TestCase):
             /  \     /  \     /  \
           y      4  x    3   z    2"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         else1=root.third
         self.assertEqual(else1.id,'else')
@@ -191,7 +195,7 @@ class TestKeyword_if_else(unittest.TestCase):
                          |---=
                            /   \
                           c     3"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -237,7 +241,7 @@ class TestKeyword_if_else(unittest.TestCase):
                            /   \
                           c     3"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -293,7 +297,7 @@ class TestKeyword_if_else(unittest.TestCase):
                                  |---=
                                    /   \
                                   c     3"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -351,7 +355,7 @@ class TestKeyword_if_else(unittest.TestCase):
                                       c     3
 
                                             """
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -421,7 +425,7 @@ class TestKeyword_if_else(unittest.TestCase):
                                                     |---=
                                                       /   \
                                                      c     3"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -487,7 +491,7 @@ class TestKeyword_if_else(unittest.TestCase):
                                                     |---=
                                                       /   \
                                                      c     3"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -558,7 +562,7 @@ class TestKeyword_if_else(unittest.TestCase):
                                 /   \
                                y     4"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -610,7 +614,7 @@ class TestKeyword_if_else(unittest.TestCase):
 
                                                     """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -676,7 +680,7 @@ class TestKeyword_if_else(unittest.TestCase):
 
                                                     """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -742,7 +746,7 @@ class TestKeyword_if_else(unittest.TestCase):
 
                                                     """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'if')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -785,7 +789,7 @@ class TestKeyword_do_while(unittest.TestCase):
              |
              x
                 """
-        self.assertRaises(SyntaxError,cparser.parse,a)
+        self.assertRaises(SyntaxError,Cparser.parse,a)
 
     def test_while_statement_with_condition_only(self):
         a='while ( x < 1 ) ;'
@@ -796,7 +800,7 @@ class TestKeyword_do_while(unittest.TestCase):
              <
             / \
            x   1"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'while')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -816,7 +820,7 @@ class TestKeyword_do_while(unittest.TestCase):
            <     x
           / \
          x   1"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'while')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -847,7 +851,7 @@ class TestKeyword_do_while(unittest.TestCase):
                    /   \
                   c     3"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'while')
         bracket=root.first
         self.assertEqual(bracket.id,'(')
@@ -889,7 +893,7 @@ class TestKeyword_do_while(unittest.TestCase):
            x     <
                 / \
                X   1"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'do')
         bracket=root.first
         self.assertEqual(bracket.id,'{')
@@ -931,7 +935,7 @@ class TestKeyword_forloop(unittest.TestCase):
                 x
 
                """
-        self.assertRaises(SyntaxError,cparser.parse,a)
+        self.assertRaises(SyntaxError,Cparser.parse,a)
 
     def test_for_loop_without_semicolumn_raiseSyntax(self):
         a='for ( int x = 0 ; x = 5 ; x ++ ) '
@@ -945,7 +949,7 @@ class TestKeyword_forloop(unittest.TestCase):
                 x
 
                """
-        self.assertRaises(SyntaxError,cparser.parse,a)
+        self.assertRaises(SyntaxError,Cparser.parse,a)
 
 
     def test_for_loop_without_a_body(self):
@@ -959,7 +963,7 @@ class TestKeyword_forloop(unittest.TestCase):
                           x   5
 
                """
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'for')
         equal=root.first
         self.assertEqual(equal.id,'=')
@@ -990,7 +994,7 @@ class TestKeyword_forloop(unittest.TestCase):
                           x   5         / \
                                        x   y
                """
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'for')
         equal=root.first
         self.assertEqual(equal.id,'=')
@@ -1035,7 +1039,7 @@ class TestKeyword_forloop(unittest.TestCase):
                                             |c     3
 
                                   """
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'for')
         equal=root.first
         self.assertEqual(equal.id,'=')
@@ -1109,7 +1113,7 @@ class TestKeyword_switchcase(unittest.TestCase):
                         |------------=
                                     / \
                                    z    3"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'switch')
         self.assertEqual(root.arity,'binary')
         choice=root.first
@@ -1174,7 +1178,7 @@ class TestKeyword_switchcase(unittest.TestCase):
                         |------------=           s   t
                                     / \
                                    z   4"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'switch')
         self.assertEqual(root.arity,'binary')
         choice=root.first
@@ -1248,25 +1252,30 @@ class TestKeyword_braces(unittest.TestCase):
 ##           { y ; };
 
 
-
-if __name__=='__main__':
-    if debug_scope==True or debug_All==True:
-        suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_scope)
+if __name__ == '__main__':
+    if test_result==True:
+        unittest.main()
+    elif debug_all==True:
+        suite = unittest.TestLoader().loadTestsFromModule(TestKeyword)
         unittest.TextTestRunner(verbosity=2).run(suite)
-    if debug_if_else==True or debug_All==True:
-        suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_if_else)
-        unittest.TextTestRunner(verbosity=2).run(suite)
-    if debug_do_while==True or debug_All==True:
-        suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_do_while)
-        unittest.TextTestRunner(verbosity=2).run(suite)
-    if debug_forloop==True or debug_All==True:
-        suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_forloop)
-        unittest.TextTestRunner(verbosity=2).run(suite)
-    if debug_switchcase==True or debug_All==True:
-        suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_switchcase)
-        unittest.TextTestRunner(verbosity=2).run(suite)
-    if debug_braces==True or debug_All==True:
-        suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_braces)
-        unittest.TextTestRunner(verbosity=2).run(suite)
+    else:
+        if debug_scope==True:
+            suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_scope)
+            unittest.TextTestRunner(verbosity=2).run(suite)
+        if debug_if_else==True:
+            suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_if_else)
+            unittest.TextTestRunner(verbosity=2).run(suite)
+        if debug_do_while==True:
+            suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_do_while)
+            unittest.TextTestRunner(verbosity=2).run(suite)
+        if debug_forloop==True:
+            suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_forloop)
+            unittest.TextTestRunner(verbosity=2).run(suite)
+        if debug_switchcase==True:
+            suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_switchcase)
+            unittest.TextTestRunner(verbosity=2).run(suite)
+        if debug_braces==True:
+            suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_braces)
+            unittest.TextTestRunner(verbosity=2).run(suite)
 
 

@@ -1,9 +1,19 @@
 import unittest
-import cparser
+import Cparser
 from Tokenizer import *
 def valueof(symObj):
     return symObj.first
 
+#set On/Off -> False = Off ; True = On
+#To verify test_result:
+test_result=True
+#To debug_all,set test_result = False:
+debug_all=True
+################################################################################
+##[Capital Letter style]########################################################
+################################################################################
+# Test -> Tokenizer
+################################################################################
 class TestTokenizer(unittest.TestCase):
     def testAdvanceTokenShouldReturnThreeWordWithOneFinalEnd(self):
         global tokenzier
@@ -102,5 +112,8 @@ class TestTokenizer(unittest.TestCase):
         self.assertRaises(SyntaxError,tokenizer.advance,'a')
 
 if __name__=='__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestTokenizer)
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    if test_result==True:
+        unittest.main()
+    elif debug_all==True:
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestTokenizer)
+        unittest.TextTestRunner(verbosity=2).run(suite)

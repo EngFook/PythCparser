@@ -1,5 +1,5 @@
 ####################################       "files imported"
-from symbol import *
+from Symbol import *
 from Tokenizer import *
 ##########################
 expression=0
