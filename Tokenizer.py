@@ -1,5 +1,5 @@
 ######################       "files imported"
-from symbol import *
+from Symbol import *
 ######################
 class Tokenizer: # Class for Split Token
     def __init__(self,str):

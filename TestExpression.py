@@ -1,31 +1,41 @@
 import unittest
-import cparser
+import Cparser
 from Tokenizer import *
 def valueof(symObj):
     return symObj.first
 
+#set On/Off -> False = Off ; True = On
+#To verify test_result:
+test_result=True
+#To debug_all,set test_result = False:
+debug_all=True
+################################################################################
+##[Mixing style]################################################################
+################################################################################
+# Test -> Expression
+################################################################################
 class TestExperession(unittest.TestCase):
 
     def testAdvanceShouldReturnLiteral(self):
-        tokenizer=cparser.Tokenizer('3')
+        tokenizer=Cparser.Tokenizer('3')
         token=tokenizer.advance()
         self.assertEqual(token.id,'(literal)')
         self.assertEqual(valueof(token),'3')
 
     def testAdvanceShouldReturnIdentifier(self):
-        tokenizer=cparser.Tokenizer('one')
+        tokenizer=Cparser.Tokenizer('one')
         token=tokenizer.advance()
         self.assertEqual(token.id,'(identifier)')
         self.assertEqual(valueof(token),'one')
 
     def testAdvanceShouldReturnOperator(self):
-        tokenizer=cparser.Tokenizer('+')
+        tokenizer=Cparser.Tokenizer('+')
         token=tokenizer.advance()
         self.assertEqual(token.arity,'binary')
         self.assertEqual(token.id,'+')
 
     def testAdvanceShouldReturnCorrectToken(self):
-        tokenizer=cparser.Tokenizer('one 3 +')
+        tokenizer=Cparser.Tokenizer('one 3 +')
         token=tokenizer.advance()
         self.assertEqual(token.id,'(identifier)')
         self.assertEqual(valueof(token),'one')
@@ -38,7 +48,7 @@ class TestExperession(unittest.TestCase):
 
     def test2plus3(self):#2+3
         a='2 + 3 ;'
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         two=root.first
         self.assertEqual(valueof(two),'2')
         self.assertEqual(two.id,'(literal)')
@@ -55,7 +65,7 @@ class TestExperession(unittest.TestCase):
               2      *
                     /  \
                   3      4"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'+')
         self.assertEqual(root.arity,'binary')
         two=root.first
@@ -78,7 +88,7 @@ class TestExperession(unittest.TestCase):
               *      4
             /  \
            2    3"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'+')
         self.assertEqual(root.arity,'binary')
         multiply=root.first
@@ -103,7 +113,7 @@ class TestExperession(unittest.TestCase):
            2    *
                /  \
               3    4"""
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'+')
         self.assertEqual(root.arity,'binary')
         plus2=root.first
@@ -134,7 +144,7 @@ class TestExperession(unittest.TestCase):
                   +     4
                 /  \
                2    3"""
-          root=cparser.parse(a)
+          root=Cparser.parse(a)
           self.assertEqual(root.id,'+')
           self.assertEqual(root.arity,'binary')
           plus2=root.first
@@ -168,7 +178,7 @@ class TestExperession(unittest.TestCase):
                       / \
                      5   6  """
 
-          root=cparser.parse(a)
+          root=Cparser.parse(a)
           self.assertEqual(root.id,'+')
           self.assertEqual(root.arity,'binary')
           plus2=root.first
@@ -215,7 +225,7 @@ class TestExperession(unittest.TestCase):
                 |
                 1"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'-')
         self.assertEqual(root.arity,'unary')
         one=root.first
@@ -230,7 +240,7 @@ class TestExperession(unittest.TestCase):
                 |
                 1"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'-')
         self.assertEqual(root.arity,'unary')
         negative=root.first
@@ -248,7 +258,7 @@ class TestExperession(unittest.TestCase):
                    /  \
                   2    3"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'**')
         self.assertEqual(root.arity,'binary')
         one=root.first
@@ -272,7 +282,7 @@ class TestExperession(unittest.TestCase):
              |
              1"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'+')
         self.assertEqual(root.arity,'binary')
         negative=root.first
@@ -295,7 +305,7 @@ class TestExperession(unittest.TestCase):
              |
              1"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'+')
         self.assertEqual(root.arity,'binary')
         plus1=root.first
@@ -324,7 +334,7 @@ class TestExperession(unittest.TestCase):
              |
              ptr"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'-')
         self.assertEqual(root.arity,'unary')
         ptr=root.first
@@ -337,7 +347,7 @@ class TestExperession(unittest.TestCase):
              |
              ptr"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'--')
         self.assertEqual(root.arity,'unary')
         ptr=root.first
@@ -352,7 +362,7 @@ class TestExperession(unittest.TestCase):
            |    |
            ptr  1"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'+')
         self.assertEqual(root.arity,'binary')
         predec=root.first
@@ -376,7 +386,7 @@ class TestExperession(unittest.TestCase):
              |     |
              ptr   ptr """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'-')
         self.assertEqual(root.arity,'binary')
         postfix=root.first
@@ -404,7 +414,7 @@ class TestExperession(unittest.TestCase):
               /  \
              w   y """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'=')
         self.assertEqual(root.arity,'binary')
         x=root.first
@@ -434,7 +444,7 @@ class TestExperession(unittest.TestCase):
                  /  \
                 w   y """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'=')
         self.assertEqual(root.arity,'binary')
         x=root.first
@@ -457,7 +467,7 @@ class TestExperession(unittest.TestCase):
                 |
                 Peter """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'/*')
         self.assertEqual(root.arity,'postunary')
         Peter=root.first
@@ -469,7 +479,7 @@ class TestExperession(unittest.TestCase):
                 |
                 Peterisaboy """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'#')
         self.assertEqual(root.arity,'unary')
         Peter=root.first
@@ -482,7 +492,7 @@ class TestExperession(unittest.TestCase):
                / \
               x   y """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'.')
         self.assertEqual(root.arity,'binary')
         x=root.first
@@ -500,7 +510,7 @@ class TestExperession(unittest.TestCase):
              / \
           func  a"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'(')
         self.assertEqual(root.arity,'postunary')
         b=root.second
@@ -523,7 +533,7 @@ class TestExperession(unittest.TestCase):
              |
              a"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'int')
         a=root.first
         self.assertEqual(valueof(a),'a')
@@ -537,7 +547,7 @@ class TestExperession(unittest.TestCase):
                   |
                   a"""
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'(')
         self.assertEqual(root.arity,'postunary')
         integer=root.second
@@ -557,7 +567,7 @@ class TestExperession(unittest.TestCase):
                    |-a
                    |-b """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'(')
         self.assertEqual(root.arity,'postunary')
         function=root.first
@@ -578,7 +588,7 @@ class TestExperession(unittest.TestCase):
                    |-int-a
                    |-double-b """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'(')
         self.assertEqual(root.arity,'postunary')
         function=root.first
@@ -608,7 +618,7 @@ class TestExperession(unittest.TestCase):
                  |
                 ptr     """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'int')
         address=root.first
         self.assertEqual(address.id,'*')
@@ -638,7 +648,7 @@ class TestExperession(unittest.TestCase):
                |
                ptr     """
 
-        root=cparser.parse(a)
+        root=Cparser.parse(a)
         self.assertEqual(root.id,'int')
         address=root.first
         self.assertEqual(address.id,'*')
@@ -667,6 +677,8 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(b.id,'(identifier)')
 
 if __name__=='__main__':
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestExperession)
-    unittest.TextTestRunner(verbosity=2).run(suite)
-
+    if test_result==True:
+        unittest.main()
+    elif debug_all==True:
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestTokenizer)
+        unittest.TextTestRunner(verbosity=2).run(suite)
