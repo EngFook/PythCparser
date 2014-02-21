@@ -7,6 +7,7 @@ class Tokenizer: # Class for Split Token
         self.word=None
         self.storeforpeep=None
         self.current=None
+        self.storecon1=None
         if str is not None:
             self.array=str.split()
         else:
@@ -46,6 +47,8 @@ class Tokenizer: # Class for Split Token
             self.current=createLiteral(self.word)
         else:
             self.current=createIndentifier(self.word)
+            if self.current.first==self.storecon1:
+                print(self.array)
         self.storeforpeep=self.current
         return self.current
 
@@ -62,3 +65,7 @@ class Tokenizer: # Class for Split Token
             return self.storeforpeep
         else:
             return self.current
+    def storeconstantidentifier(self,token=None,token1=None):
+        self.storecon=token
+        self.storecon1=token1
+        return
