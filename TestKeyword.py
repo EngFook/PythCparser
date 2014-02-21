@@ -22,21 +22,21 @@ debug_braces=False
 ################################################################################
 # Test -> if and else
 ################################################################################
-class TestKeyword_scope(unittest.TestCase):
-    def testdefinestament(self):
-        a='#define x 10'
-        """ #define
-               |
-               x
-               |
-               10"""
-        root=Cparser.parse(a)
-        self.assertEqual(root.id,'#define')
-        x=root.first
-        self.assertEqual(valueof(x),'x')
-        self.assertEqual(x.id,'constantidentifier')
-        ten=x.constantidentifier
-        self.assertEqual(valueof(ten),'10')
+##class TestKeyword_scope(unittest.TestCase):
+##    def testdefinestament(self):
+##        a='#define x 10'
+##        """ #define
+##               |
+##               x
+##               |
+##               10"""
+##        root=Cparser.parse(a)
+##        self.assertEqual(root.id,'#define')
+##        x=root.first
+##        self.assertEqual(valueof(x),'x')
+##        self.assertEqual(x.id,'constantidentifier')
+##        ten=x.constantidentifier.first
+##        self.assertEqual(valueof(ten),'10')
 
 
 ################################################################################

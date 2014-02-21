@@ -28,11 +28,17 @@ def CkeywordGrammar():
             def std(self,leftToken=None):
                 self.first=tokenizer.advance()
                 token=self.first
-                token.constantidentifier=tokenizer.advance()
-                token.id="constantidentifier"
-                if tokenizer.advance().first != '(end)':
-                    raise SyntaxError('Cannot be define twice')
-                return self
+                token.id='constantidentifier'
+                token.constantidentifier=[]
+                check=tokenizer.peepahead()
+                while  check.first != '(end)' and check.id is not '{':
+                    token.constantidentifier.append(tokenizer.advance().id)
+                    check=tokenizer.peepahead()
+                tokenizer.storeconstantidentifier(token.constantidentifier,token.first)
+                check=tokenizer.peepahead()
+                if hasattr(check,'std'):
+                    temp=parseStatement()
+                return temp
 
             def REPR(self):
                 return '({0} {1} {2})'.format(self.id, self.first,self.first.constantidentifier)
