@@ -70,10 +70,8 @@ def parse(str):
 ##        print(token.first," is")
 
 
-##a=parse('''switch ( choice )
-##            {
-##                case ' A ' : x = 1 ;
-##                case ' B ' : y = 2 ;
-##                default    : z = 3 ; } ''')
-a=parse('if ( x == 2 ) { if ( x == 3 ) ; else if ( x == 4 ) ; y = 5 ; } ')
+a=parse('''switch ( choice )
+            {
+                case ' A ' : x = 1 ;  if ( x == 2 ) { w = v ;
+                case ' B ' : s = t ; } default : z = 4 ; }  ''')
 print(a)

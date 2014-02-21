@@ -270,9 +270,9 @@ def CkeywordGrammar():
                 check=tokenizer.peepahead()
                 while check.id !='}':
                         if hasattr(check,'std'):
-                            if( check.id == 'if'):
+                           if( check.id == 'if'):
                                 temp=parseStatement()
-                            else : temp=check.std()
+                           else : temp=check.std()
                         else:
                             temp=expression.expression(0)
                             tokenizer.advance(';')
@@ -296,6 +296,8 @@ def CkeywordGrammar():
             sym.__repr__=REPR
 
             def REPR(self):
+                if self.second != None :
+                    return '({0} {1} {2})'.format(self.id ,self.first,self.second)
                 return '({0} {1})'.format(self.id ,self.first)
 
             def std(self):
@@ -304,10 +306,25 @@ def CkeywordGrammar():
 
             sym=keyword('int')
             sym.std=std
+            sym.second=None
             sym.first=None
             sym.__repr__=REPR
 
             sym=keyword('double')
+            sym.std=std
+            sym.first=None
+            sym.__repr__=REPR
+
+            def std(self):
+                tokenizer.advance()
+                self.first=expression.expression(0)
+                tokenizer.advance()
+                return self
+
+            def REPR(self):
+                return '({0} {1})'.format(self.id ,self.first)
+
+            sym=keyword('return')
             sym.std=std
             sym.first=None
             sym.__repr__=REPR

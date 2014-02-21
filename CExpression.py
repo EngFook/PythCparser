@@ -188,44 +188,85 @@ def CexpressionGrammar():
 
 
             def REPR(self): #for print number or symbol instead of address
+                if hasattr(self,'third'):
+                    return '({0}) ({1}) {2}'.format(self.first,self.second,self.third)
                 if(self.arity=='grouping'):
                     return '{0} {1}'.format(self.id,self.first)
                 else:
-                    return '({0} {1})'.format(self.first,self.second)
+                    return '({0}) ({1})'.format(self.first,self.second)
 
             def nud(self):
                 self.arity='grouping'
                 token=expression(0)
                 self.first=token
                 tokenizer.advance()
+                self.CheckFunctionType=False
                 return self
 
             def led(self,leftToken):
-                    self.arity='postunary'
-                    tokenizer.advance()
-                    temp=[]
-                    comma=False
-                    check=tokenizer.peepahead()
-                    while(check.id != ')'):
-                      if hasattr(tokenizer.peepahead(),'std'):
+                self.arity='postunary'
+                tokenizer.advance()
+                temp=[]
+                comma=False
+                check=tokenizer.peepahead()
+                while(check.id != ')'):
+                    if hasattr(tokenizer.peepahead(),'std'):
                         token=Keyword.parseStatement()
-                      else:
-                        token=expression(0)
-                      if tokenizer.peepahead().first == ',':
-                        comma=True
-                      temp.append(token)
-                      check=tokenizer.advance()
-                    self.first=leftToken
-                    if(comma):
-                        self.second=temp
                     else:
-                        self.second=token
-                    return self
+                        token=expression(0)
+                    if tokenizer.peepahead().first == ',':
+                        comma=True
+                    temp.append(token)
+                    check=tokenizer.advance()
+                self.first=leftToken
+                if(comma):
+                    self.second=temp
+                else:
+                    self.second=token
+                if hasattr(leftToken,'CheckFunctionType'):
+                    if leftToken.CheckFunctionType :
+                        raise SyntaxError('Should not enter "{0}" '.format(leftToken.id))
+                check =tokenizer.peepahead()
+                if hasattr(check,'std'):
+                    if self.second != None :
+                        self.third=Keyword.parseStatement()
+                return self
 
             sym=infix('(',100)
             sym.__repr__=REPR
             sym.nud=nud
             sym.led=led
+            sym.third=None
+            sym.CheckFunctionType=True
+
+            def led(self,leftToken):
+                self.arity='postunary'
+                tokenizer.advance()
+                temp=[]
+                comma=False
+                check=tokenizer.peepahead()
+                while(check.id != ']'):
+                    if hasattr(tokenizer.peepahead(),'std'):
+                        token=Keyword.parseStatement()
+                    else:
+                        token=expression(0)
+                    if tokenizer.peepahead().first == ',':
+                        comma=True
+                    temp.append(token)
+                    check=tokenizer.advance()
+                self.first=leftToken
+                if(comma):
+                    self.second=temp
+                else:
+                    self.second=token
+                return self
+
+            def REPR(self): #for print number or symbol instead of address
+                if(self.arity=='grouping'):
+                    return '{0} {1}'.format(self.id,self.first)
+                else:
+                    return '({0} [{1}] )'.format(self.first,self.second)
+
             sym=infix('[',100)
             sym.__repr__=REPR
             sym.nud=nud
