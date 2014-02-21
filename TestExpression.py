@@ -460,32 +460,6 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(y),'y')
         self.assertEqual(y.id,'(identifier)')
 
-
-    '''def wrongtestcomment(self):
-        a='/* P e t e r */ '
-        """     /*
-                |
-                Peter """
-
-        root=Cparser.parse(a)
-        self.assertEqual(root.id,'/*')
-        self.assertEqual(root.arity,'postunary')
-        Peter=root.first
-        self.assertEqual(Peter,'Peter')
-
-    def wrongtestcommentonlyoneline(self):
-        a='# P e t e r i s a b o y '
-        """     #
-                |
-                Peterisaboy """
-
-        root=Cparser.parse(a)
-        self.assertEqual(root.id,'#')
-        self.assertEqual(root.arity,'unary')
-        Peter=root.first
-        self.assertEqual(Peter,'Peterisaboy')'''
-
-
     def testxdoty(self):
         a='x . y ;'
         """     .
@@ -502,22 +476,27 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(y),'y')
         self.assertEqual(y.id,'(identifier)')
 
-    def testbracket(self):
+    def testbracketforerror(self):
         a='func ( a ) ( b ) ;'
-        """    (
+        self.assertRaises(SyntaxError,Cparser.parse,a)
+
+
+    def testbracket(self):
+        a='func [ a ] [ b ] ;'
+        """    [
                /  \
-              (    b
+              [    b
              / \
           func  a"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'(')
+        self.assertEqual(root.id,'[')
         self.assertEqual(root.arity,'postunary')
         b=root.second
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
         bracket=root.first
-        self.assertEqual(bracket.id,'(')
+        self.assertEqual(bracket.id,'[')
         self.assertEqual(bracket.arity,'postunary')
         func=bracket.first
         self.assertEqual(valueof(func),'func')
@@ -675,6 +654,46 @@ class TestExperession(unittest.TestCase):
         b=double1.first
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
+
+    def testfunctiondefinition(self):
+        a='''int func ( int x , int y )
+            {
+                return a + b ;
+            } '''
+        """     int
+               /
+              (-----{----------return
+            /   \                |
+         func    |-int-x         +
+                 |-int-y        / \
+                               a   b"""
+        root=Cparser.parse(a)
+        self.assertEqual(root.id,'int')
+        bracket=root.first
+        self.assertEqual(bracket.id,'(')
+        func=bracket.first
+        self.assertEqual(valueof(func),'func')
+        listofvariable=bracket.second
+        int0=listofvariable[0]
+        self.assertEqual(int0.id,'int')
+        x=int0.first
+        self.assertEqual(valueof(x),'x')
+        int1=listofvariable[1]
+        self.assertEqual(int1.id,'int')
+        y=int1.first
+        self.assertEqual(valueof(y),'y')
+        brace=bracket.third
+        self.assertEqual(brace.id,'{')
+        listofcontent=brace.first
+        return0=listofcontent[0]
+        self.assertEqual(return0.id,'return')
+        plus=return0.first
+        self.assertEqual(plus.id,'+')
+        a=plus.first
+        self.assertEqual(valueof(a),'a')
+        b=plus.second
+        self.assertEqual(valueof(b),'b')
+
 
 if __name__=='__main__':
     if test_result==True:
