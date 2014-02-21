@@ -29,12 +29,13 @@ def CkeywordGrammar():
                 self.first=tokenizer.advance()
                 token=self.first
                 token.id='constantidentifier'
-                token.constantidentifier=[]
+                tokenconstantidentifier=[]
                 check=tokenizer.peepahead()
                 while  check.first != '(end)' and check.id is not '{':
-                    token.constantidentifier.append(tokenizer.advance().id)
+                    store=tokenizer.advance()
+                    tokenconstantidentifier.append(store)
                     check=tokenizer.peepahead()
-                tokenizer.storeconstantidentifier(token.constantidentifier,token.first)
+                tokenizer.storeconstantidentifier(tokenconstantidentifier,token.first)
                 check=tokenizer.peepahead()
                 if hasattr(check,'std'):
                     temp=parseStatement()
@@ -182,6 +183,7 @@ def CkeywordGrammar():
                     if check.first == ';':
                         sym.four=None
                         temp=self
+                        tokenizer.advance(';')
                         return temp
                     if hasattr(check,'std'):
                         self.four=parseStatement()
@@ -276,7 +278,7 @@ def CkeywordGrammar():
                 check=tokenizer.peepahead()
                 while check.id !='}':
                         if hasattr(check,'std'):
-                           if( check.id == 'if'):
+                           if( check.id == 'if' or check.id == 'for'):
                                 temp=parseStatement()
                            else : temp=check.std()
                         else:
