@@ -65,6 +65,14 @@ class Tokenizer: # Class for Split Token
                 for i in self.storecon:
                     if count==0:
                         self.array1.append(self.storecon[count])
+                    elif self.storecon[count].id =='(identifier)':
+                        changestr=self.storecon[count]
+                        changestr=''.join(changestr.first)
+                        self.array1.append(changestr)
+                    elif self.storecon[count].id =='(literal)':
+                        changestr=self.storecon[count]
+                        changestr=''.join(changestr.first)
+                        self.array1.append(changestr)
                     else:
                         self.array1.append(self.storecon[count].id)
                     count=count+1

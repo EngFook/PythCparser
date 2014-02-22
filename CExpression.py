@@ -188,6 +188,8 @@ def CexpressionGrammar():
 
 
             def REPR(self): #for print number or symbol instead of address
+                if hasattr(self,'third') and hasattr(self,'third'):
+                    return '({0})'.format(self.first)
                 if hasattr(self,'third'):
                     return '({0}) ({1}) {2}'.format(self.first,self.second,self.third)
                 if(self.arity=='grouping'):
