@@ -69,9 +69,12 @@ def parse(str):
 ##    else:
 ##        print(token.first," is")
 
-
-a=parse(''' #define max for (
-        {
-        max x = 5 ; x > 0 ; x ++ ) ;
-        } }''')
+##
+a=parse('''switch ( choice )
+            {
+                case ' A ' : x = 1 ;
+                case ' C ' : if ( x == 2 ) { w = v ;
+                case ' B ' : s = t ; } default : z = 4 ; }  ''')
 print(a)
+print(a.second.address)
+print(a.second.back)
