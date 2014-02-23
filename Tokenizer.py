@@ -7,10 +7,10 @@ class Tokenizer: # Class for Split Token
         self.word=None
         self.storeforpeep=None
         self.current=None
-        self.storecon1=None
-        self.define=True
-        self.array1=[]
+        self.variable_of_define=None
+        self.define=False
         self.count=0
+        self.array_constantidentifier=[]
         if str is not None:
             self.array=str.split()
         else:
@@ -18,12 +18,11 @@ class Tokenizer: # Class for Split Token
         self.gen=self.advanceToken()
 
     def advanceToken(self):
-
             for word in self.array:
-                if self.define == True:
+                if self.define == False:
                     self.count=self.count+1
                     yield word
-                for word in self.array1:
+                for word in self.array_constantidentifier:
                     yield word
             while True:
                 yield None
@@ -55,37 +54,39 @@ class Tokenizer: # Class for Split Token
             self.current=createLiteral(self.word)
         else:
             self.current=createIndentifier(self.word)
-            if self.current.first==self.storecon1:
-                self.define=False
-                i=0
-                while i != self.count:
-                    del self.array[0]
-                    i=i+1
+##################################### Code Added For #define constant identifier
+            if self.current.first==self.variable_of_define:
+                self.define=True
                 count=0
-                for i in self.storecon:
+                while count != self.count:
+                    del self.array[0]
+                    count=count+1
+                count=0
+                for i in self.statement_of_define:
                     if count==0:
-                        self.array1.append(self.storecon[count])
-                    elif self.storecon[count].id =='(identifier)':
-                        changestr=self.storecon[count]
-                        changestr=''.join(changestr.first)
-                        self.array1.append(changestr)
-                    elif self.storecon[count].id =='(literal)':
-                        changestr=self.storecon[count]
-                        changestr=''.join(changestr.first)
-                        self.array1.append(changestr)
+                        self.array_constantidentifier.append(self.statement_of_define[count])
+                    elif self.statement_of_define[count].id =='(identifier)':
+                        change_to_str=self.statement_of_define[count]
+                        change_to_str=''.join(change_to_str.first)
+                        self.array_constantidentifier.append(change_to_str)
+                    elif self.statement_of_define[count].id =='(literal)':
+                        change_to_str=self.statement_of_define[count]
+                        change_to_str=''.join(change_to_str.first)
+                        self.array_constantidentifier.append(change_to_str)
                     else:
-                        self.array1.append(self.storecon[count].id)
+                        self.array_constantidentifier.append(self.statement_of_define[count].id)
                     count=count+1
                 count=0
                 for i in self.array:
-                    self.array1.append(self.array[count])
+                    self.array_constantidentifier.append(self.array[count])
                     count=count+1
-                if self.array1[0].id in symbolTable:
-                    temp=self.array1[0]
-                    del self.array1[0]
-                    return temp
+                if self.array_constantidentifier[0].id in symbolTable:
+                    temporary=self.array_constantidentifier[0]
+                    del self.array_constantidentifier[0]
+                    return temporary
                 else:
-                    raise SyntaxError ('Invalid statement')
+                    raise SyntaxError ('Invalid Statement')
+################################################################################
         self.storeforpeep=self.current
         return self.current
 
@@ -102,7 +103,9 @@ class Tokenizer: # Class for Split Token
             return self.storeforpeep
         else:
             return self.current
-    def storeconstantidentifier(self,token=None,token1=None):
-        self.storecon=token
-        self.storecon1=token1
+
+    def storeconstantidentifier(self,token_string=None,token_variable=None):
+        self.statement_of_define=token_string
+        self.variable_of_define=token_variable
         return
+
