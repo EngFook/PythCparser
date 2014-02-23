@@ -27,19 +27,23 @@ def parseStatement():
 def CkeywordGrammar():
             def std(self,leftToken=None):
                 self.first=tokenizer.advance()
-                token=self.first
-                token.id='constantidentifier'
+                token=self
                 tokenconstantidentifier=[]
                 check=tokenizer.peepahead()
                 while  check.first != '(end)' and check.id is not '{':
                     store=tokenizer.advance()
                     tokenconstantidentifier.append(store)
+                    token.constantidentifier=tokenconstantidentifier
                     check=tokenizer.peepahead()
-                tokenizer.storeconstantidentifier(tokenconstantidentifier,token.first)
+                tokenizer.storeconstantidentifier(token.constantidentifier,token.first.first)
                 check=tokenizer.peepahead()
+                if check.first=='(end)':
+                    return token
                 if hasattr(check,'std'):
                     temp=parseStatement()
-                return temp
+                    return temp
+                else:
+                    raise SyntaxError ('Invalid Statement')
 
             def REPR(self):
                 return '({0} {1} {2})'.format(self.id, self.first,self.first.constantidentifier)

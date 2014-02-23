@@ -17,26 +17,14 @@ debug_do_while=False
 debug_forloop=True
 debug_switchcase=False
 debug_braces=False
+debug_define=False
 ################################################################################
 ##[Underscore_style]############################################################
 ################################################################################
-# Test -> if and else
+# Test -> scope
 ################################################################################
 ##class TestKeyword_scope(unittest.TestCase):
-##    def testdefinestament(self):
-##        a='#define x 10'
-##        """ #define
-##               |
-##               x
-##               |
-##               10"""
-##        root=Cparser.parse(a)
-##        self.assertEqual(root.id,'#define')
-##        x=root.first
-##        self.assertEqual(valueof(x),'x')
-##        self.assertEqual(x.id,'constantidentifier')
-##        ten=x.constantidentifier.first
-##        self.assertEqual(valueof(ten),'10')
+##    pass
 
 
 ################################################################################
@@ -1237,10 +1225,6 @@ class TestKeyword_switchcase(unittest.TestCase):
         self.assertEqual(valueof(three),'4')
         self.assertEqual(three.id,'(literal)')
 
-
-
-
-
 ################################################################################
 ################################################################################
 ################################################################################
@@ -1250,6 +1234,233 @@ class TestKeyword_braces(unittest.TestCase):
         pass
 ##       def testforloop(self):
 ##           { y ; };
+
+################################################################################
+################################################################################
+################################################################################
+# Test-> #define
+################################################################################
+class TestKeyword_define(unittest.TestCase):
+
+    def test_define_stament(self):
+        a='#define Str 10 + '
+        """ #define
+               |
+               x
+               |
+               10"""
+        root=Cparser.parse(a)
+        self.assertEqual(root.id,'#define')
+        Str=root.first
+        self.assertEqual(valueof(Str),'Str')
+        ten=root.constantidentifier[0]
+        self.assertEqual(valueof(ten),'10')
+        plus=root.constantidentifier[1]
+        self.assertEqual(plus.id,'+')
+
+    def test_define_replace_constantidentifier_to_expression(self):
+          a='#define Str 2 + 3 + { Str 4 + 5 * 6 * 7 * 8 ; }'
+          """          {
+                       |
+                       +
+                   /       \
+                  +         *
+                /  \       /  \
+               +    4     *    8
+             /  \       /  \
+            2    3     *    7
+                      / \
+                     5   6  """
+
+          root=Cparser.parse(a)
+          self.assertEqual(root.id,'{')
+          plus1=root.first[0]
+          self.assertEqual(plus1.id,'+')
+          self.assertEqual(plus1.arity,'binary')
+          plus2=plus1.first
+          self.assertEqual(plus2.id,'+')
+          self.assertEqual(plus2.arity,'binary')
+          plus3=plus2.first
+          self.assertEqual(plus3.id,'+')
+          self.assertEqual(plus3.arity,'binary')
+          two=plus3.first
+          self.assertEqual(valueof(two),'2')
+          self.assertEqual(two.id,'(literal)')
+          three=plus3.second
+          self.assertEqual(valueof(three),'3')
+          self.assertEqual(three.id,'(literal)')
+          four=plus2.second
+          self.assertEqual(valueof(four),'4')
+          self.assertEqual(four.id,'(literal)')
+          multiply=plus1.second
+          self.assertEqual(multiply.id,'*')
+          self.assertEqual(multiply.arity,'binary')
+          multiply2=multiply.first
+          self.assertEqual(multiply2.id,'*')
+          self.assertEqual(multiply2.arity,'binary')
+          multiply3=multiply2.first
+          self.assertEqual(multiply3.id,'*')
+          self.assertEqual(multiply3.arity,'binary')
+          five=multiply3.first
+          self.assertEqual(valueof(five),'5')
+          self.assertEqual(five.id,'(literal)')
+          six=multiply3.second
+          self.assertEqual(valueof(six),'6')
+          self.assertEqual(five.id,'(literal)')
+          seven=multiply2.second
+          self.assertEqual(valueof(seven),'7')
+          self.assertEqual(five.id,'(literal)')
+          eight=multiply.second
+          self.assertEqual(valueof(eight),'8')
+          self.assertEqual(five.id,'(literal)')
+
+    def test_define_replace_constantidentifier_to_expression_in_middle(self):
+          a='#define Str 5 * 6 * { 2 + 3 + 4 + Str 7 * 8 ; }'
+          """          {
+                       |
+                       +
+                   /       \
+                  +         *
+                /  \       /  \
+               +    4     *    8
+             /  \       /  \
+            2    3     *    7
+                      / \
+                     5   6  """
+
+          root=Cparser.parse(a)
+          self.assertEqual(root.id,'{')
+          plus1=root.first[0]
+          self.assertEqual(plus1.id,'+')
+          self.assertEqual(plus1.arity,'binary')
+          plus2=plus1.first
+          self.assertEqual(plus2.id,'+')
+          self.assertEqual(plus2.arity,'binary')
+          plus3=plus2.first
+          self.assertEqual(plus3.id,'+')
+          self.assertEqual(plus3.arity,'binary')
+          two=plus3.first
+          self.assertEqual(valueof(two),'2')
+          self.assertEqual(two.id,'(literal)')
+          three=plus3.second
+          self.assertEqual(valueof(three),'3')
+          self.assertEqual(three.id,'(literal)')
+          four=plus2.second
+          self.assertEqual(valueof(four),'4')
+          self.assertEqual(four.id,'(literal)')
+          multiply=plus1.second
+          self.assertEqual(multiply.id,'*')
+          self.assertEqual(multiply.arity,'binary')
+          multiply2=multiply.first
+          self.assertEqual(multiply2.id,'*')
+          self.assertEqual(multiply2.arity,'binary')
+          multiply3=multiply2.first
+          self.assertEqual(multiply3.id,'*')
+          self.assertEqual(multiply3.arity,'binary')
+          five=multiply3.first
+          self.assertEqual(valueof(five),'5')
+          self.assertEqual(five.id,'(literal)')
+          six=multiply3.second
+          self.assertEqual(valueof(six),'6')
+          self.assertEqual(five.id,'(literal)')
+          seven=multiply2.second
+          self.assertEqual(valueof(seven),'7')
+          self.assertEqual(five.id,'(literal)')
+          eight=multiply.second
+          self.assertEqual(valueof(eight),'8')
+          self.assertEqual(five.id,'(literal)')
+
+    def test_statement_define_with_replace_constantidentifier_for_if_statement(self):
+        a=' #define Str if ( x  { Str == 2 ) else  y = 5 ; }'
+        """               {
+                          |
+                          if
+                          |
+                          |____________
+                          |          else
+                          |           |
+                          (           |
+                          |           |
+                          |           |
+                          |           |
+                          ==          |
+                         /  \         |
+                        x    2        |
+                                      |
+                                      |
+                                      |
+                                      |-------=
+                                            /   \
+                                           y     5
+
+                                                    """
+
+        root=Cparser.parse(a)
+        self.assertEqual(root.id,'{')
+        if_id=root.first[0]
+        self.assertEqual(if_id.id,'if')
+        bracket=if_id.first
+        self.assertEqual(bracket.id,'(')
+        equalequal=bracket.first
+        self.assertEqual(equalequal.id,'==')
+        x=equalequal.first
+        self.assertEqual(valueof(x),'x')
+        two=equalequal.second
+        self.assertEqual(valueof(two),'2')
+        brace=root.second
+        else1=if_id.second
+        self.assertEqual(else1.id,'else')
+        equal=else1.first
+        self.assertEqual(equal.id,'=')
+        y=equal.first
+        self.assertEqual(valueof(y),'y')
+        five=equal.second
+        self.assertEqual(valueof(five),'5')
+
+    def test_define_replace_constantidentifier_for_forloop(self):
+        a='#define Str for ( x = 0 ; x { Str = 5 ; x ++ ) x + y = z ; }'
+        """    {
+               |
+              for-----------------------------
+                  |         |      |        |
+                  =         |      ++       =
+                 / \        =      |      /  \
+                x   0      / \     x     +    z
+                          x   5         / \
+                                       x   y
+               """
+        root=Cparser.parse(a)
+        self.assertEqual(root.id,'{')
+        for_id=root.first[0]
+        self.assertEqual(for_id.id,'for')
+        equal=for_id.first
+        self.assertEqual(equal.id,'=')
+        x=equal.first
+        self.assertEqual(valueof(x),'x')
+        zero=equal.second
+        self.assertEqual(valueof(zero),'0')
+        equal2=for_id.second
+        self.assertEqual(equal2.id,'=')
+        x2=equal2.first
+        self.assertEqual(valueof(x2),'x')
+        five=equal2.second
+        self.assertEqual(valueof(five),'5')
+        plusplus=for_id.third
+        self.assertEqual(plusplus.id,'++')
+        x3=plusplus.first
+        self.assertEqual(valueof(x3),'x')
+        equal3=for_id.four
+        self.assertEqual(equal3.id,'=')
+        plus=equal3.first
+        self.assertEqual(plus.id,'+')
+        x=plus.first
+        self.assertEqual(valueof(x),'x')
+        y=plus.second
+        self.assertEqual(valueof(y),'y')
+        z=equal3.second
+        self.assertEqual(valueof(z),'z')
+
+
 
 
 if __name__ == '__main__':
@@ -1277,5 +1488,7 @@ if __name__ == '__main__':
         if debug_braces==True:
             suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_braces)
             unittest.TextTestRunner(verbosity=2).run(suite)
-
+        if debug_define==True:
+            suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_define)
+            unittest.TextTestRunner(verbosity=2).run(suite)
 

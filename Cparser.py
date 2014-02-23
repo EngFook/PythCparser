@@ -70,8 +70,8 @@ def parse(str):
 ##        print(token.first," is")
 
 
-a=parse(''' #define max for ( x =
+a=parse(''' #define max ( x =
         {
-        max 0 ; x > 0 ; x ++ ) x = 5 ;
+         if max 0 ) x = 5 ;
         } ''')
 print(a)
