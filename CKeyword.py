@@ -46,7 +46,7 @@ def CkeywordGrammar():
                     raise SyntaxError ('Invalid Statement')
 
             def REPR(self):
-                return '({0} {1} {2})'.format(self.id, self.first,self.first.constantidentifier)
+                return '({0} {1} {2})'.format(self.id, self.first,self.constantidentifier)
 
             sym=keyword('#define')
             sym.std=std
