@@ -70,7 +70,6 @@ def parse(str):
 ##        print(token.first," is")
 
 
-a=parse('''#define Str if (
-        { Str x = 5 ) ; y = 2 ;
+a=parse('''#define Str if ( {  Str x = 5 ) ; y = 2 ;
         } ''')
 print(a)
