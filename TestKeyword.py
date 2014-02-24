@@ -1156,6 +1156,34 @@ class TestKeyword_switchcase(unittest.TestCase):
         self.assertEqual(valueof(three),'3')
         self.assertEqual(three.id,'(literal)')
 
+    def test_back_address_switch_statement_with_condition_and_statement_block(self):
+        a='''switch ( choice )
+            {
+                case ' A ' : x = 1 ;
+                case ' C ' : y = 2 ; if ( x == 2 ) { w = v ;
+                case ' B ' : s = t ; } default : z = 4 ; }  '''
+        root=Cparser.parse(a)
+        bracket=root.second
+        self.assertEqual(bracket.id,'{')
+        listofchoice=bracket.address
+        bracket=listofchoice['A'][1]
+        listofchoice1=bracket.first
+        casea=listofchoice1[0]
+        self.assertEqual(casea.id,'case')
+        a=casea.first
+        self.assertEqual(valueof(a),'A')
+        self.assertEqual(a.id,'(identifier)')
+        self.assertEqual(bracket.id,'{')
+        bracket=listofchoice['B'][1]
+        listofchoice1=bracket.first
+        equal=listofchoice1[0]
+        w=equal.first
+        self.assertEqual(valueof(w),'w')
+        self.assertEqual(w.id,'(identifier)')
+        v=equal.second
+        self.assertEqual(valueof(v),'v')
+        self.assertEqual(v.id,'(identifier)')
+
     def test_switch_statement_with_condition_and_statement_block(self):
         a='''switch ( choice )
             {

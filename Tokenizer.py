@@ -8,6 +8,9 @@ class Tokenizer: # Class for Split Token
         self.storeforpeep=None
         self.current=None
         self.storecon1=None
+        self.define=True
+        self.array1=[]
+        self.count=0
         if str is not None:
             self.array=str.split()
         else:
@@ -15,10 +18,15 @@ class Tokenizer: # Class for Split Token
         self.gen=self.advanceToken()
 
     def advanceToken(self):
-        for word in self.array:
-            yield word
-        while True:
-            yield None
+
+            for word in self.array:
+                if self.define == True:
+                    self.count=self.count+1
+                    yield word
+                for word in self.array1:
+                    yield word
+            while True:
+                yield None
 
     def advance(self,expected=None):
         if self.wordAhead is not None:
@@ -48,7 +56,36 @@ class Tokenizer: # Class for Split Token
         else:
             self.current=createIndentifier(self.word)
             if self.current.first==self.storecon1:
-                print(self.array)
+                self.define=False
+                i=0
+                while i != self.count:
+                    del self.array[0]
+                    i=i+1
+                count=0
+                for i in self.storecon:
+                    if count==0:
+                        self.array1.append(self.storecon[count])
+                    elif self.storecon[count].id =='(identifier)':
+                        changestr=self.storecon[count]
+                        changestr=''.join(changestr.first)
+                        self.array1.append(changestr)
+                    elif self.storecon[count].id =='(literal)':
+                        changestr=self.storecon[count]
+                        changestr=''.join(changestr.first)
+                        self.array1.append(changestr)
+                    else:
+                        self.array1.append(self.storecon[count].id)
+                    count=count+1
+                count=0
+                for i in self.array:
+                    self.array1.append(self.array[count])
+                    count=count+1
+                if self.array1[0].id in symbolTable:
+                    temp=self.array1[0]
+                    del self.array1[0]
+                    return temp
+                else:
+                    raise SyntaxError ('Invalid statement')
         self.storeforpeep=self.current
         return self.current
 
