@@ -288,8 +288,18 @@ def CkeywordGrammar():
 ################################################################################
 ################################################################################
 ## Braces std
-################################################################################
-            def std(self,leftToken=None):
+#############################################################################@@@
+            global previous
+            global rootindex
+            global root
+            root=None
+            previous=-1
+            rootindex=0
+            def std(self):
+                global previous
+                global rootindex
+                global root
+                previous=previous+1
                 array=[]
                 check=tokenizer.peepahead()
                 while check.id !='}':
@@ -301,20 +311,48 @@ def CkeywordGrammar():
                             temp=expression.expression(0)
                             tokenizer.advance(';')
                         array.append(temp)
+                        index=array.index(temp)
+                        if previous :
+                            if temp.id == 'case':
+                                self.back[temp.first.first]=root,rootindex+1
+                        else:
+                            root=self
+                            rootindex=index
+                            if temp.id == 'case':
+                                self.back[temp.first.first]=None
+                        if hasattr(temp,'std'):
+                            if temp.id == 'case':
+                                case=temp.first
+                                self.address[case.first]=index,self
                         check=tokenizer.peepahead()
                 tokenizer.advance('}')
                 check=tokenizer.peepahead()
                 self.first=array
+                previous=previous-1
+                if previous == -1 :
+                    rootindex=0
                 return self
 
             def REPR(self):
-                if self.second == None:
-                    self.second = '}'
-                    return '{0} {1} {2}'.format(self.id, self.first,self.second)
-                return '{0} {1} {2} '.format(self.id, self.first ,self.second)
+                self.second = '}'
+                return '{0} {1} {2}'.format(self.id, self.first,self.second)
 
             sym=keyword('{')
             sym.std=std
+            sym.back={}
+            sym.address={}
+            sym.first=None
+            sym.second=None
+            sym.__repr__=REPR
+
+            def REPR(self):
+                self.second = '}'
+                return '{0} {1} {2}'.format(self.id, self.first,self.second)
+
+            sym=keyword('{')
+            sym.std=std
+            sym.back={}
+            sym.address={}
             sym.first=None
             sym.second=None
             sym.__repr__=REPR

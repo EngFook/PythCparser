@@ -108,4 +108,3 @@ class Tokenizer: # Class for Split Token
         self.statement_of_define=token_string
         self.variable_of_define=token_variable
         return
-

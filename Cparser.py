@@ -69,7 +69,8 @@ def parse(str):
 ##    else:
 ##        print(token.first," is")
 
+##
+##
+##a=parse('''#define Str for ( x = 0 ; x { Str = 5 ; x ++ ) x + y = z ; } ''')
+##print(a)
 
-a=parse('''#define Str if ( {  Str x = 5 ) ; y = 2 ;
-        } ''')
-print(a)
