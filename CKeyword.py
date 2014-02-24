@@ -30,20 +30,24 @@ def CkeywordGrammar():
                 token=self
                 tokenconstantidentifier=[]
                 check=tokenizer.peepahead()
-                while  check.first != '(end)' and check.id != '(newline)':
+                tokenizer.checkdefine(True)
+                while  check.first != '(end)' and check.first != '(newline)':
                     store=tokenizer.advance()
                     tokenconstantidentifier.append(store)
                     token.constantidentifier=tokenconstantidentifier
                     check=tokenizer.peepahead()
                 tokenizer.storeconstantidentifier(token.constantidentifier,token.first.first)
+                while tokenizer.peepahead().first=='(newline)':
+                    tokenizer.advance()
+                tokenizer.checkdefine(False)
                 check=tokenizer.peepahead()
                 if check.first=='(end)':
                     return token
                 if hasattr(check,'std'):
                     temp=parseStatement()
-                    return temp
                 else:
-                    raise SyntaxError ('Invalid Statement')
+                    temp=expression.expression(0)
+                return temp
 
             def REPR(self):
                 constantidentifier=[]

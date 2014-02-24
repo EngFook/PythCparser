@@ -55,10 +55,7 @@ def parse(str):
 ##    return array
 
 
-string=parse(""" #define fuck 10
-                  {
-                    x + y = 4 ;
-                    2 + 8 = fuck ; } """)
+string=parse(""" #define Str for ( x = 0 ;
+                {  Str x = 5 ; x ++ ) x + y = z ; }""")
 
-##print(a)
 print(string)
