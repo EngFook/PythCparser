@@ -36,7 +36,7 @@ def CkeywordGrammar():
                     tokenconstantidentifier.append(store)
                     token.constantidentifier=tokenconstantidentifier
                     check=tokenizer.peepahead()
-                tokenizer.storeconstantidentifier(token.constantidentifier,token.first.first)
+                tokenizer.storeconstantidentifier(token.constantidentifier,token.first.id)
                 while tokenizer.peepahead().first=='(newline)':
                     tokenizer.advance()
                 tokenizer.checkdefine(False)
@@ -47,22 +47,23 @@ def CkeywordGrammar():
                     temp=parseStatement()
                 else:
                     temp=expression.expression(0)
-                return temp
+                token.first.first=temp
+                return token
 
             def REPR(self):
-                constantidentifier=[]
-                count=0
-                for i in self.constantidentifier:
-                    if hasattr (self.constantidentifier[count],'std') or hasattr (self.constantidentifier[count],'id') :
-                        if self.constantidentifier[count].id != '(identifier)' and self.constantidentifier[count].id != '(literal)':
-                            constantidentifier.append(self.constantidentifier[count].id)
-                        else:
-                            constantidentifier.append(self.constantidentifier[count])
-                    else:
-                        constantidentifier=append(self.constantidentifier[count])
-                    count=count+1
+                return '({0} {1} {2})'.format(self.id, self.first.id,self.first.first)
+##                constantidentifier=[]
+##                count=0
+##                for i in self.constantidentifier:
+##                    if hasattr (self.constantidentifier[count],'std') or hasattr (self.constantidentifier[count],'id') :
+##                        if self.constantidentifier[count].id != '(identifier)' and self.constantidentifier[count].id != '(literal)':
+##                            constantidentifier.append(self.constantidentifier[count].id)
+##                        else:
+##                            constantidentifier.append(self.constantidentifier[count])
+##                    else:
+##                        constantidentifier=append(self.constantidentifier[count])
+##                    count=count+1
 
-                return '({0} {1} {2})'.format(self.id, self.first,constantidentifier)
 
             sym=keyword('#define')
             sym.std=std

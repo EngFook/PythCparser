@@ -56,4 +56,12 @@ def createSystemToken(value): # create identifier
     symObj.first=value
     return symObj
 
-
+def createConstantIdentifier(value):
+    sym=symbol(value)
+    sym.first=None
+    sym.arity=None
+    sym.__repr__=printCharacter
+    sym.nud=nud
+    symObj=sym()
+    symObj.first=value
+    return symObj

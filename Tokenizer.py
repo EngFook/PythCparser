@@ -7,7 +7,7 @@ class Tokenizer: # Class for Split Token
         self.word=None
         self.storeforpeep=None
         self.current=None
-        self.variable_of_define=None
+        self.variable_of_define=0
         self.define=False
         self.count=0
         self.checksemicolumn=None
@@ -42,6 +42,10 @@ class Tokenizer: # Class for Split Token
             temp=self.wordAhead
             self.wordAhead=None
             return temp
+        if self.word=='#define':
+            self.word=next(self.gen)
+            self.current=createConstantIdentifier(self.word)
+            return self.current
         self.word=next(self.gen)
         while self.HasDefine != True and self.word == '(newline)':
             self.word=next(self.gen)
