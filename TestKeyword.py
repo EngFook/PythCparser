@@ -1287,7 +1287,8 @@ class TestKeyword_define(unittest.TestCase):
         self.assertEqual(plus.id,'+')
 
     def test_define_replace_constantidentifier_to_expression(self):
-          a='#define Str 2 + 3 + { Str 4 + 5 * 6 * 7 * 8 ; }'
+          a='''#define Str  2 + 3 +
+           { Str 4 + 5 * 6 * 7 * 8 ; }'''
           """          {
                        |
                        +

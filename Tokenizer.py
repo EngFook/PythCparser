@@ -10,6 +10,7 @@ class Tokenizer: # Class for Split Token
         self.variable_of_define=None
         self.define=False
         self.count=0
+        self.checksemicolumn=None
         self.array_constantidentifier=[]
         if str is not None:
             self.array=str.split()
@@ -19,6 +20,9 @@ class Tokenizer: # Class for Split Token
 
     def advanceToken(self):
             for word in self.array:
+##                string=''.join(word)
+##                if string.split('\n'):
+##                    yield '(newline)'
                 if self.define == False:
                     self.count=self.count+1
                     yield word
@@ -35,13 +39,22 @@ class Tokenizer: # Class for Split Token
             temp=self.wordAhead
             self.wordAhead=None
             return temp
-        self.word=next(self.gen)
+        if self.checksemicolumn is None:
+            self.word=next(self.gen)
+##        else:
+##            self.checksemicolumn=None
+##            check=self.peepahead()
+##            if self.peepahead()!='(end)':
+##                self.current=createSystemToken('(newline)')
+##                return self.current
         if(self.word=='//' or self.word=='/*'):
             i=True
             while(i):
                 if(self.word=='*/'):
                     i=False
                 self.word=next(self.gen)
+##        if self.word == ';':
+##                self.checksemicolumn=self.word
         if expected is not None:
             if expected is not self.word:
                 raise SyntaxError('Expected {0}, but encounterd {1}'.format(expected,self.word))

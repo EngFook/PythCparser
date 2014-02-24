@@ -71,6 +71,22 @@ def parse(str):
 
 ##
 ##
-##a=parse('''#define Str for ( x = 0 ; x { Str = 5 ; x ++ ) x + y = z ; } ''')
-##print(a)
-
+##
+##a=parse('#define Str ( x = 0 ; x { for Str = 5 ; x ++ ) x + y = z ; }')
+string=("""{ Str = 5 ;
+            x + y = z ; } """)
+######b=a.split('\n')
+######print(b)
+######c=' '.join(b)
+######print(c)
+s=''
+sentences=string.split('\n')
+######
+######for sentence in sentences:
+######     s.join(sentence)
+######     s.join('(newline)')
+####
+for sentence in sentences:
+    s=s+sentence +'(newline)'
+print(string)
+print(s)

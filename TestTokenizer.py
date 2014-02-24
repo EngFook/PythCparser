@@ -110,6 +110,22 @@ class TestTokenizer(unittest.TestCase):
         tokenizer=Tokenizer('a')
         tokenizer.advance('a')
         self.assertRaises(SyntaxError,tokenizer.advance,'a')
+################################################################################
+################################################################################
+# Test -> Tokenizer for join constant Identifier
+################################################################################
+##    def testJoinConstantIdentifier(self):
+##        global tokenzier
+##        tokenizer=Tokenizer('a b c ')
+##        gen=tokenizer.advanceToken()
+##        a=next(gen)
+##        self.assertEqual(a,'a')
+##        b=next(gen)
+##        self.assertEqual(b,'b')
+##        c=next(gen)
+##        self.assertEqual(c,'c')
+##        d=next(gen)
+##        self.assertIsNone(d)
 
 if __name__=='__main__':
     if test_result==True:
