@@ -275,11 +275,14 @@ def CkeywordGrammar():
 #############################################################################@@@
             global previous
             global rootindex
+            global root
+            root=None
             previous=-1
             rootindex=0
             def std(self):
                 global previous
                 global rootindex
+                global root
                 previous=previous+1
                 array=[]
                 check=tokenizer.peepahead()
@@ -295,15 +298,16 @@ def CkeywordGrammar():
                         index=array.index(temp)
                         if previous :
                             if temp.id == 'case':
-                                self.back[temp.first]=rootindex
+                                self.back[temp.first.first]=root,rootindex+1
                         else:
+                            root=self
                             rootindex=index
                             if temp.id == 'case':
-                                self.back[temp.first]=None
+                                self.back[temp.first.first]=None
                         if hasattr(temp,'std'):
                             if temp.id == 'case':
                                 case=temp.first
-                                self.address[case]=index,previous
+                                self.address[case.first]=index,self
                         check=tokenizer.peepahead()
                 tokenizer.advance('}')
                 check=tokenizer.peepahead()

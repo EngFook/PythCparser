@@ -69,12 +69,7 @@ def parse(str):
 ##    else:
 ##        print(token.first," is")
 
-##
-a=parse('''switch ( choice )
-            {
-                case ' A ' : x = 1 ;
-                case ' C ' : if ( x == 2 ) { w = v ;
-                case ' B ' : s = t ; } default : z = 4 ; }  ''')
+
+a=parse('''#define a  fuck
+        { a = feifok ; }  ''')
 print(a)
-print(a.second.address)
-print(a.second.back)
