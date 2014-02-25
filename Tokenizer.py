@@ -13,16 +13,18 @@ class Tokenizer: # Class for Split Token
         self.checksemicolumn=None
         self.array_constantidentifier=[]
         if str is not None:
-            self.array=str.split()
+            s=''
+            sentences=str.split('\n')
+            for sentence in sentences:
+                s=s+sentence +' (newline) '
+            self.array=s.split()
+            del self.array[-1]
         else:
             self.array=[]
         self.gen=self.advanceToken()
 
     def advanceToken(self):
             for word in self.array:
-##                string=''.join(word)
-##                if string.split('\n'):
-##                    yield '(newline)'
                 if self.define == False:
                     self.count=self.count+1
                     yield word
@@ -39,24 +41,17 @@ class Tokenizer: # Class for Split Token
             temp=self.wordAhead
             self.wordAhead=None
             return temp
-        if self.checksemicolumn is None:
+        self.word=next(self.gen)
+        while self.define != True and self.word == '(newline)':
             self.word=next(self.gen)
-##        else:
-##            self.checksemicolumn=None
-##            check=self.peepahead()
-##            if self.peepahead()!='(end)':
-##                self.current=createSystemToken('(newline)')
-##                return self.current
         if(self.word=='//' or self.word=='/*'):
             i=True
             while(i):
                 if(self.word=='*/'):
                     i=False
                 self.word=next(self.gen)
-##        if self.word == ';':
-##                self.checksemicolumn=self.word
         if expected is not None:
-            if expected is not self.word:
+            if expected != self.word:
                 raise SyntaxError('Expected {0}, but encounterd {1}'.format(expected,self.word))
         if self.word in symbolTable:
             sym=symbolTable[self.word]

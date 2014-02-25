@@ -54,39 +54,11 @@ def parse(str):
 ##        array.append(temp)
 ##    return array
 
-##def intepreter(token):
-##    if(token.id != '(literal)' and token.id != '(identifier)' ):
-##        intepreter(token.first)
-##        if(token.id == '*'):
-##            print('a pointer to')
-##        elif(token.arity=='special'):
-##            print(token.id)
-##        elif(token.arity=="postunary"):
-##            if(token.id == '['):
-##                print("array ",token.second," at")
-##            else:
-##                print("function which take in ",token.second)
-##    else:
-##        print(token.first," is")
 
-##
-##
-##
-##a=parse('#define Str ( x = 0 ; x { for Str = 5 ; x ++ ) x + y = z ; }')
-string=("""{ Str = 5 ;
-            x + y = z ; } """)
-######b=a.split('\n')
-######print(b)
-######c=' '.join(b)
-######print(c)
-s=''
-sentences=string.split('\n')
-######
-######for sentence in sentences:
-######     s.join(sentence)
-######     s.join('(newline)')
-####
-for sentence in sentences:
-    s=s+sentence +'(newline)'
+string=parse(""" #define fuck 10
+                  {
+                    x + y = 4 ;
+                    2 + 8 = fuck ; } """)
+
+##print(a)
 print(string)
-print(s)

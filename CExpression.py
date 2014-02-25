@@ -290,52 +290,18 @@ def CexpressionGrammar():
             sym.nud=nud
             sym.led=led
 
-##            '''def led(self,leftToken=None):
-##                self.arity='postunary'
-##                sym=symbol(self.id)
-##                sym.__repr__=REPR
-##                temp=[]
-##                temp1=sym()
-##                temp1.id=None
-##                while(temp1.id != '*/'):
-##                    temp1=tokenizer.advance()
-##                    if(temp1.id == '(identifier)' or temp1.id == '(literal)'):
-##                        temp.append(temp1.first)
-##                    else:
-##                        temp.append(temp1.id)
-##               	temp.remove(temp1.id)
-##                temp=''.join(temp)
-##                self.first=temp
-##                return self
-##            sym=infix('/*',100)
-##            sym.__repr__=REPR
-##            sym.nud=led
-##            sym.led=led
-##            sym=infix('*/',0)
-##            sym.__repr__=REPR
-##            sym.nud=led
-##            sym.led=led
-##
-##            def led(self,leftToken=None):   # same as above.
-##                self.arity='unary'
-##                sym=symbol(self.id)
-##                sym.__repr__=REPR
-##                temp=[]
-##                temp1=sym()
-##                while(temp1.first != '(end)'):
-##                    temp1=tokenizer.advance()
-##                    if(temp1.id == '(identifier)' or temp1.id == '(literal)'):
-##                        temp.append(temp1.first)
-##                    else:
-##                        temp.append(temp1.id)
-##               	temp.remove(temp1.id)
-##                temp=''.join(temp)
-##                self.first=temp
-##                return self
-##            sym=infix('#',100)
-##            sym.__repr__=REPR
-##            sym.nud=led
-##            sym.led=led'''
+            def nud(self):
+                self.first=expression(0)
+                tokenizer.advance("'")
+                return self.first
+
+            def REPR(self):
+                return '{0} {1} {2}'.format(self.id,self.first,self.id)
+
+            sym=infix("'",0)
+            sym.__repr__=REPR
+            sym.nud=nud
+            sym.led=led
 
 ################################################################################
 CexpressionGrammar() # call C expressionGrammar

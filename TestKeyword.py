@@ -1073,10 +1073,6 @@ class TestKeyword_forloop(unittest.TestCase):
 ################################################################################
 class TestKeyword_switchcase(unittest.TestCase):
 
-##
-##    still have to add some more.
-##
-##
 
     def test_switch_case_with_one_body_in_each_case(self):
         a='''switch ( choice )
@@ -1171,6 +1167,12 @@ class TestKeyword_switchcase(unittest.TestCase):
         v=equal.second
         self.assertEqual(valueof(v),'v')
         self.assertEqual(v.id,'(identifier)')
+
+    def test_if_loop_cannot_contain_case(self):
+         a='''if ( cond ) {
+                case 10 : x + y ; }'''
+         self.assertRaises(SyntaxError,Cparser.parse,a)
+
 
     def test_switch_statement_with_condition_and_statement_block(self):
         a='''switch ( choice )
@@ -1273,10 +1275,8 @@ class TestKeyword_define(unittest.TestCase):
     def test_define_stament(self):
         a='#define Str 10 + '
         """ #define
-               |
-               x
-               |
-               10"""
+               | |- 10
+               x |- + """
         root=Cparser.parse(a)
         self.assertEqual(root.id,'#define')
         Str=root.first
@@ -1520,4 +1520,3 @@ if __name__ == '__main__':
         if debug_define==True:
             suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_define)
             unittest.TextTestRunner(verbosity=2).run(suite)
-

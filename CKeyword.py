@@ -30,7 +30,7 @@ def CkeywordGrammar():
                 token=self
                 tokenconstantidentifier=[]
                 check=tokenizer.peepahead()
-                while  check.first != '(end)' and check.id is not '{':
+                while  check.first != '(end)' and check.id != '(newline)':
                     store=tokenizer.advance()
                     tokenconstantidentifier.append(store)
                     token.constantidentifier=tokenconstantidentifier
@@ -74,7 +74,12 @@ def CkeywordGrammar():
                     raise SyntaxError('Expected a condition start with a open bracket ("(") . ')
                 self.first=expression.expression(0)
                 if hasattr(tokenizer.peepahead(),'std'):
+                    print(tokenizer.peepahead())
                     self.second=parseStatement()
+                    if previous == -1 :
+                        for check in self.second.first:
+                            if check.id == 'case' :
+                                raise SyntaxError('It is not inside switch loop')
                 else:
                     if tokenizer.peepahead().first != ';':
                         self.second=expression.expression(0)
@@ -85,8 +90,7 @@ def CkeywordGrammar():
                 if hasattr(check,'std'):
                     if check.id == 'else':
                         self.third=parseStatement()
-                    elif check.id == 'case':
-                        return self
+
                 else:
                     self.third=None
                 return self
@@ -254,9 +258,7 @@ def CkeywordGrammar():
             def std(self):
                 if self.id == 'case':
                     tokenizer.advance()
-                    tokenizer.advance("'")
-                    self.first=tokenizer.advance()
-                    tokenizer.advance("'")
+                    self.first=expression.expression(0)
                     tokenizer.advance(':')
                     return self
                 elif hasattr(self,'std'):
@@ -325,6 +327,9 @@ def CkeywordGrammar():
                                 case=temp.first
                                 self.address[case.first]=index,self
                         check=tokenizer.peepahead()
+                        if check == '(newline)':
+                            tokenizer.advance()
+                            check=tokenizer.peepahead()
                 tokenizer.advance('}')
                 check=tokenizer.peepahead()
                 self.first=array
@@ -395,7 +400,6 @@ def CkeywordGrammar():
 ################################################################################
 ################################################################################
 CkeywordGrammar() # all C keywordGrammar
-
 
 
 
