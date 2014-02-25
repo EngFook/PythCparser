@@ -188,14 +188,17 @@ def CexpressionGrammar():
 
 
             def REPR(self): #for print number or symbol instead of address
-                if hasattr(self,'third') and hasattr(self,'third'):
-                    return '({0})'.format(self.first)
                 if hasattr(self,'third'):
-                    return '({0}) ({1}) {2}'.format(self.first,self.second,self.third)
-                if(self.arity=='grouping'):
-                    return '{0} {1}'.format(self.id,self.first)
-                else:
-                    return '({0}) ({1})'.format(self.first,self.second)
+                    if self.second == None and self.third == None:
+                        return '({0} )'.format(self.first)
+                    elif self.second == None:
+                        return '({0} {1})'.format(self.first,self.second)
+                    else:
+                        '({0})'.format(self.first)
+                    if(self.arity=='grouping'):
+                        return '{0} {1} '.format(self.id,self.first)
+                    else:
+                        return '({0}) ({1})'.format(self.first,self.second)
 
             def nud(self):
                 self.arity='grouping'

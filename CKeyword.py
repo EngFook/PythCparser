@@ -368,12 +368,13 @@ def CkeywordGrammar():
             sym.__repr__=REPR
 
             def REPR(self):
-                if self.second != None :
-                    return '({0} {1} {2})'.format(self.id ,self.first,self.second)
+                if hasattr(self,'second'):
+                    if self.second != None :
+                        return '({0} {1} {2})'.format(self.id ,self.first,self.second)
                 return '({0} {1})'.format(self.id ,self.first)
 
             def std(self):
-                self.first=expression.expression(90)
+                self.first=expression.expression(0)
                 return self
 
             sym=keyword('int')
