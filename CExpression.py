@@ -189,8 +189,10 @@ def CexpressionGrammar():
 
             def REPR(self): #for print number or symbol instead of address
                 if hasattr(self,'third'):
-                    if self.second == None and self.third == None:
-                        return '({0} )'.format(self.first)
+                    if self.third !=None:
+                        return '({0} {1} {2} )'.format(self.first,self.second,self.third)
+                    elif self.second == None and self.third == None:
+                        return '( {0} )'.format(self.first)
                     elif self.second == None:
                         return '({0} {1})'.format(self.first,self.second)
                     else:

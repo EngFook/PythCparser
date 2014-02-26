@@ -54,6 +54,13 @@ def parse(str):
 ##        array.append(temp)
 ##    return array
 
+a=parse('''int func ( int x , int y )
+            {
+                x = a ;
+                y = b ;
+                return a + b ;
+            } ''')
 
-a=parse(" a = foo ( 2 , 3 ) ;")
 print(a)
+##print("break 1 :",a.second.first[1].second.first[1].braces)
+##print("break 2 :",a.second.first[2].braces)
