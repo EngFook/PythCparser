@@ -3,6 +3,7 @@ import Cparser
 from TestTokenizer import *
 from TestKeyword import *
 from TestExpression import *
+from TestInterpreter import *
 from Tokenizer import *
 def valueof(symObj):
     return symObj.first

@@ -694,10 +694,9 @@ class TestExperession(unittest.TestCase):
         b=plus.second
         self.assertEqual(valueof(b),'b')
 
-
 if __name__=='__main__':
     if test_result==True:
         unittest.main()
     elif debug_all==True:
-        suite = unittest.TestLoader().loadTestsFromTestCase(TestTokenizer)
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestExperession)
         unittest.TextTestRunner(verbosity=2).run(suite)

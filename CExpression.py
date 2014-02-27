@@ -15,6 +15,17 @@ def nud(self,token):
     self.first=temp.nud()
     return self
 
+def REPR(self):
+    return '({0} {1})'.format(self.id ,self.first)
+
+def prefix(id, bindingPower):
+    sym=symbol(id)
+    sym.first=None
+    sym.arity='unary'
+    sym.leftBindingPower=bindingPower
+    sym.__repr__=REPR
+    return sym
+
 def REPR(self): #for print number or symbol instead of address
     return '({0} {1} {2})'.format(self.first,self.id, self.second)
 
@@ -24,17 +35,6 @@ def infix(id, bindingPower,Type=True):
     sym.first=None
     sym.second=None
     sym.arity='binary'
-    sym.leftBindingPower=bindingPower
-    sym.__repr__=REPR
-    return sym
-
-def REPR(self):
-    return '({0} {1})'.format(self.id ,self.first)
-
-def prefix(id, bindingPower):
-    sym=symbol(id)
-    sym.first=None
-    sym.arity='unary'
     sym.leftBindingPower=bindingPower
     sym.__repr__=REPR
     return sym
@@ -73,9 +73,10 @@ def CexpressionGrammar():
                 return self
 
             sym=infix('+',40)
+            sym.__repr__=REPR
             sym.led=led
             sym.nud=nud
-            sym.__repr__=REPR
+
             sym=infix('-',40)
             sym.led=led
             sym.nud=nud
