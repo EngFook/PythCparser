@@ -15,20 +15,11 @@ def nud(self,token):
     self.first=temp.nud()
     return self
 
-def REPR(self):
-    return '({0} {1})'.format(self.id ,self.first)
-
-def prefix(id, bindingPower):
-    sym=symbol(id)
-    sym.first=None
-    sym.arity='unary'
-    sym.leftBindingPower=bindingPower
-    sym.__repr__=REPR
-    return sym
-
 def REPR(self): #for print number or symbol instead of address
-    return '({0} {1} {2})'.format(self.first,self.id, self.second)
-
+    if self.arity == 'binary':
+        return '({0} {1} {2})'.format(self.first,self.id, self.second)
+    else:
+        return '({0} {1})'.format(self.id, self.first)
 def infix(id, bindingPower,Type=True):
     sym=symbol(id)
     sym.left=Type
@@ -36,7 +27,13 @@ def infix(id, bindingPower,Type=True):
     sym.second=None
     sym.arity='binary'
     sym.leftBindingPower=bindingPower
-    sym.__repr__=REPR
+    return sym
+
+def prefix(id, bindingPower):
+    sym=symbol(id)
+    sym.first=None
+    sym.arity='unary'
+    sym.leftBindingPower=bindingPower
     return sym
 
 def expression(rightBindingPower):
@@ -77,13 +74,32 @@ def CexpressionGrammar():
             sym.led=led
             sym.nud=nud
 
-            sym=infix('-',40)
+            sym=infix('&',40)
+            sym.__repr__=REPR
             sym.led=led
             sym.nud=nud
+
+            sym=infix('|',40)
             sym.__repr__=REPR
+            sym.led=led
+
+            sym=infix('^',40)
+            sym.__repr__=REPR
+            sym.led=led
+
+            sym=infix('-',40)
+            sym.__repr__=REPR
+            sym.led=led
+            sym.nud=nud
+
             sym=infix('/',60)
             sym.led=led
             sym.__repr__=REPR
+
+            sym=infix('%',60)
+            sym.led=led
+            sym.__repr__=REPR
+
             sym=infix('*',60)
             sym.led=led
             sym.nud=nud
@@ -111,11 +127,17 @@ def CexpressionGrammar():
             sym.nud=nud
             sym.led=led
 
-            def REPR(self): #for print number or symbol instead of address
-                if(self.arity=='unary'):
-                    return '({0} {1})'.format(self.id ,self.first)
-                elif(self.arity=='binary'):
-                    return '({0} {1} {2})'.format(self.first,self.id, self.second)
+            def led (self,leftToken):
+                raise SyntaxError('{0} should come before a word.Invalid Logic'.format(self.first))
+
+            sym=prefix('!',90)
+            sym.__repr__=REPR
+            sym.nud=nud
+            sym.led=led
+            sym=prefix('~',90)
+            sym.__repr__=REPR
+            sym.nud=nud
+            sym.led=led
 
             def nud(self):
                 raise SyntaxError('{0} should come after a word.Invalid Logic'.format(self.first))
@@ -127,6 +149,12 @@ def CexpressionGrammar():
                 self.second=token
                 return self
 
+            def REPR(self): #for print number or symbol instead of address
+                if self.arity == 'unary' :
+                    return '({0} {1})'.format(self.id ,self.first)
+                elif self.arity == 'binary':
+                    return '({0} {1} {2})'.format(self.first,self.id, self.second)
+
             sym=infix('**',70)
             sym.led=led
             sym.__repr__=REPR
@@ -137,39 +165,53 @@ def CexpressionGrammar():
             sym.led=led
             sym.__repr__=REPR
             sym.nud=led
-            sym=infix('=+',10)
+            sym=infix('+=',10)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('=-',10)
+            sym=infix('-=',10)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('=*',10)
+            sym=infix('*=',10)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('=/',10)
+            sym=infix('/=',10)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('=%',10)
+            sym=infix('%=',10)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('=~',10)
+            sym=infix('~=',10)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('=!',10)
+            sym=infix('!=',10)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('=<<',10)
+            sym=infix('<<=',10)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('=>>',10)
+            sym=infix('>>=',10)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('<',10)
+            sym=infix('<',12)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('>',10)
+            sym=infix('>',12)
             sym.__repr__=REPR
             sym.led=led
+            sym=infix('<=',12)
+            sym.__repr__=REPR
+            sym.led=led
+            sym=infix('>=',12)
+            sym.__repr__=REPR
+            sym.led=led
+            sym=infix('<<',15)
+            sym.__repr__=REPR
+            sym.led=led
+            sym=infix('>>',15)
+            sym.__repr__=REPR
+            sym.led=led
+
+
 
             def led(self,leftToken):
                 if(leftToken.id == '(identifier)'):
@@ -180,10 +222,10 @@ def CexpressionGrammar():
                     return self
                 else:
                     raise SyntaxError("Input should be identifier!")
-            sym=infix('.',40)
+            sym=infix('.',80)
             sym.__repr__=REPR
             sym.led=led
-            sym=infix('->',40)
+            sym=infix('->',80)
             sym.__repr__=REPR
             sym.led=led
 
@@ -308,6 +350,9 @@ def CexpressionGrammar():
             sym.__repr__=REPR
             sym.nud=nud
             sym.led=led
+
+            def nud(self):
+                pass
 
 ################################################################################
 CexpressionGrammar() # call C expressionGrammar

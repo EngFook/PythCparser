@@ -55,8 +55,5 @@ def parse(str):
 ##        array.append(temp)
 ##    return array
 ##
-##a=parse('2 + 3 ;')
-##
+##a=parse('a = 1 ;')
 ##print(a)
-##print("break 1 :",a.second.first[1].second.first[1].braces)
-##print("break 2 :",a.second.first[2].braces)

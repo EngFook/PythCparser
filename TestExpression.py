@@ -437,10 +437,10 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(z.id,'(identifier)')
 
     def testequalandetcwithequal(self):
-        a='x = w =+ y ;'
+        a='x = w += y ;'
         """     =
                / \
-              x   =+
+              x   +=
                  /  \
                 w   y """
 
@@ -451,7 +451,7 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(x),'x')
         self.assertEqual(x.id,'(identifier)')
         equalplus=root.second
-        self.assertEqual(equalplus.id,'=+')
+        self.assertEqual(equalplus.id,'+=')
         self.assertEqual(equalplus.arity,'binary')
         w=equalplus.first
         self.assertEqual(valueof(w),'w')
