@@ -4,8 +4,10 @@ def dprint(args, kwargs):
         print (args,kwargs)
 ############################        "files imported"
 from Tokenizer import *
+import CInterperter
 import CExpression
 import CKeyword
+import CScope
 array=[]
 newarray=[]
 ############################
@@ -74,3 +76,4 @@ a=parsex(''' #define Strtwo 100 + 200 +
               Str = 5 ; x ++ ) x + y = z ; ''')
 
 print(a)
+

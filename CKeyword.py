@@ -33,7 +33,6 @@ def configure_tokenizer_Keyword(module):
 ####################################
 def keyword(id):
     sym=symbol(id)
-    sym.std=None
     sym.arity=None
     return sym
 def parseStatement():
@@ -44,6 +43,8 @@ def parseStatement():
 ################################################################################
 
 def CkeywordGrammar():
+            global FlowControlStack
+            FlowControlStack=[]
             def std(self,leftToken=None):
                 token=self
                 if (tokenizer.peepahead().first=='define'):
@@ -115,7 +116,9 @@ def CkeywordGrammar():
                     raise SyntaxError('Expected a condition start with a open bracket ("(") . ')
                 self.first=expression.expression(0)
                 if hasattr(tokenizer.peepahead(),'std'):
+                    FlowControlStack.append(tokenizer.peepahead())
                     self.second=parseStatement()
+                    FlowControlStack.pop()
                     if previous == -1 :
                         for check in self.second.first:
                             if check.id == 'case' :
@@ -138,10 +141,13 @@ def CkeywordGrammar():
             def REPR(self):##return '({0} {1} {2}) \n{3}'.format(self.id, self.first, self.second ,self.third)##
                 if self.third == None:
                     if self.second == None:
-                        return '({0} {1}'.format(self.id, self.first)
-                    return '({0} {1} {2}'.format(self.id, self.first, self.second)
+                        return '{0} {1}'.format(self.id, self.first)
+                    return '( {0} {1} {2} )'.format(self.id, self.first, self.second)
                 if self.second == None:
-                    return '({0} {1} {2})'.format(self.id, self.first,self.third)
+                    return '( {0} {1} {2} )'.format(self.id, self.first,self.third)
+                return '( {0} {1} {2} {3})'.format(self.id, self.first,self.second,self.third)
+
+
             sym=keyword('if')
             sym.std=std
             sym.first=None
@@ -186,10 +192,15 @@ def CkeywordGrammar():
                         self.second=None
                         return self
                 if hasattr(tokenizer.peepahead(),'std'):
-                        self.second=parseStatement()
+                    FlowControlStack.append(tokenizer.peepahead())
+                    self.second=parseStatement()
+                    if previous == -1 :
+                        for check in self.second.first:
+                            if check.id == 'case' :
+                                raise SyntaxError('It is not inside switch loop')
+                    FlowControlStack.pop()
                 else:
                         self.second=expression.expression(0)
-
                 return self
 
             def REPR(self):
@@ -208,9 +219,9 @@ def CkeywordGrammar():
                 sym=symbol(self.id)
                 temp=tokenizer.advance()
                 self.first=temp.std()
-                temp=tokenizer.peepahead()
-                if(tokenizer.peepahead().id == 'while'):
-                    self.second=tokenizer.advance().std()
+                temp=tokenizer.advance()
+                if(temp.id == 'while'):
+                    self.second=temp.std()
                 return self
 
             def REPR(self):
@@ -280,7 +291,9 @@ def CkeywordGrammar():
                 self.first=expression.expression(0)
                 tokenizer.advance(')')
                 token=tokenizer.advance('{')
+                FlowControlStack.append(token)
                 temp=token.std()
+                FlowControlStack.pop()
                 self.second=temp
                 return self
 
@@ -337,6 +350,7 @@ def CkeywordGrammar():
             root=None
             previous=-1
             rootindex=0
+
             def std(self):
                 global previous
                 global rootindex
@@ -346,9 +360,10 @@ def CkeywordGrammar():
                 check=tokenizer.peepahead()
                 while check.id !='}':
                         if hasattr(check,'std'):
-                           if( check.id == 'if' or check.id == 'for' or check.id == 'do' or check.id == 'while'):
-                                temp=parseStatement()
-                           else : temp=check.std()
+                           if(check.id== 'case' or check.id =='default'):
+                                temp=check.std()
+                           else:
+                            temp=parseStatement()
                         else:
                             temp=expression.expression(0)
                             tokenizer.advance(';')
@@ -387,43 +402,50 @@ def CkeywordGrammar():
             sym.back={}
             sym.address={}
             sym.first=None
+            sym.test='o-o'
             sym.second=None
             sym.__repr__=REPR
 
             def REPR(self):
-                self.second = '}'
-                return '{0} {1} {2}'.format(self.id, self.first,self.second)
-
-            sym=keyword('{')
-            sym.std=std
-            sym.back={}
-            sym.address={}
-            sym.first=None
-            sym.second=None
-            sym.__repr__=REPR
-
-            def REPR(self):
-                if self.second != None :
-                    return '({0} {1} {2})'.format(self.id ,self.first,self.second)
+                if hasattr(self,'second'):
+                    if self.second != None :
+                        return '({0} {1} {2})'.format(self.id ,self.first,self.second)
                 return '({0} {1})'.format(self.id ,self.first)
 
+            def limitedExpression(self,rightBindingPower):
+                global tokenizer
+                token=tokenizer.peepahead()
+                while(rightBindingPower<token.leftBindingPower):
+                    token=token.led(self)
+                    self=token
+                    token=tokenizer.peepahead()
+                return self
+
             def std(self):
-                self.first=expression.expression(90)
+                if tokenizer.peepahead().id == '(identifier)':
+                    self.first=tokenizer.advance()
+                else:
+                    self.first=expression.expression(100)
+                self=self.limitedExpression(0)
+                if tokenizer.peepahead().first == ';':
+                    tokenizer.advance()
                 return self
 
             sym=keyword('int')
             sym.std=std
-            sym.second=None
             sym.first=None
+            sym.second=None
+            sym.limitedExpression=limitedExpression
             sym.__repr__=REPR
 
             sym=keyword('double')
             sym.std=std
             sym.first=None
+            sym.second=None
+            sym.limitedExpression=limitedExpression
             sym.__repr__=REPR
 
             def std(self):
-                tokenizer.advance()
                 self.first=expression.expression(0)
                 tokenizer.advance()
                 return self
@@ -433,6 +455,27 @@ def CkeywordGrammar():
 
             sym=keyword('return')
             sym.std=std
+            sym.first=None
+            sym.__repr__=REPR
+
+            def std(self):
+                if FlowControlStack != []:
+                    self.braces=FlowControlStack[-1]
+                tokenizer.advance(';')
+                return self
+
+            def REPR(self):
+                return '{0}'.format(self.id)
+
+            sym=keyword('break')
+            sym.std=std
+            sym.braces=None
+            sym.first=None
+            sym.__repr__=REPR
+
+            sym=keyword('continue')
+            sym.std=std
+            sym.braces=None
             sym.first=None
             sym.__repr__=REPR
 
