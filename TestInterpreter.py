@@ -416,7 +416,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parse(a)
         value=root.interpreter()
         five = value[2]
-        self.assertEqual(six,5)
+        self.assertEqual(five,5)
 
     def test_if_with_condition_interpreter(self):
         a="""{

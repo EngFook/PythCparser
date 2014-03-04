@@ -376,9 +376,22 @@ def CkeywordGrammar():
                         return '({0} {1} {2})'.format(self.id ,self.first,self.second)
                 return '({0} {1})'.format(self.id ,self.first)
 
+            def limitedExpression(self,rightBindingPower):
+                global tokenizer
+                token=tokenizer.peepahead()
+                while(rightBindingPower<token.leftBindingPower):
+                    token=token.led(self)
+                    self=token
+                    token=tokenizer.peepahead()
+                return self
+
             def std(self):
-                self.first=expression.expression(0)
-                if tokenizer.peepahead().first==";" :
+                if tokenizer.peepahead().id == '(identifier)':
+                    self.first=tokenizer.advance()
+                else:
+                    self.first=expression.expression(100)
+                self=self.limitedExpression(0)
+                if tokenizer.peepahead().first == ';':
                     tokenizer.advance()
                 return self
 
@@ -386,12 +399,14 @@ def CkeywordGrammar():
             sym.std=std
             sym.first=None
             sym.second=None
+            sym.limitedExpression=limitedExpression
             sym.__repr__=REPR
 
             sym=keyword('double')
             sym.std=std
             sym.first=None
             sym.second=None
+            sym.limitedExpression=limitedExpression
             sym.__repr__=REPR
 
             def std(self):

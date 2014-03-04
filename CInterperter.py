@@ -59,7 +59,7 @@ def CInterpreterGrammar():
     def interpreter(self):
         return self.first.interpreter()
 
-    sym=CExpression.infix('(',100)
+    sym=CExpression.infix('(',50)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -99,7 +99,10 @@ def CInterpreterGrammar():
 
     def interpreter(self):
         global assignTable
-        assignTable[self.first.first]=self.first
+        if hasattr(self.first,'std'):
+            assignTable[self.first.first.first]=self.first
+        else:
+            assignTable[self.first.first]=self.first
         self.first.interpreter=self.second.interpreter
         return self
 
@@ -203,7 +206,7 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        temp=self.first.interpreter()
+        temp=self.first.first.interpreter()
         return temp
 
     sym=CKeyword.keyword('int')

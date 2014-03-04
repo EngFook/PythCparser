@@ -7,6 +7,7 @@ from Tokenizer import *
 import CInterperter
 import CExpression
 import CKeyword
+import CScope
 array=[]
 ############################
 ############################
@@ -54,6 +55,6 @@ def parse(str):
 ##        store=tokenizer.peepahead()
 ##        array.append(temp)
 ##    return array
-##a=parse("""( )  ; """)
+##a=parse(""" a * ( b - c ) ( 4 ) ;""")
 ##print(a)
 

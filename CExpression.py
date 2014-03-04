@@ -254,7 +254,9 @@ def CexpressionGrammar():
                 return self
 
             def led(self,leftToken):
-                self.arity='postunary'
+                if leftToken.arity == 'binary':
+                    raise SyntaxError('Should not enter "{0}" '.format(self.id))
+                self.arity='function'
                 tokenizer.advance()
                 temp=[]
                 comma=False
@@ -282,7 +284,7 @@ def CexpressionGrammar():
                         self.third=Keyword.parseStatement()
                 return self
 
-            sym=infix('(',100)
+            sym=infix('(',50)
             sym.__repr__=REPR
             sym.nud=nud
             sym.led=led
@@ -317,7 +319,7 @@ def CexpressionGrammar():
                 else:
                     return '({0} [{1}] )'.format(self.first,self.second)
 
-            sym=infix('[',100)
+            sym=infix('[',50)
             sym.__repr__=REPR
             sym.nud=nud
             sym.led=led

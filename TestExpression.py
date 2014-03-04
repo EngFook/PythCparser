@@ -436,7 +436,7 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(z),'z')
         self.assertEqual(z.id,'(identifier)')
 
-    def testequalandetcwithequal(self):
+    def test_equal_and_etcwithequal(self):
         a='x = w += y ;'
         """     =
                / \
@@ -481,7 +481,7 @@ class TestExperession(unittest.TestCase):
         self.assertRaises(SyntaxError,Cparser.parse,a)
 
 
-    def testbracket(self):
+    def test_bracket(self):
         a='func [ a ] [ b ] ;'
         """    [
                /  \
@@ -506,7 +506,7 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(func.id,'(identifier)')
 
 
-    def testInta(self):
+    def test_Int_a(self):
         a='int a ;'
         """  int
              |
@@ -518,7 +518,7 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
 
-    def testbracketwithdeclaration(self):
+    def test_bracket_with_declaration(self):
         a='func ( int a ) ;'
         """   (
              / \
@@ -528,7 +528,7 @@ class TestExperession(unittest.TestCase):
 
         root=Cparser.parse(a)
         self.assertEqual(root.id,'(')
-        self.assertEqual(root.arity,'postunary')
+        self.assertEqual(root.arity,'function')
         integer=root.second
         self.assertEqual(integer.id,'int')
         a=integer.first
@@ -538,7 +538,30 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(func),'func')
         self.assertEqual(func.id,'(identifier)')
 
-    def testfunctioncallwithcomma(self):
+    def test_function_call_with_comma_and_int(self):
+        a='int function ( a , b ) ;'
+        """     (
+               /  \
+             int   |
+               |   |-a
+          function |-b """
+
+        root=Cparser.parse(a)
+        self.assertEqual(root.id,'(')
+        self.assertEqual(root.arity,'function')
+        INT=root.first
+        self.assertEqual(INT.id,'int')
+        function=INT.first
+        self.assertEqual(valueof(function),'function')
+        self.assertEqual(function.id,'(identifier)')
+        a=root.second[0]
+        self.assertEqual(valueof(a),'a')
+        self.assertEqual(a.id,'(identifier)')
+        b=root.second[1]
+        self.assertEqual(valueof(b),'b')
+        self.assertEqual(b.id,'(identifier)')
+
+    def test_function_call_with_comma(self):
         a=' function ( a , b ) ;'
         """     (
                /  \
@@ -548,7 +571,7 @@ class TestExperession(unittest.TestCase):
 
         root=Cparser.parse(a)
         self.assertEqual(root.id,'(')
-        self.assertEqual(root.arity,'postunary')
+        self.assertEqual(root.arity,'function')
         function=root.first
         self.assertEqual(valueof(function),'function')
         self.assertEqual(function.id,'(identifier)')
@@ -559,7 +582,7 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
 
-    def testfunctioncallwithcommawithdeclaration(self):
+    def test_function_call_with_comma_with_declaration(self):
         a=' function ( int a , double b ) ;'
         """     (
                /  \
@@ -569,7 +592,7 @@ class TestExperession(unittest.TestCase):
 
         root=Cparser.parse(a)
         self.assertEqual(root.id,'(')
-        self.assertEqual(root.arity,'postunary')
+        self.assertEqual(root.arity,'function')
         function=root.first
         self.assertEqual(valueof(function),'function')
         self.assertEqual(function.id,'(identifier)')
@@ -584,7 +607,7 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
 
-    def testintegerwithpointerwithfunction(self):
+    def test_integer_with_pointer_with_function(self):
         a='int * ( * ptr ) ;'
 
         """     int
@@ -611,31 +634,30 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(ptr.id,'(identifier)')
 
 
-    def testfunctioncallwithcommaanddeclaration(self):
+    def test_function_call_with_command_declaration(self):
         a='int * ( * ptr ) ( int a , double b ) ;'
 
-        """     int
-                 |
-                 *
-                 |
-                 (
+        """      (
                  |
                 / \
-               (   |
+              int  |
                |   |-int-a
                *   |-double-b
+               |
+               (
+               |
+               *
                |
                ptr     """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'int')
-        address=root.first
+        self.assertEqual(root.id,'(')
+        INT=root.first
+        self.assertEqual(INT.id,'int')
+        address=INT.first
         self.assertEqual(address.id,'*')
         self.assertEqual(address.arity,"unary")
-        bracket=address.first
-        self.assertEqual(bracket.id,'(')
-        self.assertEqual(bracket.arity,"postunary")
-        bracket1=bracket.first
+        bracket1=address.first
         self.assertEqual(bracket1.id,'(')
         self.assertEqual(bracket1.arity,"grouping")
         address1=bracket1.first
@@ -644,36 +666,35 @@ class TestExperession(unittest.TestCase):
         ptr=address1.first
         self.assertEqual(valueof(ptr),'ptr')
         self.assertEqual(ptr.id,'(identifier)')
-        int1=bracket.second[0]
+        int1=root.second[0]
         self.assertEqual(int1.id,'int')
         a=int1.first
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
-        double1=bracket.second[1]
+        double1=root.second[1]
         self.assertEqual(double1.id,'double')
         b=double1.first
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
 
-    def testfunctiondefinition(self):
+    def test_function_definition(self):
         a='''int func ( int x , int y )
             {
                 return a + b ;
             } '''
-        """     int
-               /
+        """
               (-----{----------return
             /   \                |
-         func    |-int-x         +
-                 |-int-y        / \
-                               a   b"""
+          int    |-int-x         +
+            |    |-int-y        / \
+        function               a   b"""
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'int')
-        bracket=root.first
-        self.assertEqual(bracket.id,'(')
-        func=bracket.first
+        self.assertEqual(root.id,'(')
+        INT=root.first
+        self.assertEqual(INT.id,'int')
+        func=INT.first
         self.assertEqual(valueof(func),'func')
-        listofvariable=bracket.second
+        listofvariable=root.second
         int0=listofvariable[0]
         self.assertEqual(int0.id,'int')
         x=int0.first
@@ -682,7 +703,7 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(int1.id,'int')
         y=int1.first
         self.assertEqual(valueof(y),'y')
-        brace=bracket.third
+        brace=root.third
         self.assertEqual(brace.id,'{')
         listofcontent=brace.first
         return0=listofcontent[0]
@@ -693,6 +714,26 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(a),'a')
         b=plus.second
         self.assertEqual(valueof(b),'b')
+
+    def test_int_a_equal_2(self):
+        a=" int a = 2 ;"
+        """   =
+            /   \
+          int    2
+          |
+          a"""
+        root=Cparser.parse(a)
+        self.assertEqual(root.id,'=')
+        INT=root.first
+        self.assertEqual(INT.id,'int')
+        a=INT.first
+        self.assertEqual(a.id,'(identifier)')
+        self.assertEqual(valueof(a),'a')
+        two=root.second
+        self.assertEqual(two.id,'(literal)')
+        self.assertEqual(valueof(two),'2')
+
+
 
 if __name__=='__main__':
     if test_result==True:
