@@ -1,6 +1,26 @@
 ####################################       "files imported"
 from Symbol import *
 from Tokenizer import *
+#######################################
+array=[]
+def configure_array(module):
+    global array
+    array=module
+######################
+defineTable={} #set the define list.
+def define(id,constant_token): #to add id to the symbolTable if symbolTable don't contain it
+    global defineTable
+    if id not in defineTable:
+        defineTable[id]=constant_token
+        return
+    else:
+        retrive_constant_token=defineTable.get(id)
+        if constant_token==retrive_constant_token:
+            pass
+        else:
+            array.clear()
+            raise SyntaxError('Invalid Statement : #define ')
+        return
 ##########################
 expression=0
 tokenizer=0
@@ -16,7 +36,6 @@ def keyword(id):
     sym.std=None
     sym.arity=None
     return sym
-
 def parseStatement():
     global tokenizer
     token=tokenizer.advance()
@@ -26,45 +45,62 @@ def parseStatement():
 
 def CkeywordGrammar():
             def std(self,leftToken=None):
-                self.first=tokenizer.advance()
                 token=self
-                tokenconstantidentifier=[]
-                check=tokenizer.peepahead()
-                tokenizer.checkdefine(True)
-                while  check.first != '(end)' and check.first != '(newline)':
-                    store=tokenizer.advance()
-                    tokenconstantidentifier.append(store)
-                    token.constantidentifier=tokenconstantidentifier
-                    check=tokenizer.peepahead()
-                tokenizer.storeconstantidentifier(token.constantidentifier,token.first.id)
-                while tokenizer.peepahead().first=='(newline)':
-                    tokenizer.advance()
-                tokenizer.checkdefine(False)
-                check=tokenizer.peepahead()
-                if check.first=='(end)':
-                    return token
-                if hasattr(check,'std'):
-                    temp=parseStatement()
+                if (tokenizer.peepahead().first=='define'):
+                    token.second=tokenizer.advance()
                 else:
-                    temp=expression.expression(0)
-                token.first.first=temp
-                return token
+                    token.second=None
+                token.first=tokenizer.advance()
+                token.first.id='ConstantIdentifier'
+                constant_token=[]
+                checkAhead=tokenizer.peepahead()
+                tokenizer.checkdefine(True)
+                while  checkAhead.first != '(end)' and checkAhead.first != '(newline)':
+                    while tokenizer.peepahead().first==' \ ':
+                        tokenizer.advance()
+                    if checkAhead.id =='(identifier)' or checkAhead.id == '(literal)':
+                            constant_token.append(tokenizer.advance().first)
+                    else:
+                            constant_token.append(tokenizer.advance().id)
+                    checkAhead=tokenizer.peepahead()
+                define(token.first.first,constant_token)
+                configure_defineTable(defineTable)
+                tokenizer.checkdefine(False)
+                checkAhead=tokenizer.peepahead()
+                while checkAhead.first=='(newline)':
+                    tokenizer.advance()
+                    checkAhead=tokenizer.peepahead()
+                token.first.constantidentifier=' '.join(constant_token)
+                checkAhead=tokenizer.peepahead()
+                if checkAhead.first=='(end)':
+                    token.first.constantidentifier=' '.join(constant_token)
+                    return token
+                if hasattr(checkAhead,'std'):
+                    if checkAhead.id=='#' or checkAhead.id=='#define':
+                        token.first.constantidentifier=' '.join(constant_token)
+                        return token
+                    token.first.constantidentifier=' '.join(constant_token)
+                    tokenizer.finishdefine(True)
+                    return token
+                else:
+                    tokenizer.finishdefine(True)
+                    token.first.constantidentifier=' '.join(constant_token)
+                    tokenizer.specialcondition(True)
+                    checkAhead=tokenizer.peepahead()
+                    return token
 
             def REPR(self):
-                return '({0} {1} {2})'.format(self.id, self.first.id,self.first.first)
-##                constantidentifier=[]
-##                count=0
-##                for i in self.constantidentifier:
-##                    if hasattr (self.constantidentifier[count],'std') or hasattr (self.constantidentifier[count],'id') :
-##                        if self.constantidentifier[count].id != '(identifier)' and self.constantidentifier[count].id != '(literal)':
-##                            constantidentifier.append(self.constantidentifier[count].id)
-##                        else:
-##                            constantidentifier.append(self.constantidentifier[count])
-##                    else:
-##                        constantidentifier=append(self.constantidentifier[count])
-##                    count=count+1
+                if self.second==None:
+                    return '({0} {1} {2})'.format(self.id, self.first,self.first.constantidentifier)
+                else:
+                    return '({0}{1} {2} {3})'.format(self.id,self.second, self.first,self.first.constantidentifier)
 
-
+            sym=keyword('#')
+            sym.std=std
+            sym.first=None
+            sym.second=None
+            sym.arity='unary'
+            sym.__repr__=REPR
             sym=keyword('#define')
             sym.std=std
             sym.first=None
@@ -79,7 +115,6 @@ def CkeywordGrammar():
                     raise SyntaxError('Expected a condition start with a open bracket ("(") . ')
                 self.first=expression.expression(0)
                 if hasattr(tokenizer.peepahead(),'std'):
-                    print(tokenizer.peepahead())
                     self.second=parseStatement()
                     if previous == -1 :
                         for check in self.second.first:
@@ -311,7 +346,7 @@ def CkeywordGrammar():
                 check=tokenizer.peepahead()
                 while check.id !='}':
                         if hasattr(check,'std'):
-                           if( check.id == 'if' or check.id == 'for'):
+                           if( check.id == 'if' or check.id == 'for' or check.id == 'do' or check.id == 'while'):
                                 temp=parseStatement()
                            else : temp=check.std()
                         else:
