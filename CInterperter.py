@@ -1,7 +1,10 @@
 from Symbol import *
 from Tokenizer import *
-from CExpression import *
-from CKeyword import *
+import CKeyword
+import CExpression
+
+global assignTable
+assignTable={}
 
 def CInterpreterGrammar():
     def interpreter(self):
@@ -10,7 +13,7 @@ def CInterpreterGrammar():
         else:
             return  self.first.interpreter()
 
-    sym=infix('+',40)
+    sym=CExpression.infix('+',40)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -19,13 +22,13 @@ def CInterpreterGrammar():
         else:
             return - self.first.interpreter()
 
-    sym=infix('-',40)
+    sym=CExpression.infix('-',40)
     sym.interpreter=interpreter
 
     def interpreter(self):
         return self.first.interpreter() / self.second.interpreter()
 
-    sym=infix('/',60)
+    sym=CExpression.infix('/',60)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -33,7 +36,7 @@ def CInterpreterGrammar():
             return self.first.interpreter() * self.second.interpreter()
         else:
             return "this is the pointer of {0}".format(self.first.interpreter())
-    sym=infix('*',60)
+    sym=CExpression.infix('*',60)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -42,8 +45,13 @@ def CInterpreterGrammar():
     sym=symbol('(literal)')
     sym.interpreter=interpreter
 
+
     def interpreter(self):
-        return self.first
+        global assignTable
+        if self.first in assignTable:
+            return assignTable[self.first].interpreter()
+        else:
+            raise SyntaxError('{0} have not assigned'.format(self.first))
 
     sym=symbol('(identifier)')
     sym.interpreter=interpreter
@@ -51,46 +59,59 @@ def CInterpreterGrammar():
     def interpreter(self):
         return self.first.interpreter()
 
-    sym=infix('(',100)
+    sym=CExpression.infix('(',100)
     sym.interpreter=interpreter
 
     def interpreter(self):
+        global assignTable
+        if self.first.id == '(literal)':
+            raise SyntaxError('{0} is not identifier'.format(self))
+        temp=self.first.interpreter()
+        temp1=createLiteral(self.first.interpreter()-1)
+        assignTable[self.first.first].interpreter=temp1.interpreter
         if self.arity == 'postunary':
-            return self.first.interpreter()
+            return temp
         else:
-            return self.first.interpreter()-1
+            return temp1.interpreter()
 
-    sym=prefix('--',90)
+    sym=CExpression.prefix('--',90)
     sym.interpreter=interpreter
 
     def interpreter(self):
+        global assignTable
+        if self.first.id == '(literal)':
+            raise SyntaxError('{0} is not identifier'.format(self))
+        temp=self.first.interpreter()
+        temp1=createLiteral(self.first.interpreter()+1)
+        assignTable[self.first.first].interpreter=temp1.interpreter
         if self.arity == 'postunary':
-            return self.first.interpreter()
+            return temp
         else:
-            return self.first.interpreter()+1
-
-    sym=prefix('++',90)
+            return temp1.interpreter()
+    sym=CExpression.prefix('++',90)
     sym.interpreter=interpreter
 
     def interpreter(self):
         return self.first.interpreter() ** self.second.interpreter()
 
-    sym=infix('**',70)
+    sym=CExpression.infix('**',70)
     sym.interpreter=interpreter
 
     def interpreter(self):
+        global assignTable
+        assignTable[self.first.first]=self.first
         self.first.interpreter=self.second.interpreter
         return self
 
-    sym=infix('=',10)
+    sym=CExpression.infix('=',10)
     sym.interpreter=interpreter
 
     def interpreter(self):
         return "The address of {0} point to {2}".format(self.first.interpreter(),self.first.interpreter())
 
-    sym=infix('.',80)
+    sym=CExpression.infix('.',80)
     sym.interpreter=interpreter
-    sym=infix('->',80)
+    sym=CExpression.infix('->',80)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -98,7 +119,7 @@ def CInterpreterGrammar():
             return True
         else: False
 
-    sym=infix('==',10)
+    sym=CExpression.infix('==',10)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -106,7 +127,7 @@ def CInterpreterGrammar():
             return True
         else: False
 
-    sym=infix('<',10)
+    sym=CExpression.infix('<',10)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -114,7 +135,7 @@ def CInterpreterGrammar():
             return True
         else: False
 
-    sym=infix('>',10)
+    sym=CExpression.infix('>',10)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -124,7 +145,7 @@ def CInterpreterGrammar():
             return True
         return False
 
-    sym=infix('>=',10)
+    sym=CExpression.infix('>=',10)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -134,19 +155,19 @@ def CInterpreterGrammar():
                 return True
         return False
 
-    sym=infix('>=',10)
+    sym=CExpression.infix('>=',10)
     sym.interpreter=interpreter
 
     def interpreter(self):
         return self.first.interpreter() >> self.second.interpreter()
 
-    sym=infix('>>',15)
+    sym=CExpression.infix('>>',15)
     sym.interpreter=interpreter
 
     def interpreter(self):
         return self.first.interpreter() << self.second.interpreter()
 
-    sym=infix('<<',15)
+    sym=CExpression.infix('<<',15)
     sym.interpreter=interpreter
 
 
@@ -155,19 +176,59 @@ def CInterpreterGrammar():
             return self.first.interpreter() & self.second.interpreter()
         else:
             return "this is the addresss of {0}".format(self.first.interpreter())
-    sym=infix('&',60)
+    sym=CExpression.infix('&',60)
     sym.interpreter=interpreter
 
     def interpreter(self):
         return not(self.first.interpreter())
 
-    sym=prefix('!',90)
+    sym=CExpression.prefix('!',90)
     sym.interpreter=interpreter
 
     def interpreter(self):
         return ~(self.first.interpreter())
 
-    sym=prefix('~',90)
+    sym=CExpression.prefix('~',90)
+    sym.interpreter=interpreter
+
+    def interpreter(self):
+        global assignTable
+        temp=[]
+        for index in self.first:
+            temp.append(index.interpreter())
+        assignTable={}
+        return temp
+
+    sym=CKeyword.keyword('{')
+    sym.interpreter=interpreter
+
+    def interpreter(self):
+        temp=self.first.interpreter()
+        return temp
+
+    sym=CKeyword.keyword('int')
+    sym.interpreter=interpreter
+    sym=CKeyword.keyword('double')
+    sym.interpreter=interpreter
+
+    def interpreter(self):
+        temp=self.first.interpreter()
+        if self.first.interpreter() >= 1:
+            self.second.interpreter()
+        elif self.third != None :
+            temp=self.third
+            temp.first.interpreter()
+        else :
+            return
+
+    sym=CKeyword.keyword('if')
+    sym.interpreter=interpreter
+
+    def interpreter(self):
+        temp=self.first.interpreter()
+        return
+
+    sym=CKeyword.keyword('else')
     sym.interpreter=interpreter
 
 CInterpreterGrammar()

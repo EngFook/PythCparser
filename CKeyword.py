@@ -13,7 +13,6 @@ def configure_tokenizer_Keyword(module):
 ####################################
 def keyword(id):
     sym=symbol(id)
-    sym.std=None
     sym.arity=None
     return sym
 
@@ -110,6 +109,9 @@ def CkeywordGrammar():
                     return '( {0} {1} {2} )'.format(self.id, self.first, self.second)
                 if self.second == None:
                     return '( {0} {1} {2} )'.format(self.id, self.first,self.third)
+                return '( {0} {1} {2} {3})'.format(self.id, self.first,self.second,self.third)
+
+
             sym=keyword('if')
             sym.std=std
             sym.first=None
@@ -312,6 +314,7 @@ def CkeywordGrammar():
             root=None
             previous=-1
             rootindex=0
+
             def std(self):
                 global previous
                 global rootindex
@@ -363,18 +366,7 @@ def CkeywordGrammar():
             sym.back={}
             sym.address={}
             sym.first=None
-            sym.second=None
-            sym.__repr__=REPR
-
-            def REPR(self):
-                self.second = '}'
-                return '{0} {1} {2}'.format(self.id, self.first,self.second)
-
-            sym=keyword('{')
-            sym.std=std
-            sym.back={}
-            sym.address={}
-            sym.first=None
+            sym.test='o-o'
             sym.second=None
             sym.__repr__=REPR
 
@@ -386,17 +378,20 @@ def CkeywordGrammar():
 
             def std(self):
                 self.first=expression.expression(0)
+                if tokenizer.peepahead().first==";" :
+                    tokenizer.advance()
                 return self
 
             sym=keyword('int')
             sym.std=std
-            sym.second=None
             sym.first=None
+            sym.second=None
             sym.__repr__=REPR
 
             sym=keyword('double')
             sym.std=std
             sym.first=None
+            sym.second=None
             sym.__repr__=REPR
 
             def std(self):

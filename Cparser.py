@@ -4,9 +4,9 @@ def dprint(args, kwargs):
         print (args,kwargs)
 ############################        "files imported"
 from Tokenizer import *
+import CInterperter
 import CExpression
 import CKeyword
-import CInterperter
 array=[]
 ############################
 ############################
@@ -54,6 +54,6 @@ def parse(str):
 ##        store=tokenizer.peepahead()
 ##        array.append(temp)
 ##    return array
-##
-##a=parse('a = 1 ;')
+##a=parse("""( )  ; """)
 ##print(a)
+
