@@ -4,16 +4,9 @@ from Tokenizer import *
 def valueof(symObj):
     return symObj.first
 
-#set On/Off -> False = Off ; True = On
-#To verify test_result:
 test_result=False
-#To debug_all,set test_result = False:
 debug_all=True
-################################################################################
-##[Mixing style]################################################################
-################################################################################
-# Test -> Expression
-################################################################################
+
 class TestExperession(unittest.TestCase):
 
     def testAdvanceShouldReturnLiteral(self):

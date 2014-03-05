@@ -115,16 +115,6 @@ class TestInterpreter(unittest.TestCase):
         value=three.interpreter()
         self.assertEqual(value,3)
 
-    def test_equal_interpreter(self):
-        a=" a = 1 ;"
-        """     =
-              /   \
-             a     1 """
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        a=value.first.interpreter()
-        self.assertEqual(a,1)
-
     def test_pointer_interpreter(self):
         a="ptr -> temp = 10 ;"
         """
@@ -256,168 +246,167 @@ class TestInterpreter(unittest.TestCase):
         value=root.interpreter()
         self.assertEqual(value,0)
 
-    def test_braces_interpreter(self):
-        a="""{
-            1 + 2 ;
-            2 + 3 ;
-            }
-            """
-        """ {
-            |------- +
-            |       / \
-            |      1   2
-            |--------+
-                    / \
-                   2   3"""
-
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        three=value[0]
-        five=value[1]
-        self.assertEqual(three,3)
-        self.assertEqual(five,5)
-
-    def test_int_a_double_b_interpreter(self):
-        a="""{
-                int a = 2 ;
-                double b = 3 ;
-             } """
-        """ {
-            |------- =
-            |       /  \
-            |   int-a   2
-            |---------=
-                    /   \
-               double-b  0.1"""
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        two=value[0].first.interpreter()
-        self.assertEqual(two,2)
-        two=value[0].second.interpreter()
-        self.assertEqual(two,2)
-        three=value[1].first.interpreter()
-        self.assertEqual(three,3)
-        three=value[1].second.interpreter()
-        self.assertEqual(three,3)
-
-    def test_braces_with_assigened_indentfier_interpreter(self):
-        a=""" {
-                c = 2 ;
-                1 + c ;
-               }"""
-
-        """ {
-            |------- =
-            |       / \
-            |      c   2
-            |--------+
-                    / \
-                   1   c"""
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        two=value[0].first.interpreter()
-        self.assertEqual(two,2)
-        two=value[0].second.interpreter()
-        self.assertEqual(two,2)
-        three=value[1]
-        self.assertEqual(three,3)
-
-    def test_minusminus_after_literal_indentfier_interpreter(self):
-        a="10 -- ;"
-        root=Cparser.parse(a)
-        self.assertRaises(SyntaxError,root.interpreter)
-
-    def test_minusminus_before_literal_indentfier_interpreter(self):
-        a="-- 10 ;"
-        root=Cparser.parse(a)
-        self.assertRaises(SyntaxError,root.interpreter)
-
-    def test_minusminus_after_indentifier_interpreter(self):
-        a="""{
-                int a = 5 ;
-                a -- ;
-                -- a ;
-             }"""
-
-        """ {
-            |------- =
-            |       /  \
-            |   int-a   2
-            |_______--__a
-            |_______--__a"""
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        five=value[0].second.interpreter()
-        self.assertEqual(five,5)
-        five=value[1]
-        self.assertEqual(five,5)
-        three=value[2]
-        self.assertEqual(three,3)
-
-    def test_if_false_interpreter(self):
-        a="""{
-                a = 5 ;
-                if ( 0 ) a = 4 ;
-                1 + a ;
-             }
-            """
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        six = value[2]
-        self.assertEqual(six,6)
-
-    def test_if_true_interpreter(self):
-        a="""{
-                a = 5 ;
-                if ( 1 ) a = 4 ;
-                1 + a ;
-             }
-            """
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        five = value[2]
-        self.assertEqual(five,5)
-
-    def test_if_with_else_interpreter(self):
-        a="""{
-                a = 5 ;
-                if ( 0 ) a = 4 ;
-                else  a = 3 ;
-                1 + a ;
-             }
-            """
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        four = value[2]
-        self.assertEqual(four,4)
-
-    def test_if_with_else_if_interpreter(self):
-        a="""{
-                a = 5 ;
-               if ( 0 ) a = 4 ;
-               else if ( 1 ) a = 3 ;
-                a + 1 ;
-             }
-            """
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        four = value[2]
-        self.assertEqual(four,4)
-
-    def test_if_with_else_if_interpreter(self):
-        a="""{
-                a = 5 ;
-               if ( 0 ) a = 4 ;
-               else
-                    if ( 0 ) a = 3 ;
-                a ;
-             }
-            """
-        root=Cparser.parse(a)
-        value=root.interpreter()
-        five = value[2]
-        self.assertEqual(five,5)
-
+##    def test_braces_interpreter(self):
+##        a="""{
+##                1 + 2 ;
+##                2 + 3 ;
+##             }"""
+##        """ {
+##            |------- +
+##            |       / \
+##            |      1   2
+##            |--------+
+##                    / \
+##                   2   3"""
+##
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        three=value[0]
+##        five=value[1]
+##        self.assertEqual(three,3)
+##        self.assertEqual(five,5)
+##
+##    def test_int_a_double_b_interpreter(self):
+##        a="""{
+##                int a = 2 ;
+##                double b = 3 ;
+##             } """
+##        """ {
+##            |------- =
+##            |       /  \
+##            |   int-a   2
+##            |---------=
+##                    /   \
+##               double-b  0.1"""
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        two=value[0].first.interpreter()
+##        self.assertEqual(two,2)
+##        two=value[0].second.interpreter()
+##        self.assertEqual(two,2)
+##        three=value[1].first.interpreter()
+##        self.assertEqual(three,3)
+##        three=value[1].second.interpreter()
+##        self.assertEqual(three,3)
+##
+##    def test_braces_with_assigened_indentfier_interpreter(self):
+##        a=""" {
+##                c = 2 ;
+##                1 + c ;
+##               }"""
+##
+##        """ {
+##            |------- =
+##            |       / \
+##            |      c   2
+##            |--------+
+##                    / \
+##                   1   c"""
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        two=value[0].first.interpreter()
+##        self.assertEqual(two,2)
+##        two=value[0].second.interpreter()
+##        self.assertEqual(two,2)
+##        three=value[1]
+##        self.assertEqual(three,3)
+##
+##    def test_minusminus_after_literal_indentfier_interpreter(self):
+##        a="10 -- ;"
+##        root=Cparser.parse(a)
+##        self.assertRaises(SyntaxError,root.interpreter)
+##
+##    def test_minusminus_before_literal_indentfier_interpreter(self):
+##        a="-- 10 ;"
+##        root=Cparser.parse(a)
+##        self.assertRaises(SyntaxError,root.interpreter)
+##
+##    def test_minusminus_after_indentifier_interpreter(self):
+##        a="""{
+##                int a = 5 ;
+##                a -- ;
+##                -- a ;
+##             }"""
+##
+##        """ {
+##            |------- =
+##            |       /  \
+##            |   int-a   2
+##            |_______--__a
+##            |_______--__a"""
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        five=value[0].second.interpreter()
+##        self.assertEqual(five,5)
+##        five=value[1]
+##        self.assertEqual(five,5)
+##        three=value[2]
+##        self.assertEqual(three,3)
+##
+##    def test_if_false_interpreter(self):
+##        a="""{
+##                a = 5 ;
+##                if ( 0 ) a = 4 ;
+##                1 + a ;
+##             }
+##            """
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        six = value[2]
+##        self.assertEqual(six,6)
+##
+##    def test_if_true_interpreter(self):
+##        a="""{
+##                a = 5 ;
+##                if ( 1 ) a = 4 ;
+##                1 + a ;
+##             }
+##            """
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        five = value[2]
+##        self.assertEqual(five,5)
+##
+##    def test_if_with_else_interpreter(self):
+##        a="""{
+##                a = 5 ;
+##                if ( 0 ) a = 4 ;
+##                else  a = 3 ;
+##                1 + a ;
+##             }
+##            """
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        four = value[2]
+##        self.assertEqual(four,4)
+##
+##    def test_if_with_else_if_interpreter(self):
+##        a="""{
+##                a = 5 ;
+##               if ( 0 ) a = 4 ;
+##               else if ( 1 ) a = 3 ;
+##                a + 1 ;
+##             }
+##            """
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        four = value[2]
+##        self.assertEqual(four,4)
+##
+##    def test_if_with_else_if_interpreter(self):
+##        a="""{
+##                a = 5 ;
+##               if ( 0 ) a = 4 ;
+##               else
+##                    if ( 0 ) a = 3 ;
+##                a ;
+##             }
+##            """
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        five = value[2]
+##        self.assertEqual(five,5)
+##
 ##    def test_if_with_condition_interpreter(self):
 ##        a="""{
 ##                a = 5 ;
@@ -429,6 +418,16 @@ class TestInterpreter(unittest.TestCase):
 ##        value=root.interpreter()
 ##        five = value[2]
 ##        self.assertEqual(five,5)
+##
+##    def test_equal_interpreter(self):
+##        a=" a = 1 ;"
+##        """     =
+##              /   \
+##             a     1 """
+##        root=Cparser.parse(a)
+##        value=root.interpreter()
+##        a=value.first.interpreter()
+##        self.assertEqual(a,1)
 
 
 

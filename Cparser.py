@@ -67,13 +67,18 @@ def parsex(str):
     return newarray
 
 
-a=parsex(''' #define Strtwo 100 + 200 +
-                # define Str for ( x = 0 ; x
-                #define Strthree \
-                \
-                \
-                2 + 3 +
-              Str = 5 ; x ++ ) x + y = z ; ''')
+a=parsex('''{
+                int a = 1 ;
+                int b = 2 ;
+                {
+                    int a = 3 ;
+                    int b = 4 ;
+                    {
+                        int a = 5 ;
+                        int b = 6 ;
+                    }
+                }
+            }''')
 
-print(a)
+##print(a)
 

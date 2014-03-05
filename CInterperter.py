@@ -99,10 +99,6 @@ def CInterpreterGrammar():
 
     def interpreter(self):
         global assignTable
-        if hasattr(self.first,'std'):
-            assignTable[self.first.first.first]=self.first
-        else:
-            assignTable[self.first.first]=self.first
         self.first.interpreter=self.second.interpreter
         return self
 
@@ -195,11 +191,6 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        global assignTable
-        temp=[]
-        for index in self.first:
-            temp.append(index.interpreter())
-        assignTable={}
         return temp
 
     sym=CKeyword.keyword('{')

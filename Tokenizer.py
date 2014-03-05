@@ -61,17 +61,6 @@ class Tokenizer: # Class for Split Token
                 self.word=self.array_constant[0]
                 del self.array_constant[0]
                 self.wordAhead=None
-##                if self.word in symbolTable:
-##                    sym=symbolTable[self.word]
-##                    return sym()
-##                elif self.word is None:
-##                    self.current=createSystemToken('(end)')
-##                elif self.word.isdigit():
-##                    self.current=createLiteral(self.word)
-##                else:
-##                    self.current=createIndentifier(self.word)
-##                self.storeforpeep=self.current
-##                return self.current
         else:
             if self.wordAhead is not None:
                 if expected is not None:
@@ -80,13 +69,9 @@ class Tokenizer: # Class for Split Token
                 temp=self.wordAhead
                 self.wordAhead=None
                 return temp
-
             self.word=next(self.gen)
-    ##################################### Code Added For #define constant identifier
             while self.HasDefine != True and self.word == '(newline)':
                 self.word=next(self.gen)
-
-    ###############################################################################
 
 
         if self.checkfinishdefine==True:
@@ -96,55 +81,6 @@ class Tokenizer: # Class for Split Token
                 self.word=self.array_constant[0]
                 del self.array_constant[0]
 
-##            if self.word=='#' or self.word=='#define':
-##                self.test=False
-##                self.checkfinishdefine=False
-##            else:
-##                count=0
-##                while count<self.count-1 and self.once==False:
-##                        del self.array[0]
-##                        count=count+1
-##                self.once=True
-##
-##                for a in self.array:
-##                    arraystore.append(a)
-##
-##                value=-1
-##                for i in self.variable_of_define:
-##                    value=value+1
-##                    num=-1
-##                    counter=0
-##                    checkforonce=True
-##                    self.array.clear()
-##                    for m in arraystore:
-##                        self.array.append(m)
-##                    length=len(self.array)
-##                    while num<length-1:
-##                        num=num+1
-##                        if i==self.array[0]:
-##                            anothercounter=counter
-##                            del arraystore[num+counter]
-##                            if checkforonce==True:
-##                                arrayforpeep=[]
-##                                for k in self.statement_of_define:
-##                                    arrayforpeep=self.statement_of_define[value]
-##                                arrayforpeep.reverse()
-##                                checkforonce=False
-##                            count1=0
-##                            counter=0
-##                            for check in arrayforpeep:
-##                                arraystore.insert(num+anothercounter,check)
-##                                count1=count1+1
-##                                if count1>1:
-##                                    counter=counter+1
-##                        del self.array[0]
-##                for i in arraystore:
-##                    self.array_constantidentifier.append(i)
-##                self.checkfinishdefine=False
-##                self.array.clear()
-##                self.define=True
-##                self.word=next(self.gen)
-################################################################################
         if(self.word=='//' or self.word=='/*'):
             i=True
             while(i):
