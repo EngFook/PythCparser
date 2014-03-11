@@ -22,7 +22,7 @@ class Tokenizer: # Class for Split Token
         self.checkconstantidentifierarray=[]
         self.statement_of_define=[]
         self.arraystore=[]
-        self.HasDefine=False
+        self.NidNewline=False
         self.checkfinishdefine=False
         self.once=False
         self.value=0
@@ -70,7 +70,7 @@ class Tokenizer: # Class for Split Token
                 self.wordAhead=None
                 return temp
             self.word=next(self.gen)
-            while self.HasDefine != True and self.word == '(newline)':
+            while self.NidNewline!= True and self.word == '(newline)':
                 self.word=next(self.gen)
 
 
@@ -117,9 +117,10 @@ class Tokenizer: # Class for Split Token
         else:
             return self.current
 
-    def checkdefine(self,bool):
-        self.HasDefine=bool
-        return
+    def checkNewline(self,bool=None):
+        if bool != None:
+            self.NidNewline=bool
+        return self.NidNewline
 
     def finishdefine(self,bool):
         self.checkfinishdefine=bool

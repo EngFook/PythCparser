@@ -1,11 +1,6 @@
 ####################################       "files imported"
 from Symbol import *
 from Tokenizer import *
-#######################################
-array=[]
-def configure_array(module):
-    global array
-    array=module
 ######################
 defineTable={} #set the define list.
 def define(id,constant_token): #to add id to the symbolTable if symbolTable don't contain it
@@ -18,7 +13,6 @@ def define(id,constant_token): #to add id to the symbolTable if symbolTable don'
         if constant_token==retrive_constant_token:
             pass
         else:
-            array.clear()
             raise SyntaxError('Invalid Statement : #define ')
         return
 ##########################
@@ -55,7 +49,7 @@ def CkeywordGrammar():
                 token.first.id='ConstantIdentifier'
                 constant_token=[]
                 checkAhead=tokenizer.peepahead()
-                tokenizer.checkdefine(True)
+                tokenizer.checkNewline(True)
                 while  checkAhead.first != '(end)' and checkAhead.first != '(newline)':
                     while tokenizer.peepahead().first==' \ ':
                         tokenizer.advance()
@@ -66,7 +60,7 @@ def CkeywordGrammar():
                     checkAhead=tokenizer.peepahead()
                 define(token.first.first,constant_token)
                 configure_defineTable(defineTable)
-                tokenizer.checkdefine(False)
+                tokenizer.checkNewline(False)
                 checkAhead=tokenizer.peepahead()
                 while checkAhead.first=='(newline)':
                     tokenizer.advance()
@@ -201,6 +195,7 @@ def CkeywordGrammar():
                     FlowControlStack.pop()
                 else:
                         self.second=expression.expression(0)
+                        tokenizer.advance(';')
                 return self
 
             def REPR(self):
@@ -347,6 +342,7 @@ def CkeywordGrammar():
             global previous
             global rootindex
             global root
+            global checkenum
             root=None
             previous=-1
             rootindex=0
@@ -359,32 +355,32 @@ def CkeywordGrammar():
                 array=[]
                 check=tokenizer.peepahead()
                 while check.id !='}':
-                        if hasattr(check,'std'):
-                           if(check.id== 'case' or check.id =='default'):
-                                temp=check.std()
-                           else:
-                            temp=parseStatement()
-                        else:
-                            temp=expression.expression(0)
-                            tokenizer.advance(';')
-                        array.append(temp)
-                        index=array.index(temp)
-                        if previous :
-                            if temp.id == 'case':
-                                self.back[temp.first.first]=root,rootindex+1
-                        else:
-                            root=self
-                            rootindex=index
-                            if temp.id == 'case':
-                                self.back[temp.first.first]=None
-                        if hasattr(temp,'std'):
-                            if temp.id == 'case':
-                                case=temp.first
-                                self.address[case.first]=index,self
+                    if hasattr(check,'std'):
+                       if(check.id== 'case' or check.id =='default'):
+                            temp=check.std()
+                       else:
+                        temp=parseStatement()
+                    else:
+                        temp=expression.expression(0)
+                        tokenizer.advance(';')
+                    array.append(temp)
+                    index=array.index(temp)
+                    if previous :
+                        if temp.id == 'case':
+                            self.back[temp.first.first]=root,rootindex+1
+                    else:
+                        root=self
+                        rootindex=index
+                        if temp.id == 'case':
+                            self.back[temp.first.first]=None
+                    if hasattr(temp,'std'):
+                        if temp.id == 'case':
+                            case=temp.first
+                            self.address[case.first]=index,self
+                    check=tokenizer.peepahead()
+                    if check == '(newline)':
+                        tokenizer.advance()
                         check=tokenizer.peepahead()
-                        if check == '(newline)':
-                            tokenizer.advance()
-                            check=tokenizer.peepahead()
                 tokenizer.advance('}')
                 check=tokenizer.peepahead()
                 self.first=array
@@ -432,6 +428,13 @@ def CkeywordGrammar():
                 return self
 
             sym=keyword('int')
+            sym.std=std
+            sym.first=None
+            sym.second=None
+            sym.limitedExpression=limitedExpression
+            sym.__repr__=REPR
+
+            sym=keyword('floating')
             sym.std=std
             sym.first=None
             sym.second=None

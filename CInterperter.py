@@ -1,7 +1,9 @@
 from Symbol import *
 from Tokenizer import *
+from CScope import *
 import CKeyword
 import CExpression
+
 
 global assignTable
 assignTable={}
@@ -26,7 +28,12 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        return self.first.interpreter() / self.second.interpreter()
+        temp=Scope.find_variable(self.first,self.first)
+        if temp[0] == 'int':
+            temp1=self.first.interpreter()/self.second.interpreter()
+            return temp1
+        else:
+            return self.first.interpreter() / self.second.interpreter()
 
     sym=CExpression.infix('/',60)
     sym.interpreter=interpreter
@@ -40,18 +47,15 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        return int(self.first)
+        return int(float(self.first))
 
     sym=symbol('(literal)')
     sym.interpreter=interpreter
 
 
     def interpreter(self):
-        global assignTable
-        if self.first in assignTable:
-            return assignTable[self.first].interpreter()
-        else:
-            raise SyntaxError('{0} have not assigned'.format(self.first))
+        temp=Scope.find_variable(self,self)
+        return int(temp[1])
 
     sym=symbol('(identifier)')
     sym.interpreter=interpreter
@@ -68,7 +72,8 @@ def CInterpreterGrammar():
             raise SyntaxError('{0} is not identifier'.format(self))
         temp=self.first.interpreter()
         temp1=createLiteral(self.first.interpreter()-1)
-        assignTable[self.first.first].interpreter=temp1.interpreter
+        temp2=Scope.find_variable(self.first,self.first)
+        Scope.add_variable(self.first,temp2,temp1)
         if self.arity == 'postunary':
             return temp
         else:
@@ -83,7 +88,7 @@ def CInterpreterGrammar():
             raise SyntaxError('{0} is not identifier'.format(self))
         temp=self.first.interpreter()
         temp1=createLiteral(self.first.interpreter()+1)
-        assignTable[self.first.first].interpreter=temp1.interpreter
+        Scope.add_variable(self.first,self.first,temp1)
         if self.arity == 'postunary':
             return temp
         else:
@@ -98,9 +103,13 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        global assignTable
-        self.first.interpreter=self.second.interpreter
-        return self
+        if hasattr (self.first,'std'):
+            Scope.add_variable(self.first,self.first,self.second)
+            return "has assigned value to the object"
+        else:
+            temp=Scope.find_variable(self.first,self.first)
+            Scope.add_variable(self.first,temp,self.second)
+            return "has assigned value to the object"
 
     sym=CExpression.infix('=',10)
     sym.interpreter=interpreter
@@ -191,23 +200,30 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
+        temp=[]
+        Scope.add_scope(self)
+        for index in self.first:
+            temp.append(index.interpreter())
+        Scope.delete_current_scope(self)
         return temp
 
     sym=CKeyword.keyword('{')
     sym.interpreter=interpreter
 
     def interpreter(self):
-        temp=self.first.first.interpreter()
-        return temp
+        Scope.add_variable(self,self.first,None)
 
     sym=CKeyword.keyword('int')
     sym.interpreter=interpreter
+
     sym=CKeyword.keyword('double')
     sym.interpreter=interpreter
 
+    sym=CKeyword.keyword('floating')
+    sym.interpreter=interpreter
+
     def interpreter(self):
-        temp=self.first.interpreter()
-        if self.first.interpreter() >= 1:
+        if self.first.interpreter() :
             self.second.interpreter()
         elif self.third != None :
             temp=self.third
@@ -225,4 +241,10 @@ def CInterpreterGrammar():
     sym=CKeyword.keyword('else')
     sym.interpreter=interpreter
 
+    def interpreter(self):
+        while self.first.interpreter():
+            self.second.interpreter()
+
+    sym=CKeyword.keyword('while')
+    sym.interpreter=interpreter
 CInterpreterGrammar()
