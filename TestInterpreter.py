@@ -202,9 +202,8 @@ class TestInterpreter(unittest.TestCase):
                    2   3"""
 
         root=Cparser.parse(a)
-        value=root.interpreter()
-        three=value[0]
-        five=value[1]
+        three=root.first[0].interpreter()
+        five=root.first[1].interpreter()
         self.assertEqual(three,3)
         self.assertEqual(five,5)
 
@@ -386,6 +385,15 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parse(a)
         self.assertRaises(SyntaxError,root.interpreter)
 
+    def test_declate_twice_raise_error_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int a ;
+             double a ;"""
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        self.assertRaises(SyntaxError,root[1].interpreter)
+
     def test_double_a_with_one_point_zero_interpreter(self):
         global scope
         Scope.init_scope(self)
@@ -425,6 +433,32 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],0)
 
+    def test_equal_with_double_zero_point_nine_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="double a = 0.9 ;"
+        """     =
+              /   \
+          double-a    1 """
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        temp=Scope.find_variable(root[0].first,root[0].first)
+        self.assertEqual(temp[0],'double')
+        self.assertEqual(temp[1],0.9)
+
+
+    def test_int_a_with_negative_value_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="int a = -1 ;"
+        """     =
+              /   \
+          int-a    1 """
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        temp=Scope.find_variable(root[0].first,root[0].first)
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],-1)
 
     def test_int_a_without_value_interpreter(self):
         global scope
@@ -437,21 +471,106 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],None)
 
+    def test_int_a_with_value_plusplus_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int a = 1 ;
+            a ++ ;"""
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        root[1].interpreter()
+        temp=Scope.find_variable(root[0].first,root[0].first)
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],2)
+
+    def test_while_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x = - 1 ;
+            while ( x < 1 ) x ++ ;
+            """
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        root[1].interpreter()
+        temp=Scope.find_variable(root[0].first,root[0].first)
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],1)
+
+    def test_while_infinity_lopp_raise_syntax_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x = 0 ;
+             while ( 1 ) x ++ ;
+            """
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        self.assertRaises(SyntaxError,root[1].interpreter)
+
+    def test_while_loop_with_many_statment_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x = 0 ;
+             while ( x < 4 )
+             {
+                     x ++ ;
+                     x -- ;
+                     x ++ ;
+             }
+
+            """
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        root[1].interpreter()
+        temp=Scope.find_variable(root[0].first,root[0].first)
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],4)
 
 
-##
-##    def test_while_interpreter(self):
-##        global scope
-##        Scope.init_scope(self)
-##        a="""int x = - 1 ;
-##            while ( x < 1 ) x ++ ;
-##                x ;"""
-##        root=Cparser.parsex(a)
-##        root[0].interpreter()
-##        root[1].interpreter()
-##        one=root[2].interpreter()
-##        self.assertEqual(one,1)
+    def test_do_while_loop_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x = 0
+                do {  x ++ ; }
+             while ( x < 3 ) ;"""
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        root[1].interpreter()
+        temp=Scope.find_variable(root[0].first,root[0].first)
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],3)
 
+    def test_if_none_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""if ( 0 ) ;
+            else ;"""
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+
+    def test_while_loop_None_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x = 0 ;
+             while ( x == 0 )  ;
+            """
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        self.assertRaises(SyntaxError,root[1].interpreter)
+
+    def test_do_while_loop_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x = 0
+                do { }
+             while ( x < 3 ) ;"""
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        self.assertRaises(SyntaxError,root[1].interpreter)
+
+    def test_for_loop_interpreter(self):
+        a="""for ( x = 0 ; x = 5 ; x ++ ) ;"""
+        root=Cparser.parsex(a)
+        self.assertRaises(SyntaxError,root[0].interpreter)
 
 if __name__=='__main__':
     if test_result==True:

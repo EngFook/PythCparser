@@ -47,7 +47,7 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        return int(float(self.first))
+        return float(self.first)
 
     sym=symbol('(literal)')
     sym.interpreter=interpreter
@@ -88,7 +88,8 @@ def CInterpreterGrammar():
             raise SyntaxError('{0} is not identifier'.format(self))
         temp=self.first.interpreter()
         temp1=createLiteral(self.first.interpreter()+1)
-        Scope.add_variable(self.first,self.first,temp1)
+        temp2=Scope.find_variable(self.first,self.first)
+        Scope.add_variable(self.first,temp2,temp1)
         if self.arity == 'postunary':
             return temp
         else:
@@ -167,13 +168,19 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        return self.first.interpreter() >> self.second.interpreter()
+        if self.first.interpreter().is_integer() and self.second.interpreter().is_integer():
+            return int(self.first.interpreter()) >> int(self.second.interpreter())
+        else:
+            raise SyntaxError('value entered is not identifier')
 
     sym=CExpression.infix('>>',15)
     sym.interpreter=interpreter
 
     def interpreter(self):
-        return self.first.interpreter() << self.second.interpreter()
+        if self.first.interpreter().is_integer() and self.second.interpreter().is_integer():
+            return int(self.first.interpreter()) << int(self.second.interpreter())
+        else:
+            raise SyntaxError('value entered is not identifier')
 
     sym=CExpression.infix('<<',15)
     sym.interpreter=interpreter
@@ -181,7 +188,10 @@ def CInterpreterGrammar():
 
     def interpreter(self):
         if self.arity == 'binary':
-            return self.first.interpreter() & self.second.interpreter()
+            if self.first.interpreter().is_integer() and self.second.interpreter().is_integer():
+                return int(self.first.interpreter()) & int(self.second.interpreter())
+            else:
+                raise SyntaxError('value entered is not identifier')
         else:
             return "this is the addresss of {0}".format(self.first.interpreter())
     sym=CExpression.infix('&',60)
@@ -194,24 +204,35 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        return ~(self.first.interpreter())
+        return ~int(self.first.interpreter())
 
     sym=CExpression.prefix('~',90)
     sym.interpreter=interpreter
 
     def interpreter(self):
         temp=[]
+        a=0
         Scope.add_scope(self)
         for index in self.first:
             temp.append(index.interpreter())
         Scope.delete_current_scope(self)
+        temp1=self.first.__len__()
+        while a < temp1:
+            self.first[a].interpreter()
+            a=a+1
         return temp
 
     sym=CKeyword.keyword('{')
     sym.interpreter=interpreter
 
     def interpreter(self):
-        Scope.add_variable(self,self.first,None)
+        temp=Scope.check_variable(self.first,self.first)
+        if temp == None :
+            Scope.add_variable(self,self.first,None)
+        elif temp[0] == self.id:
+            Scope.add_variable(self,self.first,None)
+        else:
+            raise SyntaxError('Cannot declare twice')
 
     sym=CKeyword.keyword('int')
     sym.interpreter=interpreter
@@ -224,10 +245,12 @@ def CInterpreterGrammar():
 
     def interpreter(self):
         if self.first.interpreter() :
-            self.second.interpreter()
+            if self.second != None:
+                self.second.interpreter()
         elif self.third != None :
             temp=self.third
-            temp.first.interpreter()
+            if temp.first != None:
+                temp.first.interpreter()
         else :
             return
 
@@ -235,16 +258,42 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        temp=self.first.interpreter()
+        if self.first != None :
+            temp=self.first.interpreter()
         return
 
     sym=CKeyword.keyword('else')
     sym.interpreter=interpreter
 
     def interpreter(self):
+        temp=0
         while self.first.interpreter():
-            self.second.interpreter()
+            temp=temp+1
+            if temp > 300 :
+                raise SyntaxError('Infinity loop')
+            if self.second != None:
+                self.second.interpreter()
 
     sym=CKeyword.keyword('while')
     sym.interpreter=interpreter
+
+    def interpreter(self):
+        temp=0
+        self.first.interpreter()
+        while self.second.first.interpreter():
+            temp=temp+1
+            if temp > 300 :
+                raise SyntaxError('Infinity loop')
+            if self.first != None:
+                self.first.interpreter()
+
+    sym=CKeyword.keyword('do')
+    sym.interpreter=interpreter
+
+    def interpreter(self):
+        Scope.find_variable(self.first.first,self.first.first)
+        pass
+    sym=CKeyword.keyword('for')
+    sym.interpreter=interpreter
+
 CInterpreterGrammar()

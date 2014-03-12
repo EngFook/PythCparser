@@ -95,11 +95,10 @@ class Tokenizer: # Class for Split Token
             return sym()
         elif self.word is None:
             self.current=createSystemToken('(end)')
-        elif self.word.isdigit():
-            self.current=createLiteral(self.word)
-        else:
+        elif self.word.isidentifier():
             self.current=createIndentifier(self.word)
-
+        else:
+            self.current=createLiteral(self.word)
         self.storeforpeep=self.current
         return self.current
 

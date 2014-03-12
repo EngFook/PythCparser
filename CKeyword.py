@@ -160,6 +160,9 @@ def CkeywordGrammar():
                 else:
                     if tokenizer.peepahead().id == '(':
                         raise SyntaxError('Did not expected open bracket ("(") after ("else")')
+                    if tokenizer.peepahead().first == ';':
+                        tokenizer.advance(';')
+                        return self
                     self.first=expression.expression(0)
                     tokenizer.advance(';')
                 return self
@@ -208,7 +211,7 @@ def CkeywordGrammar():
             sym.second=None
             sym.__repr__=REPR
 ################################################################################
-## do std
+## std
 ################################################################################
             def std(self,leftToken=None):
                 sym=symbol(self.id)
