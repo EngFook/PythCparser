@@ -53,7 +53,7 @@ def parsex(str):
     return array
 
 
-a=parsex("""function ( int a , double b ) ;""")
-
+a=parsex("""int a , b , c ;""")
+a[0].interpreter()
 print(a)
 

@@ -228,13 +228,26 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        temp=Scope.check_variable(self.first,self.first)
-        if temp == None :
-            Scope.add_variable(self,self.first,None)
-        elif temp[0] == self.id:
-            Scope.add_variable(self,self.first,None)
+        if self.first.__class__() == []:
+            length=self.first.__len__()
+            temp=0
+            while temp < length:
+                temp1=Scope.check_variable(self.first[temp],self.first[temp])
+                if temp1 == None :
+                    Scope.add_variable(self,self.first[temp],None)
+                elif temp1[0] == self.id:
+                    Scope.add_variable(self,self.first[temp],None)
+                else:
+                    raise SyntaxError('Cannot declare twice')
+                temp = temp+1
         else:
-            raise SyntaxError('Cannot declare twice')
+            temp=Scope.check_variable(self.first,self.first)
+            if temp == None :
+                Scope.add_variable(self,self.first,None)
+            elif temp[0] == self.id:
+                Scope.add_variable(self,self.first,None)
+            else:
+                raise SyntaxError('Cannot declare twice')
 
     sym=CKeyword.keyword('int')
     sym.interpreter=interpreter
@@ -299,6 +312,11 @@ def CInterpreterGrammar():
         while self.second.interpreter():
             if self.third != None :
                 self.third.interpreter()
+            if self.four != None :
+                temp=0
+                while temp < self.four.first.__len__():
+                    self.four.first[temp].interpreter()
+                    temp = temp + 1
 
     sym=CKeyword.keyword('for')
     sym.interpreter=interpreter

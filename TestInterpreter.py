@@ -12,6 +12,12 @@ test_result=True
 #To debug_all,set test_result = False:
 debug_all=True
 
+def Runinterpreter(self):
+    temp=0
+    while temp < self.__len__():
+        self[temp].interpreter()
+        temp = temp + 1
+
 class ProductionClass():
     def method():
         return 3
@@ -401,8 +407,7 @@ class TestInterpreter(unittest.TestCase):
             a = a / 2 ;
             """
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],0)
@@ -415,7 +420,7 @@ class TestInterpreter(unittest.TestCase):
               /   \
           int-a    1 """
         root=Cparser.parsex(a)
-        root[0].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],1)
@@ -428,7 +433,7 @@ class TestInterpreter(unittest.TestCase):
               /   \
           int-a    1 """
         root=Cparser.parsex(a)
-        root[0].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],0)
@@ -441,7 +446,7 @@ class TestInterpreter(unittest.TestCase):
               /   \
           double-a    1 """
         root=Cparser.parsex(a)
-        root[0].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'double')
         self.assertEqual(temp[1],0.9)
@@ -455,7 +460,7 @@ class TestInterpreter(unittest.TestCase):
               /   \
           int-a    1 """
         root=Cparser.parsex(a)
-        root[0].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],-1)
@@ -469,7 +474,24 @@ class TestInterpreter(unittest.TestCase):
         root.interpreter()
         temp=Scope.find_variable(root.first,root.first)
         self.assertEqual(temp[0],'int')
-        self.assertEqual(temp[1],None)
+        self.assertEqual(temp[1],0)
+
+    def test_int_a_b_c_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="int a , b , c ;"
+        """int-a"""
+        root=Cparser.parse(a)
+        root.interpreter()
+        temp=Scope.find_variable(root.first[0],root.first[0])
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],0)
+        temp=Scope.find_variable(root.first[1],root.first[1])
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],0)
+        temp=Scope.find_variable(root.first[2],root.first[2])
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],0)
 
     def test_int_a_with_value_plusplus_interpreter(self):
         global scope
@@ -477,8 +499,7 @@ class TestInterpreter(unittest.TestCase):
         a="""int a = 1 ;
             a ++ ;"""
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],2)
@@ -490,8 +511,7 @@ class TestInterpreter(unittest.TestCase):
             while ( x < 1 ) x ++ ;
             """
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],1)
@@ -519,8 +539,7 @@ class TestInterpreter(unittest.TestCase):
 
             """
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],4)
@@ -533,8 +552,7 @@ class TestInterpreter(unittest.TestCase):
                 do {  x ++ ; }
              while ( x < 3 ) ;"""
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],3)
@@ -574,20 +592,73 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         self.assertRaises(SyntaxError,root[0].interpreter)
 
-    def test_for_loop_with_declaration_inside_interpreter(self):
+    def test_for_loop_with_declaration_interpreter(self):
         global scope
         Scope.init_scope(self)
         a="""int x ;
              for ( x = 0 ; x < 5 ; x ++ ) ;"""
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
         self.assertEqual(temp[0],'int')
         self.assertEqual(temp[1],5)
 
+    def test_for_loop_with_working_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x , b ;
+             b = 0 ;
+             for ( x = 0 ; x < 5 ; x ++ )
+             {
+                b ++ ;
+             }"""
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[0],root[0].first[0])
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],5)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],5)
 
+    def test_for_loop_with_working_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x , b ;
+             for ( x = 0 ; x < 5 ; x ++ )
+             {
+                b ++ ;
+             }"""
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[0],root[0].first[0])
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],5)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],5)
 
+    def test_for_loop_with_multiple_working_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x , b ;
+             double a ;
+             for ( x = 0 ; x < 5 ; x ++ )
+             {
+                b ++ ;
+                a = b - 1 ;
+             }"""
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[0],root[0].first[0])
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],5)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],5)
+        temp=Scope.find_variable(root[1].first,root[1].first)
+        self.assertEqual(temp[0],'double')
+        self.assertEqual(temp[1],4)
 
 if __name__=='__main__':
     if test_result==True:

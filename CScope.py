@@ -44,7 +44,7 @@ class Scope:
         global scope
         if hasattr(self,'std'):
             if value == None :
-                scope[-1][variable.first]=(self.id,None)
+                scope[-1][variable.first]=(self.id,0)
             else:
                 if hasattr(value,'led'):
                     temp=value.interpreter()
