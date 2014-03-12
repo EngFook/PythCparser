@@ -567,10 +567,27 @@ class TestInterpreter(unittest.TestCase):
         root[0].interpreter()
         self.assertRaises(SyntaxError,root[1].interpreter)
 
-    def test_for_loop_interpreter(self):
-        a="""for ( x = 0 ; x = 5 ; x ++ ) ;"""
+    def test_for_loop_withouth_declaration_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""for ( x = 0 ; x == 5 ; x ++ ) ;"""
         root=Cparser.parsex(a)
         self.assertRaises(SyntaxError,root[0].interpreter)
+
+    def test_for_loop_with_declaration_inside_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x ;
+             for ( x = 0 ; x < 5 ; x ++ ) ;"""
+        root=Cparser.parsex(a)
+        root[0].interpreter()
+        root[1].interpreter()
+        temp=Scope.find_variable(root[0].first,root[0].first)
+        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[1],5)
+
+
+
 
 if __name__=='__main__':
     if test_result==True:

@@ -55,7 +55,9 @@ def CInterpreterGrammar():
 
     def interpreter(self):
         temp=Scope.find_variable(self,self)
-        return int(temp[1])
+        if temp[1] != None:
+            return int(temp[1])
+        else: return None
 
     sym=symbol('(identifier)')
     sym.interpreter=interpreter
@@ -291,8 +293,13 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        Scope.find_variable(self.first.first,self.first.first)
-        pass
+        if self.first != None :
+            Scope.find_variable(self.first.first,self.first.first)
+            self.first.interpreter()
+        while self.second.interpreter():
+            if self.third != None :
+                self.third.interpreter()
+
     sym=CKeyword.keyword('for')
     sym.interpreter=interpreter
 

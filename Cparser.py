@@ -53,9 +53,7 @@ def parsex(str):
     return array
 
 
-##a=parsex("""if ( 0 ) ;
-##            else  ;""")
-##a[0].interpreter()
-##a[1].interpreter()
-##print(a)
+a=parsex("""function ( int a , double b ) ;""")
+
+print(a)
 

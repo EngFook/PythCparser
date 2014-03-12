@@ -252,8 +252,10 @@ def CexpressionGrammar():
                 tokenizer.advance()
                 self.CheckFunctionType=False
                 return self
-
+            global functiondeclare
+            functiondeclare=False
             def led(self,leftToken):
+                global functiondeclare
                 if leftToken.arity == 'binary':
                     raise SyntaxError('Should not enter "{0}" '.format(self.id))
                 self.arity='function'
@@ -263,7 +265,9 @@ def CexpressionGrammar():
                 check=tokenizer.peepahead()
                 while(check.id != ')'):
                     if hasattr(tokenizer.peepahead(),'std'):
+                        functiondeclare=True
                         token=Keyword.parseStatement()
+                        functiondeclare=False
                     else:
                         token=expression(0)
                     if tokenizer.peepahead().first == ',':
@@ -353,8 +357,6 @@ def CexpressionGrammar():
             sym.nud=nud
             sym.led=led
 
-            def nud(self):
-                pass
 
 ################################################################################
 CexpressionGrammar() # call C expressionGrammar

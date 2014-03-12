@@ -421,8 +421,15 @@ def CkeywordGrammar():
                 return self
 
             def std(self):
+                temp=[]
                 if tokenizer.peepahead().id == '(identifier)':
                     self.first=tokenizer.advance()
+                    temp.append(self.first)
+                    while tokenizer.peepahead().first == ',' and not expression.functiondeclare:
+                        tokenizer.advance()
+                        temp.append(tokenizer.advance())
+                    if temp.__len__() != 1:
+                        self.first=temp
                 else:
                     self.first=expression.expression(100)
                 self=self.limitedExpression(0)
