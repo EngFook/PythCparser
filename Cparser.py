@@ -14,26 +14,8 @@ CKeyword.configure_C_Keyword(CExpression)
 CExpression.configure_C_Expression(CKeyword)
 ##"Global Tokenizer."                                                         ##
 global tokenizer
-##"Parse the string to analyse."          'temporary'                         ##
-def parse(str):
-    tokenizer=Tokenizer(str)
-    token=tokenizer.peepahead()
-    token=tokenizer.peepahead()
-    CExpression.configure_tokenizer_Expression(tokenizer)
-    CKeyword.configure_tokenizer_Keyword(tokenizer)
-    while(token.first == ';'):
-        tokenizer.advance(';')
-        token=tokenizer.peepahead()
-    if token.first=='(end)':
-        return
-    if hasattr(token,'std'):
-        temp=CKeyword.parseStatement()
-    else:
-        temp=CExpression.expression(0)
-        tokenizer.advance(';')
-    return temp
 ##"Parse the string to analyse."                                              ##
-def parsex(str):
+def parse(str):
     array=[]
     CKeyword.defineTable={}
     tokenizer=Tokenizer(str)
@@ -56,13 +38,11 @@ def parsex(str):
 ################################################################################
 """
     Manual Test here.
-##                        """
-a=parsex('''struct DataQ {
-                    int a ;
-                    int b ;
-                            }  Data99 ;
-
-''')
-
-print(a)
-
+                       """
+#
+#
+#
+#
+#
+#
+#

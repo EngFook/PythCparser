@@ -23,42 +23,58 @@ FileName=$[Project-Path]CKeyword.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Cparser.py
+FileName=$[Project-Path]ConfigureType.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node4]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Symbol.py
+FileName=$[Project-Path]Cparser.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node5]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestCKeywordDefine.py
+FileName=$[Project-Path]CScope.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node6]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestCparser.py
+FileName=$[Project-Path]Symbol.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node7]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestExpression.py
+FileName=$[Project-Path]TestCKeywordDefine.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node8]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestInterpreter.py
+FileName=$[Project-Path]TestCKeywordDefine.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node9]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestKeyword.py
+FileName=$[Project-Path]TestCparser.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node10]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestTokenizer.py
+FileName=$[Project-Path]TestExpression.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node11]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestInterpreter.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node12]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestKeyword.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node13]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestScope.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node14]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestTokenizer.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node15]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]Tokenizer.py
 
 [Project\ChildNodes\Node0\ChildNodes]
-Count=12
+Count=16
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode

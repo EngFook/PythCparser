@@ -1,14 +1,20 @@
+##"Files imported."                                                           ##
 import unittest
 import Cparser
 from CKeyword import defineTable
 from Tokenizer import *
 def valueof(symObj):
     return symObj.first
-
+##                                                                            ##
 """
-    This module is for testing keyword -> #define.
+    This module is for test keyword -> #define
                                                     """
-
+'''
+    Set On/Off -> False = Off ; True = On
+    To debug_all: set debug_all=True
+                                            '''
+debug_all=True
+##"Test start here."                                                          ##
 class TestKeyword_define(unittest.TestCase):
     def test_define_statement(self):
         a='#define Str 10 + ('
@@ -17,7 +23,7 @@ class TestKeyword_define(unittest.TestCase):
               Str
                |
             ' 10 + ('       """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
         self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -34,7 +40,7 @@ class TestKeyword_define(unittest.TestCase):
               Str
                |
             ' 10 + ('       """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#')
         define=root[0].second
         self.assertEqual(valueof(define),'define')
@@ -58,7 +64,7 @@ class TestKeyword_define(unittest.TestCase):
               Strtwo
                |
             ' 20 * y '      """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
         self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -90,7 +96,7 @@ class TestKeyword_define(unittest.TestCase):
               Strtwo
                |
             ' 20 * y '      """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#')
         define=root[0].second
         self.assertEqual(valueof(define),'define')
@@ -124,7 +130,7 @@ class TestKeyword_define(unittest.TestCase):
               Strtwo
                |
             ' 20 * y '      """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
         self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -156,7 +162,7 @@ class TestKeyword_define(unittest.TestCase):
               Strtwo
                |
             ' 20 * y '      """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#')
         define=root[0].second
         self.assertEqual(valueof(define),'define')
@@ -180,7 +186,7 @@ class TestKeyword_define(unittest.TestCase):
               Str
                |
             ' 10 + ('       """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
         self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -198,7 +204,7 @@ class TestKeyword_define(unittest.TestCase):
               Str
                |
             ' 10 + ('       """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
         self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -223,7 +229,7 @@ class TestKeyword_define(unittest.TestCase):
                |
             ' 20 * y '      """
 
-        self.assertRaises(SyntaxError,Cparser.parsex,a)
+        self.assertRaises(SyntaxError,Cparser.parse,a)
 
     def test_complicated_define(self):
         a='''   #define StrAAA \
@@ -245,7 +251,7 @@ class TestKeyword_define(unittest.TestCase):
            (root[4])->
            (root[5])->
                                 """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
         self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -318,7 +324,7 @@ class TestKeyword_define(unittest.TestCase):
                                   / \
                                  5   6
                                             """
-          root=Cparser.parsex(a)
+          root=Cparser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
           self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -388,7 +394,7 @@ class TestKeyword_define(unittest.TestCase):
                                   / \
                                  5   6          """
 
-          root=Cparser.parsex(a)
+          root=Cparser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
           self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -468,7 +474,7 @@ class TestKeyword_define(unittest.TestCase):
                                             /   \
                                            y     5
                                                     """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
         self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -516,7 +522,7 @@ class TestKeyword_define(unittest.TestCase):
                           x   5         / \
                                        x   y
                                                     """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
         self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -573,7 +579,7 @@ class TestKeyword_define(unittest.TestCase):
                           x   5         / \
                                        x   y
                                                     """
-        root=Cparser.parsex(a)
+        root=Cparser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
         self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -639,7 +645,7 @@ class TestKeyword_define(unittest.TestCase):
                                   / \
                                  5   6
                                                 """
-          root=Cparser.parsex(a)
+          root=Cparser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
           self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -729,7 +735,7 @@ class TestKeyword_define(unittest.TestCase):
                                   / \
                                  5   6
                                                     """
-          root=Cparser.parsex(a)
+          root=Cparser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
           self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -829,7 +835,7 @@ class TestKeyword_define(unittest.TestCase):
                                   / \
                                  5   6
                                                     """
-          root=Cparser.parsex(a)
+          root=Cparser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
           self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -928,7 +934,7 @@ class TestKeyword_define(unittest.TestCase):
                                   / \
                                  5   6
                                                     """
-          root=Cparser.parsex(a)
+          root=Cparser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
           self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -1029,7 +1035,7 @@ class TestKeyword_define(unittest.TestCase):
                                   / \
                                  5   6
                                                     """
-          root=Cparser.parsex(a)
+          root=Cparser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
           self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -1127,7 +1133,7 @@ class TestKeyword_define(unittest.TestCase):
                           x   5         / \
                                        x   y
                                                     """
-          root=Cparser.parsex(a)
+          root=Cparser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
           self.assertEqual((Strsymbol.id),'ConstantIdentifier')
@@ -1178,7 +1184,9 @@ class TestKeyword_define(unittest.TestCase):
           self.assertEqual(valueof(y),'y')
           z=equal3.second
           self.assertEqual(valueof(z),'z')
-
-if __name__=='__main__':
+################################################################################
+################################################################################
+if __name__ == '__main__':
+    if debug_all==True:
         suite = unittest.TestLoader().loadTestsFromTestCase(TestKeyword_define)
         unittest.TextTestRunner(verbosity=2).run(suite)

@@ -199,6 +199,7 @@ def CkeywordGrammar():
                     FlowControlStack.pop()
                 else:
                         self.second=expression.expression(0)
+                        tokenizer.advance(';')
                 return self
 
             def REPR(self):
@@ -470,6 +471,7 @@ def CkeywordGrammar():
             configureType('int')
             configureType('double')
             configureType('char')
+            configureType('floating')
 ################################################################################
 # return + break and continue std -> return std
 ################################################################################

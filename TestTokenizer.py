@@ -1,20 +1,21 @@
+##"Files imported."                                                           ##
 import unittest
 import Cparser
 from Tokenizer import *
 def valueof(symObj):
     return symObj.first
-
-#set On/Off -> False = Off ; True = On
-#To verify test_result:
-test_result=True
-#To debug_all,set test_result = False:
+##                                                                            ##
+"""
+    This module is for test Tokenizer.
+                                                            """
+'''
+    Set On/Off -> False = Off ; True = On
+    To debug_all: set debug_all=True
+                                            '''
 debug_all=True
-################################################################################
-##[Capital Letter style]########################################################
-################################################################################
-# Test -> Tokenizer
-################################################################################
+##"Test start."                                                               ##
 class TestTokenizer(unittest.TestCase):
+
     def testAdvanceTokenShouldReturnThreeWordWithOneFinalEnd(self):
         global tokenzier
         tokenizer=Tokenizer('a b c ')
@@ -112,24 +113,7 @@ class TestTokenizer(unittest.TestCase):
         self.assertRaises(SyntaxError,tokenizer.advance,'a')
 ################################################################################
 ################################################################################
-# Test -> Tokenizer for join constant Identifier
-################################################################################
-##    def testJoinConstantIdentifier(self):
-##        global tokenzier
-##        tokenizer=Tokenizer('a b c ')
-##        gen=tokenizer.advanceToken()
-##        a=next(gen)
-##        self.assertEqual(a,'a')
-##        b=next(gen)
-##        self.assertEqual(b,'b')
-##        c=next(gen)
-##        self.assertEqual(c,'c')
-##        d=next(gen)
-##        self.assertIsNone(d)
-
 if __name__=='__main__':
-    if test_result==True:
-        unittest.main()
-    elif debug_all==True:
+    if debug_all==True:
         suite = unittest.TestLoader().loadTestsFromTestCase(TestTokenizer)
         unittest.TextTestRunner(verbosity=2).run(suite)

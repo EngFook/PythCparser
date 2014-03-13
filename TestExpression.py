@@ -1,19 +1,19 @@
+##"Files imported."                                                           ##
 import unittest
 import Cparser
 from Tokenizer import *
 def valueof(symObj):
     return symObj.first
-
-#set On/Off -> False = Off ; True = On
-#To verify test_result:
-test_result=False
-#To debug_all,set test_result = False:
+##                                                                            ##
+"""
+    This module is for test everything in Expression.
+                                                            """
+'''
+    Set On/Off -> False = Off ; True = On
+    To debug_all: set debug_all=True
+                                            '''
 debug_all=True
-################################################################################
-##[Mixing style]################################################################
-################################################################################
-# Test -> Expression
-################################################################################
+##"Test start."                                                               ##
 class TestExperession(unittest.TestCase):
 
     def testAdvanceShouldReturnLiteral(self):
@@ -49,14 +49,14 @@ class TestExperession(unittest.TestCase):
     def test2plus3(self):#2+3
         a='2 + 3 ;'
         root=Cparser.parse(a)
-        two=root.first
+        two=root[0].first
         self.assertEqual(valueof(two),'2')
         self.assertEqual(two.id,'(literal)')
-        three=root.second
+        three=root[0].second
         self.assertEqual(valueof(three),'3')
         self.assertEqual(three.id,'(literal)')
-        self.assertEqual(root.id,'+')
-        self.assertEqual(root.arity,'binary')
+        self.assertEqual(root[0].id,'+')
+        self.assertEqual(root[0].arity,'binary')
 
     def test2plus3multiply4(self):
         a='2 + 3 * 4 ;'
@@ -66,12 +66,12 @@ class TestExperession(unittest.TestCase):
                     /  \
                   3      4"""
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'+')
-        self.assertEqual(root.arity,'binary')
-        two=root.first
+        self.assertEqual(root[0].id,'+')
+        self.assertEqual(root[0].arity,'binary')
+        two=root[0].first
         self.assertEqual(valueof(two),'2')
         self.assertEqual(two.id,'(literal)')
-        multiply=root.second
+        multiply=root[0].second
         self.assertEqual(multiply.id,'*')
         self.assertEqual(multiply.arity,'binary')
         three=multiply.first
@@ -89,9 +89,9 @@ class TestExperession(unittest.TestCase):
             /  \
            2    3"""
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'+')
-        self.assertEqual(root.arity,'binary')
-        multiply=root.first
+        self.assertEqual(root[0].id,'+')
+        self.assertEqual(root[0].arity,'binary')
+        multiply=root[0].first
         self.assertEqual(multiply.id,'*')
         self.assertEqual(multiply.arity,'binary')
         two=multiply.first
@@ -100,7 +100,7 @@ class TestExperession(unittest.TestCase):
         three=multiply.second
         self.assertEqual(valueof(three),'3')
         self.assertEqual(three.id,'(literal)')
-        four=root.second
+        four=root[0].second
         self.assertEqual(valueof(four),'4')
         self.assertEqual(four.id,'(literal)')
 
@@ -114,9 +114,9 @@ class TestExperession(unittest.TestCase):
                /  \
               3    4"""
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'+')
-        self.assertEqual(root.arity,'binary')
-        plus2=root.first
+        self.assertEqual(root[0].id,'+')
+        self.assertEqual(root[0].arity,'binary')
+        plus2=root[0].first
         self.assertEqual(plus2.id,'+')
         self.assertEqual(plus2.arity,'binary')
         two=plus2.first
@@ -131,7 +131,7 @@ class TestExperession(unittest.TestCase):
         four=multiply.second
         self.assertEqual(valueof(four),'4')
         self.assertEqual(four.id,'(literal)')
-        five=root.second
+        five=root[0].second
         self.assertEqual(valueof(five),'5')
         self.assertEqual(five.id,'(literal)')
 
@@ -145,9 +145,9 @@ class TestExperession(unittest.TestCase):
                 /  \
                2    3"""
           root=Cparser.parse(a)
-          self.assertEqual(root.id,'+')
-          self.assertEqual(root.arity,'binary')
-          plus2=root.first
+          self.assertEqual(root[0].id,'+')
+          self.assertEqual(root[0].arity,'binary')
+          plus2=root[0].first
           self.assertEqual(plus2.id,'+')
           self.assertEqual(plus2.arity,'binary')
           plus3=plus2.first
@@ -162,7 +162,7 @@ class TestExperession(unittest.TestCase):
           four=plus2.second
           self.assertEqual(valueof(four),'4')
           self.assertEqual(four.id,'(literal)')
-          five=root.second
+          five=root[0].second
           self.assertEqual(valueof(five),'5')
           self.assertEqual(five.id,'(literal)')
 
@@ -179,9 +179,9 @@ class TestExperession(unittest.TestCase):
                      5   6  """
 
           root=Cparser.parse(a)
-          self.assertEqual(root.id,'+')
-          self.assertEqual(root.arity,'binary')
-          plus2=root.first
+          self.assertEqual(root[0].id,'+')
+          self.assertEqual(root[0].arity,'binary')
+          plus2=root[0].first
           self.assertEqual(plus2.id,'+')
           self.assertEqual(plus2.arity,'binary')
           plus3=plus2.first
@@ -196,7 +196,7 @@ class TestExperession(unittest.TestCase):
           four=plus2.second
           self.assertEqual(valueof(four),'4')
           self.assertEqual(four.id,'(literal)')
-          multiply=root.second
+          multiply=root[0].second
           self.assertEqual(multiply.id,'*')
           self.assertEqual(multiply.arity,'binary')
           multiply2=multiply.first
@@ -226,9 +226,9 @@ class TestExperession(unittest.TestCase):
                 1"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'-')
-        self.assertEqual(root.arity,'unary')
-        one=root.first
+        self.assertEqual(root[0].id,'-')
+        self.assertEqual(root[0].arity,'unary')
+        one=root[0].first
         self.assertEqual(valueof(one),'1')
         self.assertEqual(one.id,'(literal)')
 
@@ -241,9 +241,9 @@ class TestExperession(unittest.TestCase):
                 1"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'-')
-        self.assertEqual(root.arity,'unary')
-        negative=root.first
+        self.assertEqual(root[0].id,'-')
+        self.assertEqual(root[0].arity,'unary')
+        negative=root[0].first
         self.assertEqual(negative.id,'-')
         self.assertEqual(negative.arity,'unary')
         one=negative.first
@@ -259,12 +259,12 @@ class TestExperession(unittest.TestCase):
                   2    3"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'**')
-        self.assertEqual(root.arity,'binary')
-        one=root.first
+        self.assertEqual(root[0].id,'**')
+        self.assertEqual(root[0].arity,'binary')
+        one=root[0].first
         self.assertEqual(valueof(one),'1')
         self.assertEqual(one.id,'(literal)')
-        power=root.second
+        power=root[0].second
         self.assertEqual(power.id,'**')
         self.assertEqual(power.arity,'binary')
         two=power.first
@@ -283,15 +283,15 @@ class TestExperession(unittest.TestCase):
              1"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'+')
-        self.assertEqual(root.arity,'binary')
-        negative=root.first
+        self.assertEqual(root[0].id,'+')
+        self.assertEqual(root[0].arity,'binary')
+        negative=root[0].first
         self.assertEqual(negative.id,'-')
         self.assertEqual(negative.arity,'unary')
         one=negative.first
         self.assertEqual(valueof(one),'1')
         self.assertEqual(one.id,'(literal)')
-        two=root.second
+        two=root[0].second
         self.assertEqual(valueof(two),'2')
         self.assertEqual(one.id,'(literal)')
 
@@ -306,9 +306,9 @@ class TestExperession(unittest.TestCase):
              1"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'+')
-        self.assertEqual(root.arity,'binary')
-        plus1=root.first
+        self.assertEqual(root[0].id,'+')
+        self.assertEqual(root[0].arity,'binary')
+        plus1=root[0].first
         self.assertEqual(plus1.id,'+')
         self.assertEqual(plus1.arity,'binary')
         negative1=plus1.first
@@ -320,7 +320,7 @@ class TestExperession(unittest.TestCase):
         two=plus1.second
         self.assertEqual(valueof(two),'2')
         self.assertEqual(two.id,'(literal)')
-        negative2=root.second
+        negative2=root[0].second
         self.assertEqual(negative2.id,'-')
         self.assertEqual(negative2.arity,'unary')
         three=negative2.first
@@ -335,9 +335,9 @@ class TestExperession(unittest.TestCase):
              ptr"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'-')
-        self.assertEqual(root.arity,'unary')
-        ptr=root.first
+        self.assertEqual(root[0].id,'-')
+        self.assertEqual(root[0].arity,'unary')
+        ptr=root[0].first
         self.assertEqual(valueof(ptr),'ptr')
         self.assertEqual(ptr.id,'(identifier)')
 
@@ -348,9 +348,9 @@ class TestExperession(unittest.TestCase):
              ptr"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'--')
-        self.assertEqual(root.arity,'unary')
-        ptr=root.first
+        self.assertEqual(root[0].id,'--')
+        self.assertEqual(root[0].arity,'unary')
+        ptr=root[0].first
         self.assertEqual(valueof(ptr),'ptr')
         self.assertEqual(ptr.id,'(identifier)')
 
@@ -363,15 +363,15 @@ class TestExperession(unittest.TestCase):
            ptr  1"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'+')
-        self.assertEqual(root.arity,'binary')
-        predec=root.first
+        self.assertEqual(root[0].id,'+')
+        self.assertEqual(root[0].arity,'binary')
+        predec=root[0].first
         self.assertEqual(predec.id,'--')
         self.assertEqual(predec.arity,'unary')
         ptr=predec.first
         self.assertEqual(valueof(ptr),'ptr')
         self.assertEqual(ptr.id,'(identifier)')
-        negative1=root.second
+        negative1=root[0].second
         self.assertEqual(negative1.id,'-')
         self.assertEqual(negative1.arity,'unary')
         one=negative1.first
@@ -387,15 +387,15 @@ class TestExperession(unittest.TestCase):
              ptr   ptr """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'-')
-        self.assertEqual(root.arity,'binary')
-        postfix=root.first
+        self.assertEqual(root[0].id,'-')
+        self.assertEqual(root[0].arity,'binary')
+        postfix=root[0].first
         self.assertEqual(postfix.id,'--')
         self.assertEqual(postfix.arity,'postunary')
         ptr=postfix.first
         #self.assertEqual(valueof(ptr),'ptr')
         self.assertEqual(ptr.id,'(identifier)')
-        predec=root.second
+        predec=root[0].second
         self.assertEqual(predec.id,'--')
         self.assertEqual(predec.arity,'unary')
         ptr1=predec.first
@@ -415,12 +415,12 @@ class TestExperession(unittest.TestCase):
              w   y """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'=')
-        self.assertEqual(root.arity,'binary')
-        x=root.first
+        self.assertEqual(root[0].id,'=')
+        self.assertEqual(root[0].arity,'binary')
+        x=root[0].first
         self.assertEqual(valueof(x),'x')
         self.assertEqual(x.id,'(identifier)')
-        equal=root.second
+        equal=root[0].second
         self.assertEqual(equal.id,'=')
         self.assertEqual(equal.arity,'binary')
         plus=equal.first
@@ -445,12 +445,12 @@ class TestExperession(unittest.TestCase):
                 w   y """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'=')
-        self.assertEqual(root.arity,'binary')
-        x=root.first
+        self.assertEqual(root[0].id,'=')
+        self.assertEqual(root[0].arity,'binary')
+        x=root[0].first
         self.assertEqual(valueof(x),'x')
         self.assertEqual(x.id,'(identifier)')
-        equalplus=root.second
+        equalplus=root[0].second
         self.assertEqual(equalplus.id,'+=')
         self.assertEqual(equalplus.arity,'binary')
         w=equalplus.first
@@ -467,12 +467,12 @@ class TestExperession(unittest.TestCase):
               x   y """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'.')
-        self.assertEqual(root.arity,'binary')
-        x=root.first
+        self.assertEqual(root[0].id,'.')
+        self.assertEqual(root[0].arity,'binary')
+        x=root[0].first
         self.assertEqual(valueof(x),'x')
         self.assertEqual(x.id,'(identifier)')
-        y=root.second
+        y=root[0].second
         self.assertEqual(valueof(y),'y')
         self.assertEqual(y.id,'(identifier)')
 
@@ -490,12 +490,12 @@ class TestExperession(unittest.TestCase):
           func  a"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'[')
-        self.assertEqual(root.arity,'postunary')
-        b=root.second
+        self.assertEqual(root[0].id,'[')
+        self.assertEqual(root[0].arity,'postunary')
+        b=root[0].second
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
-        bracket=root.first
+        bracket=root[0].first
         self.assertEqual(bracket.id,'[')
         self.assertEqual(bracket.arity,'postunary')
         func=bracket.first
@@ -513,10 +513,31 @@ class TestExperession(unittest.TestCase):
              a"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'int')
-        a=root.first
+        self.assertEqual(root[0].id,'int')
+        a=root[0].first
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
+
+    def test_Int_a_b_c(self):
+        a='int a , b , c ;'
+        """  int
+             |
+             |-a
+             |-b
+             |-c"""
+
+        root=Cparser.parse(a)
+        self.assertEqual(root[0].id,'int')
+        a=root[0].first[0]
+        self.assertEqual(valueof(a),'a')
+        self.assertEqual(a.id,'(identifier)')
+        a=root[0].first[1]
+        self.assertEqual(valueof(a),'b')
+        self.assertEqual(a.id,'(identifier)')
+        a=root[0].first[2]
+        self.assertEqual(valueof(a),'c')
+        self.assertEqual(a.id,'(identifier)')
+
 
     def test_bracket_with_declaration(self):
         a='func ( int a ) ;'
@@ -527,14 +548,14 @@ class TestExperession(unittest.TestCase):
                   a"""
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'(')
-        self.assertEqual(root.arity,'function')
-        integer=root.second
+        self.assertEqual(root[0].id,'(')
+        self.assertEqual(root[0].arity,'function')
+        integer=root[0].second
         self.assertEqual(integer.id,'int')
         a=integer.first
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
-        func=root.first
+        func=root[0].first
         self.assertEqual(valueof(func),'func')
         self.assertEqual(func.id,'(identifier)')
 
@@ -547,17 +568,17 @@ class TestExperession(unittest.TestCase):
           function |-b """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'(')
-        self.assertEqual(root.arity,'function')
-        INT=root.first
+        self.assertEqual(root[0].id,'(')
+        self.assertEqual(root[0].arity,'function')
+        INT=root[0].first
         self.assertEqual(INT.id,'int')
         function=INT.first
         self.assertEqual(valueof(function),'function')
         self.assertEqual(function.id,'(identifier)')
-        a=root.second[0]
+        a=root[0].second[0]
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
-        b=root.second[1]
+        b=root[0].second[1]
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
 
@@ -570,15 +591,15 @@ class TestExperession(unittest.TestCase):
                    |-b """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'(')
-        self.assertEqual(root.arity,'function')
-        function=root.first
+        self.assertEqual(root[0].id,'(')
+        self.assertEqual(root[0].arity,'function')
+        function=root[0].first
         self.assertEqual(valueof(function),'function')
         self.assertEqual(function.id,'(identifier)')
-        a=root.second[0]
+        a=root[0].second[0]
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
-        b=root.second[1]
+        b=root[0].second[1]
         self.assertEqual(valueof(b),'b')
         self.assertEqual(b.id,'(identifier)')
 
@@ -591,17 +612,17 @@ class TestExperession(unittest.TestCase):
                    |-double-b """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'(')
-        self.assertEqual(root.arity,'function')
-        function=root.first
+        self.assertEqual(root[0].id,'(')
+        self.assertEqual(root[0].arity,'function')
+        function=root[0].first
         self.assertEqual(valueof(function),'function')
         self.assertEqual(function.id,'(identifier)')
-        integer=root.second[0]
+        integer=root[0].second[0]
         self.assertEqual(integer.id,'int')
         a=integer.first
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
-        double=root.second[1]
+        double=root[0].second[1]
         self.assertEqual(double.id,'double')
         b=double.first
         self.assertEqual(valueof(b),'b')
@@ -621,8 +642,8 @@ class TestExperession(unittest.TestCase):
                 ptr     """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'int')
-        address=root.first
+        self.assertEqual(root[0].id,'int')
+        address=root[0].first
         self.assertEqual(address.id,'*')
         self.assertEqual(address.arity,"unary")
         bracket=address.first
@@ -651,8 +672,8 @@ class TestExperession(unittest.TestCase):
                ptr     """
 
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'(')
-        INT=root.first
+        self.assertEqual(root[0].id,'(')
+        INT=root[0].first
         self.assertEqual(INT.id,'int')
         address=INT.first
         self.assertEqual(address.id,'*')
@@ -666,12 +687,12 @@ class TestExperession(unittest.TestCase):
         ptr=address1.first
         self.assertEqual(valueof(ptr),'ptr')
         self.assertEqual(ptr.id,'(identifier)')
-        int1=root.second[0]
+        int1=root[0].second[0]
         self.assertEqual(int1.id,'int')
         a=int1.first
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
-        double1=root.second[1]
+        double1=root[0].second[1]
         self.assertEqual(double1.id,'double')
         b=double1.first
         self.assertEqual(valueof(b),'b')
@@ -689,12 +710,12 @@ class TestExperession(unittest.TestCase):
             |    |-int-y        / \
         function               a   b"""
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'(')
-        INT=root.first
+        self.assertEqual(root[0].id,'(')
+        INT=root[0].first
         self.assertEqual(INT.id,'int')
         func=INT.first
         self.assertEqual(valueof(func),'func')
-        listofvariable=root.second
+        listofvariable=root[0].second
         int0=listofvariable[0]
         self.assertEqual(int0.id,'int')
         x=int0.first
@@ -703,7 +724,7 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(int1.id,'int')
         y=int1.first
         self.assertEqual(valueof(y),'y')
-        brace=root.third
+        brace=root[0].third
         self.assertEqual(brace.id,'{')
         listofcontent=brace.first
         return0=listofcontent[0]
@@ -723,21 +744,18 @@ class TestExperession(unittest.TestCase):
           |
           a"""
         root=Cparser.parse(a)
-        self.assertEqual(root.id,'=')
-        INT=root.first
+        self.assertEqual(root[0].id,'=')
+        INT=root[0].first
         self.assertEqual(INT.id,'int')
         a=INT.first
         self.assertEqual(a.id,'(identifier)')
         self.assertEqual(valueof(a),'a')
-        two=root.second
+        two=root[0].second
         self.assertEqual(two.id,'(literal)')
         self.assertEqual(valueof(two),'2')
-
-
-
+################################################################################
+################################################################################
 if __name__=='__main__':
-    if test_result==True:
-        unittest.main()
-    elif debug_all==True:
+    if debug_all==True:
         suite = unittest.TestLoader().loadTestsFromTestCase(TestExperession)
         unittest.TextTestRunner(verbosity=2).run(suite)

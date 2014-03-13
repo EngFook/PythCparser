@@ -50,8 +50,15 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             self=self.limitedExpression(0)
             return self
         else:
+            temp=[]
             if tokenizer.peepahead().id == '(identifier)':
                 self.first=tokenizer.advance()
+                temp.append(self.first)
+                while tokenizer.peepahead().first == ',' and not expression.functiondeclare:
+                    tokenizer.advance()
+                    temp.append(tokenizer.advance())
+                if temp.__len__() != 1:
+                    self.first=temp
             elif token !=None:
                 self.first=token.led(self)
             else:
@@ -61,6 +68,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                 tokenizer.advance()
             return self
 
+#Type Declaration                                                             ##
     sym=keyword(type)
     if attribute=='(struct)':
         sym.std=std
@@ -86,6 +94,4 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.second=None
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
-
-
 ##                                                                            ##
