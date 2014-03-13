@@ -1168,16 +1168,6 @@ class TestKeyword_switchcase(unittest.TestCase):
         self.assertEqual(valueof(v),'v')
         self.assertEqual(v.id,'(identifier)')
 
-    def test_if_loop_cannot_contain_case(self):
-         a='''if ( cond ) {
-                case 10 : x + y ; }'''
-         self.assertRaises(SyntaxError,Cparser.parse,a)
-
-    def test_while_loop_cannot_contain_case(self):
-         a='''while ( cond ) {
-                case 10 : x + y ; }'''
-         self.assertRaises(SyntaxError,Cparser.parse,a)
-
     def test_switch_statement_with_condition_and_statement_block(self):
         a='''switch ( choice )
             {

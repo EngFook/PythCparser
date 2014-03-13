@@ -5,15 +5,18 @@ from Tokenizer import *
 def valueof(symObj):
     return symObj.first
 
-class TestKeyword_define(unittest.TestCase):
+"""
+    This module is for testing keyword -> #define.
+                                                    """
 
+class TestKeyword_define(unittest.TestCase):
     def test_define_statement(self):
         a='#define Str 10 + ('
-        """ #define
+        """ #define (root[0])
                |
               Str
                |
-            ' 10 + (' """
+            ' 10 + ('       """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
@@ -21,17 +24,16 @@ class TestKeyword_define(unittest.TestCase):
         self.assertEqual(valueof(Strsymbol),'Str')
         statement=Strsymbol.constantidentifier
         self.assertEqual(Strsymbol.constantidentifier,'10 + (')
-
 
     def test_define_statement_with_spaces(self):
         a='#  define Str 10 + ('
-        """    #
+        """    # (root[0])
                |
             define
                |
               Str
                |
-            ' 10 + (' """
+            ' 10 + ('       """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#')
         define=root[0].second
@@ -41,23 +43,21 @@ class TestKeyword_define(unittest.TestCase):
         self.assertEqual(valueof(Strsymbol),'Str')
         statement=Strsymbol.constantidentifier
         self.assertEqual(Strsymbol.constantidentifier,'10 + (')
-
 
     def test_two_define_statement_with_no_spaces(self):
         a='''#define Str 10 + (
-           #define Strtwo 20 * y'''
-        """ #define
+             #define Strtwo 20 * y'''
+        """ #define (root[0])
                |
               Str
                |
             ' 10 + ('
 
-            #define
+            #define (root[1])
                |
               Strtwo
                |
-            ' 20 * y '
-                        """
+            ' 20 * y '      """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
@@ -72,11 +72,10 @@ class TestKeyword_define(unittest.TestCase):
         statement=Strsymbol.constantidentifier
         self.assertEqual(Strsymbol.constantidentifier,'20 * y')
 
-
-    def test_define_two_statement_define_with_spaces(self):
+    def test_two_define_statement_with_spaces(self):
         a='''# define Str 10 + (
              # define Strtwo 20 * y'''
-        """    #
+        """    # (root[0])
                |
             define
                |
@@ -84,13 +83,13 @@ class TestKeyword_define(unittest.TestCase):
                |
             ' 10 + ('
 
-               #
+               # (root[1])
                |
             define
                |
               Strtwo
                |
-            ' 20 * y '  """
+            ' 20 * y '      """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#')
         define=root[0].second
@@ -109,23 +108,22 @@ class TestKeyword_define(unittest.TestCase):
         statement=Strsymbol.constantidentifier
         self.assertEqual(Strsymbol.constantidentifier,'20 * y')
 
-
-    def test_define_two_statement_with_different_spaces_of_define(self):
+    def test_two_define_statement_with_no_spaces_and_spaces(self):
         a='''#define Str 10 + (
              # define Strtwo 20 * y'''
-        """ #define
+        """ #define (root[0])
                |
               Str
                |
             ' 10 + ( '
 
-               #
+               # (root[1])
                |
             define
                |
               Strtwo
                |
-            ' 20 * y '  """
+            ' 20 * y '      """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
@@ -142,11 +140,10 @@ class TestKeyword_define(unittest.TestCase):
         statement=Strsymbol.constantidentifier
         self.assertEqual(Strsymbol.constantidentifier,'20 * y')
 
-
-    def test_define_two_statement_with_different_spaces_of_define_2nd(self):
+    def test_two_define_statement_with_spaces_and_no_spaces(self):
         a='''# define Str 10 + (
              #define Strtwo 20 * y'''
-        """    #
+        """    # (root[0])
                |
             define
                |
@@ -154,11 +151,11 @@ class TestKeyword_define(unittest.TestCase):
                |
             ' 10 + ( '
 
-            #define
+            #define (root[1])
                |
               Strtwo
                |
-            ' 20 * y ' """
+            ' 20 * y '      """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#')
         define=root[0].second
@@ -174,17 +171,15 @@ class TestKeyword_define(unittest.TestCase):
         self.assertEqual(valueof(Strsymbol),'Strtwo')
         statement=Strsymbol.constantidentifier
         self.assertEqual(Strsymbol.constantidentifier,'20 * y')
-
-
 
     def test_define_statement_with_backslash(self):
         a='''#define Str \
              10 + ('''
-        """ #define
+        """ #define (root[0])
                |
               Str
                |
-            ' 10 + (' """
+            ' 10 + ('       """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
@@ -198,11 +193,11 @@ class TestKeyword_define(unittest.TestCase):
              \
              \
              10 + ('''
-        """ #define
+        """ #define (root[0])
                |
               Str
                |
-            ' 10 + (' """
+            ' 10 + ('       """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
@@ -211,10 +206,10 @@ class TestKeyword_define(unittest.TestCase):
         statement=Strsymbol.constantidentifier
         self.assertEqual(Strsymbol.constantidentifier,'10 + (')
 
-    def test_define_twice_statement_with_different_space_same_constantidentifier_raiseSyntax(self):
+    def test_two_define_statement_with_same_constantidentifier_but_different_constant_raiseSyntax(self):
         a='''#define Str 10 + (
              # define Str 20 * y'''
-        """    #
+        """    # (root[0])
                |
             define
                |
@@ -222,38 +217,15 @@ class TestKeyword_define(unittest.TestCase):
                |
             ' 10 + ( '
 
-            #define
+            #define (root[1])
                |
               Str
                |
-            ' 20 * y ' """
+            ' 20 * y '      """
 
         self.assertRaises(SyntaxError,Cparser.parsex,a)
-        defineTable={}
 
-
-    def test_define_twice_statement_with_different_space_same_constantidentifier_raiseSyntax2(self):
-        a='''# define Str 10 + (
-             #define Str 20 * y'''
-        """    #
-               |
-            define
-               |
-              Str
-               |
-            ' 10 + ( '
-
-            #define
-               |
-              Str
-               |
-            ' 20 * y ' """
-        self.assertRaises(SyntaxError,Cparser.parsex,a)
-        defineTable={}
-
-
-
-    def test_completicated_define(self):
+    def test_complicated_define(self):
         a='''   #define StrAAA \
                 \
                 \
@@ -266,8 +238,13 @@ class TestKeyword_define(unittest.TestCase):
                 # define StrEEE 123
                 #define StrFFF zzzz
                                         '''
-
-
+        """(root[0])->
+           (root[1])->
+           (root[2])->      Same as the structure above
+           (root[3])->
+           (root[4])->
+           (root[5])->
+                                """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
@@ -322,15 +299,14 @@ class TestKeyword_define(unittest.TestCase):
     def test_define_replace_constantidentifier_to_expression(self):
           a='''#define Str  2 + 3 +
            { Str 4 + 5 * 6 * 7 * 8 ; }'''
-          """       #define
+          """       #define (root[0])
                        |
                       Str
                        |
                      2 + 3 +
 
 
-
-                       {
+                       { (root[1])
                        |
                        ------_____+____
                             /          \
@@ -341,9 +317,7 @@ class TestKeyword_define(unittest.TestCase):
                       2   3        *    7
                                   / \
                                  5   6
-
-         """
-
+                                            """
           root=Cparser.parsex(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
@@ -396,16 +370,13 @@ class TestKeyword_define(unittest.TestCase):
     def test_define_replace_constantidentifier_to_expression_in_middle(self):
           a='''#define Str 5 * 6 *
                 { 2 + 3 + 4 + Str 7 * 8 ; }'''
-
-          """       #define
+          """       #define (root[0])
                        |
                       Str
                        |
             '       5 * 6 *
 
-
-
-                       {
+                       { (root[1])
                        |
                        ------_____+____
                             /          \
@@ -415,7 +386,7 @@ class TestKeyword_define(unittest.TestCase):
                        / \          /  \
                       2   3        *    7
                                   / \
-                                 5   6 """
+                                 5   6          """
 
           root=Cparser.parsex(a)
           self.assertEqual(root[0].id,'#define')
@@ -469,15 +440,14 @@ class TestKeyword_define(unittest.TestCase):
     def test_statement_define_with_replace_constantidentifier_for_if_statement(self):
         a=''' #define Str if ( x
             { Str == 2 ) else  y = 5 ; }'''
-
-        """          #define
+        """          #define (root[0])
                        |
                       Str
                        |
                     if ( x
 
 
-                          {
+                          { (root[1])
                           |
                           if
                           |
@@ -497,9 +467,7 @@ class TestKeyword_define(unittest.TestCase):
                                       |-------=
                                             /   \
                                            y     5
-
                                                     """
-
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
@@ -531,14 +499,14 @@ class TestKeyword_define(unittest.TestCase):
     def test_define_replace_constantidentifier_for_forloop(self):
         a='''#define Str for ( x = 0 ; x
             { Str = 5 ; x ++ ) x + y = z ; }'''
-        """        #define
+        """        #define (root[0])
                        |
                       Str
                        |
                     for ( x = 0 ; x
 
 
-               {
+               { (root[1])
                |
               for-----------------------------
                   |         |      |        |
@@ -547,7 +515,7 @@ class TestKeyword_define(unittest.TestCase):
                 x   0      / \     x     +    z
                           x   5         / \
                                        x   y
-               """
+                                                    """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
@@ -589,14 +557,13 @@ class TestKeyword_define(unittest.TestCase):
     def test_define_replace_constantidentifier_for_forloop_Str_is_in_between(self):
         a='''#define Str x = 0 ; x
             { for ( Str = 5 ; x ++ ) x + y = z ; }'''
-        """        #define
+        """        #define (root[0])
                        |
                       Str
                        |
-                    for ( x = 0 ; x
+                   x = 0 ; x
 
-
-               {
+               { (root[1])
                |
               for-----------------------------
                   |         |      |        |
@@ -605,7 +572,7 @@ class TestKeyword_define(unittest.TestCase):
                 x   0      / \     x     +    z
                           x   5         / \
                                        x   y
-               """
+                                                    """
         root=Cparser.parsex(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
@@ -647,20 +614,20 @@ class TestKeyword_define(unittest.TestCase):
     def test_two_define_replace_constantidentifier_to_expression(self):
           a=''' #define Strtwo 100 + 200 +
                 #define Str  2 + 3 +
-           { Str 4 + 5 * 6 * 7 * 8 ; }'''
-          """       #define
+                { Str 4 + 5 * 6 * 7 * 8 ; }'''
+          """       #define (root[0])
+                       |
+                      Strtwo
+                       |
+                   100 + 200 +
+
+                    #define (root[1])
                        |
                       Str
                        |
                      2 + 3 +
 
-                    #define
-                       |
-                      Str
-                       |
-                     100 + 200 +
-
-                       {
+                       { (root[2])
                        |
                        ------_____+____
                             /          \
@@ -671,9 +638,7 @@ class TestKeyword_define(unittest.TestCase):
                       2   3        *    7
                                   / \
                                  5   6
-
-         """
-
+                                                """
           root=Cparser.parsex(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
@@ -731,22 +696,28 @@ class TestKeyword_define(unittest.TestCase):
 
     def test_three_define_replace_constantidentifier_to_expression(self):
           a=''' #define Strthree 12345 + 12345678 +
-                #define Strtwo 100 + 200 +
                 #define Str  2 + 3 +
-           { Str 4 + 5 * 6 * 7 * 8 ; }'''
-          """       #define
+                #define Strtwo 100 + 200 +
+                { Str 4 + 5 * 6 * 7 * 8 ; }'''
+          """       #define (root[0])
+                       |
+                      Strthree
+                       |
+                12345 + 12345678 +
+
+                    #define (root[1])
                        |
                       Str
                        |
                      2 + 3 +
 
-                    #define
+                    #define (root[2])
                        |
-                      Str
+                      Strtwo
                        |
-                     100 + 200 +
+                   100 + 200 +
 
-                       {
+                       { (root[3])
                        |
                        ------_____+____
                             /          \
@@ -757,101 +728,7 @@ class TestKeyword_define(unittest.TestCase):
                       2   3        *    7
                                   / \
                                  5   6
-
-         """
-
-          root=Cparser.parsex(a)
-          self.assertEqual(root[0].id,'#define')
-          Strsymbol=root[0].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
-          self.assertEqual(valueof(Strsymbol),'Strthree')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'12345 + 12345678 +')
-          self.assertEqual(root[1].id,'#define')
-          Strsymbol=root[1].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
-          self.assertEqual(valueof(Strsymbol),'Strtwo')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'100 + 200 +')
-          self.assertEqual(root[2].id,'#define')
-          Strsymbol=root[2].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
-          self.assertEqual(valueof(Strsymbol),'Str')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'2 + 3 +')
-          brace=root[3]
-          self.assertEqual(brace.id,'{')
-          plus1=brace.first[0]
-          self.assertEqual(plus1.id,'+')
-          self.assertEqual(plus1.arity,'binary')
-          plus2=plus1.first
-          self.assertEqual(plus2.id,'+')
-          self.assertEqual(plus2.arity,'binary')
-          plus3=plus2.first
-          self.assertEqual(plus3.id,'+')
-          self.assertEqual(plus3.arity,'binary')
-          two=plus3.first
-          self.assertEqual(valueof(two),'2')
-          self.assertEqual(two.id,'(literal)')
-          three=plus3.second
-          self.assertEqual(valueof(three),'3')
-          self.assertEqual(three.id,'(literal)')
-          four=plus2.second
-          self.assertEqual(valueof(four),'4')
-          self.assertEqual(four.id,'(literal)')
-          multiply=plus1.second
-          self.assertEqual(multiply.id,'*')
-          self.assertEqual(multiply.arity,'binary')
-          multiply2=multiply.first
-          self.assertEqual(multiply2.id,'*')
-          self.assertEqual(multiply2.arity,'binary')
-          multiply3=multiply2.first
-          self.assertEqual(multiply3.id,'*')
-          self.assertEqual(multiply3.arity,'binary')
-          five=multiply3.first
-          self.assertEqual(valueof(five),'5')
-          self.assertEqual(five.id,'(literal)')
-          six=multiply3.second
-          self.assertEqual(valueof(six),'6')
-          self.assertEqual(five.id,'(literal)')
-          seven=multiply2.second
-          self.assertEqual(valueof(seven),'7')
-          self.assertEqual(five.id,'(literal)')
-          eight=multiply.second
-          self.assertEqual(valueof(eight),'8')
-          self.assertEqual(five.id,'(literal)')
-
-    def test_three_define_replace_constantidentifier_to_expression_2nd(self):
-          a=''' #define Strthree 12345 + 12345678 +
-                #define Str  2 + 3 +
-                #define Strtwo 100 + 200 +
-           { Str 4 + 5 * 6 * 7 * 8 ; }'''
-          """       #define
-                       |
-                      Str
-                       |
-                     2 + 3 +
-
-                    #define
-                       |
-                      Str
-                       |
-                     100 + 200 +
-
-                       {
-                       |
-                       ------_____+____
-                            /          \
-                           +            *
-                         /   \         /  \
-                        +     4       *    8
-                       / \          /  \
-                      2   3        *    7
-                                  / \
-                                 5   6
-
-         """
-
+                                                    """
           root=Cparser.parsex(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
@@ -913,7 +790,7 @@ class TestKeyword_define(unittest.TestCase):
           self.assertEqual(valueof(eight),'8')
           self.assertEqual(five.id,'(literal)')
 
-    def test_three_define_replace_constantidentifier_to_expression_3rd_withbackslash_inorder_sequence(self):
+    def test_three_define_replace_constantidentifier_to_expression_withbackslash_and_inorder_sequence(self):
           a=''' #define Str  \
                 2 + 3 +
                 #define Strthree \
@@ -921,20 +798,26 @@ class TestKeyword_define(unittest.TestCase):
                 \
                 12345 + 12345678 +
                 #define Strtwo 100 + 200 +
-           { Str 4 + 5 * 6 * 7 * 8 ; }'''
-          """       #define
+                { Str 4 + 5 * 6 * 7 * 8 ; }'''
+          """       #define (root[0])
                        |
                       Str
                        |
                      2 + 3 +
 
-                    #define
+                    #define (root[1])
                        |
-                      Str
+                      Strthree
                        |
-                     100 + 200 +
+                 12345 + 12345678 +
 
-                       {
+                    #define (root[2])
+                       |
+                      Strtwo
+                       |
+                   100 + 200 +
+
+                       { (root[3])
                        |
                        ------_____+____
                             /          \
@@ -945,9 +828,7 @@ class TestKeyword_define(unittest.TestCase):
                       2   3        *    7
                                   / \
                                  5   6
-
-         """
-
+                                                    """
           root=Cparser.parsex(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
@@ -1009,28 +890,33 @@ class TestKeyword_define(unittest.TestCase):
           self.assertEqual(valueof(eight),'8')
           self.assertEqual(five.id,'(literal)')
 
-    def test_comepletely_define_replace_constantidentifier_to_expression_with_everything_inorder_sequence(self):
+    def test_comepletely_define_replace_constantidentifier_to_expression_with_backslash_and_inorder_sequence_in_middle(self):
           a=''' #define Strtwo 100 + 200 +
                 #define Strthree \
                 \
                 \
                 12345 + 12345678 +
-                #          define Str 2 + 3 +
+                #          define Str 4 + 5 *
+                { 2 + 3 + Str 6 * 7 * 8 ; }'''
+          """       #define (root[0])
+                       |
+                      Strtwo
+                       |
+                   100 + 200 +
 
-           { Str 4 + 5 * 6 * 7 * 8 ; }'''
-          """       #define
+                    #define (root[1])
+                       |
+                      Strthree
+                       |
+                 12345 + 12345678 +
+
+                    #define (root[2])
                        |
                       Str
                        |
-                     2 + 3 +
+                     4 + 5 *
 
-                    #define
-                       |
-                      Str
-                       |
-                     100 + 200 +
-
-                       {
+                       { (root[3])
                        |
                        ------_____+____
                             /          \
@@ -1041,9 +927,7 @@ class TestKeyword_define(unittest.TestCase):
                       2   3        *    7
                                   / \
                                  5   6
-
-         """
-
+                                                    """
           root=Cparser.parsex(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
@@ -1064,7 +948,7 @@ class TestKeyword_define(unittest.TestCase):
           self.assertEqual((Strsymbol.id),'ConstantIdentifier')
           self.assertEqual(valueof(Strsymbol),'Str')
           statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'2 + 3 +')
+          self.assertEqual(Strsymbol.constantidentifier,'4 + 5 *')
           brace=root[3]
           self.assertEqual(brace.id,'{')
           plus1=brace.first[0]
@@ -1107,41 +991,44 @@ class TestKeyword_define(unittest.TestCase):
           self.assertEqual(valueof(eight),'8')
           self.assertEqual(five.id,'(literal)')
 
-
-    def test_comepletely_define_replace_constantidentifier_to_expression_2nd(self):
+    def test_define_replace_constantidentifier_to_expression_with_straigh_away_replace(self):
           a=''' #define Strtwo 100 + 200 +
                 #define Strthree \
                 \
                 \
                 12345 + 12345678 +
                 #          define Str 2 + 3 +
+                Str 4 + 5 * 6 * 7 * 8 ; '''
+          """       #define (root[0])
+                       |
+                      Strtwo
+                       |
+                   100 + 200 +
 
-            Str 4 + 5 * 6 * 7 * 8 ; '''
-          """       #define
+                    #define (root[1])
+                       |
+                      Strthree
+                       |
+                 12345 + 12345678 +
+
+                    #define (root[2])
                        |
                       Str
                        |
                      2 + 3 +
 
-                    #define
+                       { (root[3])
                        |
-                      Str
-                       |
-                     100 + 200 +
-
-
-                 ______+___
-                /          \
-               +            *
-             /   \         /  \
-            +     4       *    8
-           / \          /  \
-          2   3        *    7
-                      / \
-                     5   6
-
-         """
-
+                       ------_____+____
+                            /          \
+                           +            *
+                         /   \         /  \
+                        +     4       *    8
+                       / \          /  \
+                      2   3        *    7
+                                  / \
+                                 5   6
+                                                    """
           root=Cparser.parsex(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
@@ -1212,14 +1099,25 @@ class TestKeyword_define(unittest.TestCase):
                 2 + 3 +
               Str = 5 ; x ++ ) x + y = z ; '''
 
-          """     #define
+          """  #define (root[0])
+                       |
+                      Strtwo
+                       |
+                   100 + 200 +
+
+                    #define (root[1])
                        |
                       Str
                        |
-                    for ( x = 0 ; x
+                 for ( x = 0 ; x
 
+                    #define (root[2])
+                       |
+                      Strthree
+                       |
+                     2 + 3 +
 
-               {
+               { (root[3])
                |
               for-----------------------------
                   |         |      |        |
@@ -1228,7 +1126,7 @@ class TestKeyword_define(unittest.TestCase):
                 x   0      / \     x     +    z
                           x   5         / \
                                        x   y
-               """
+                                                    """
           root=Cparser.parsex(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first

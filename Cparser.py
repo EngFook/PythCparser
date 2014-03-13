@@ -1,22 +1,20 @@
-DEBUG=True # on/off the debugger
+##"On/Off the debugger."                                                      ##
+DEBUG=True
 def dprint(args, kwargs):
     if DEBUG==True:
         print (args,kwargs)
-############################        "files imported"
+##"Files imported."                                                           ##
 from Tokenizer import *
 import CInterperter
 import CExpression
 import CKeyword
 import CScope
-array=[]
-newarray=[]
-############################
-############################
+##"Injection from Ckeyword and Cexpression."                                  ##
 CKeyword.configure_C_Keyword(CExpression)
 CExpression.configure_C_Expression(CKeyword)
-############################
-
+##"Global Tokenizer."                                                         ##
 global tokenizer
+##"Parse the string to analyse."          'temporary'                         ##
 def parse(str):
     tokenizer=Tokenizer(str)
     token=tokenizer.peepahead()
@@ -34,46 +32,37 @@ def parse(str):
         temp=CExpression.expression(0)
         tokenizer.advance(';')
     return temp
-
+##"Parse the string to analyse."                                              ##
 def parsex(str):
-    passtheexpression=False
+    array=[]
+    CKeyword.defineTable={}
     tokenizer=Tokenizer(str)
-    token=tokenizer.peepahead()
     token=tokenizer.peepahead()
     CExpression.configure_tokenizer_Expression(tokenizer)
     CKeyword.configure_tokenizer_Keyword(tokenizer)
-    store=token
     while(token.first == ';'):
         tokenizer.advance()
         token=tokenizer.peepahead()
-    while(store.first != '(end)'):
-        if hasattr(token,'std') and passtheexpression == False:
+    while(token.first != '(end)'):
+        if hasattr(token,'std'):
             temp=CKeyword.parseStatement()
         else:
             temp=CExpression.expression(0)
             tokenizer.advance(';')
-        store=tokenizer.peepahead()
+        token=tokenizer.peepahead()
         array.append(temp)
-        CKeyword.configure_array(array)
-        if hasattr(store,'std'):
-            passtheexpression=False
-        else:
-            passtheexpression=True
-    newarray.clear()
-    for i in array:
-        newarray.append(i)
-    array.clear()
-    CKeyword.defineTable={}
-    return newarray
+    return array
+################################################################################
+################################################################################
+"""
+    Manual Test here.
+##                        """
+a=parsex('''struct DataQ {
+                    int a ;
+                    int b ;
+                            }  Data99 ;
 
-
-a=parsex(''' #define Strtwo 100 + 200 +
-                # define Str for ( x = 0 ; x
-                #define Strthree \
-                \
-                \
-                2 + 3 +
-              Str = 5 ; x ++ ) x + y = z ; ''')
+''')
 
 print(a)
 

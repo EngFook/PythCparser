@@ -1,14 +1,11 @@
-####################################       "files imported"
+##"Files imported."                                                           ##
 from Symbol import *
 from Tokenizer import *
-#######################################
-array=[]
-def configure_array(module):
-    global array
-    array=module
-######################
-defineTable={} #set the define list.
-def define(id,constant_token): #to add id to the symbolTable if symbolTable don't contain it
+from ConfigureType import *
+##"DefineTable created.                                                       ##
+defineTable={}
+##"Add id to the defineTable if defineTable don't contain it."                ##
+def define(id,constant_token):
     global defineTable
     if id not in defineTable:
         defineTable[id]=constant_token
@@ -18,33 +15,39 @@ def define(id,constant_token): #to add id to the symbolTable if symbolTable don'
         if constant_token==retrive_constant_token:
             pass
         else:
-            array.clear()
             raise SyntaxError('Invalid Statement : #define ')
         return
-##########################
+##"Initialization."                                                           ##
 expression=0
 tokenizer=0
+##"Injection expression from Cparser."                                        ##
 def configure_C_Keyword(module):
     global expression
     expression=module
+##"Injection tokenizer from Cparser."                                         ##
 def configure_tokenizer_Keyword(module):
     global tokenizer
     tokenizer=module
-####################################
+##"Keyword register to symbolTable."                                          ##
 def keyword(id):
     sym=symbol(id)
     sym.arity=None
     return sym
+##"ParseStatement to perform every specific keyword function."                ##
 def parseStatement():
     global tokenizer
+    configure_tokenizer_forType(tokenizer)
+    configure_expression_forType(expression)
     token=tokenizer.advance()
     temp=token.std()
     return temp
-################################################################################
-
+##"The entire different type of function along Ckeyword."                     ##
 def CkeywordGrammar():
             global FlowControlStack
             FlowControlStack=[]
+################################################################################
+# #define std
+################################################################################
             def std(self,leftToken=None):
                 token=self
                 if (tokenizer.peepahead().first=='define'):
@@ -107,9 +110,8 @@ def CkeywordGrammar():
             sym.first=None
             sym.arity='unary'
             sym.__repr__=REPR
-
 ################################################################################
-## if else std -> if std
+# if else std -> if std
 ################################################################################
             def std(self):
                 if tokenizer.peepahead().id != '(':
@@ -133,12 +135,11 @@ def CkeywordGrammar():
                 if hasattr(check,'std'):
                     if check.id == 'else':
                         self.third=parseStatement()
-
                 else:
                     self.third=None
                 return self
 
-            def REPR(self):##return '({0} {1} {2}) \n{3}'.format(self.id, self.first, self.second ,self.third)##
+            def REPR(self):
                 if self.third == None:
                     if self.second == None:
                         return '{0} {1}'.format(self.id, self.first)
@@ -147,16 +148,14 @@ def CkeywordGrammar():
                     return '( {0} {1} {2} )'.format(self.id, self.first,self.third)
                 return '( {0} {1} {2} {3})'.format(self.id, self.first,self.second,self.third)
 
-
             sym=keyword('if')
             sym.std=std
             sym.first=None
             sym.second=None
             sym.third=None
             sym.__repr__=REPR
-################################################################################
-## if else std -> else std
-################################################################################
+
+# if else std -> else std                                                     ##
             def std(self,leftToken=None):
                 a=tokenizer.peep()
                 if a is None:
@@ -172,14 +171,13 @@ def CkeywordGrammar():
 
             def REPR(self):
                 return '({0} {1})'.format(self.id, self.first )
+
             sym=keyword('else')
             sym.std=std
             sym.first=None
             sym.__repr__=REPR
 ################################################################################
-################################################################################
-################################################################################
-## Do While std -> while std
+# do while std -> while std
 ################################################################################
             def std(self,leftToken=None):
                 sym=symbol(self.id)
@@ -207,14 +205,14 @@ def CkeywordGrammar():
                 if self.second==None:
                     return '({0} {1})'.format(self.id, self.first)
                 return '({0} {1} {2})'.format(self.id, self.first,self.second)
+
             sym=keyword('while')
             sym.std=std
             sym.first=None
             sym.second=None
             sym.__repr__=REPR
-################################################################################
-## do std
-################################################################################
+
+# do std                                                                      ##
             def std(self,leftToken=None):
                 sym=symbol(self.id)
                 temp=tokenizer.advance()
@@ -232,9 +230,7 @@ def CkeywordGrammar():
             sym.second=None
             sym.__repr__=REPR
 ################################################################################
-################################################################################
-################################################################################
-## for std
+# for std
 ################################################################################
             def std(self,leftToken=None):
                 tokenizer.advance('(')
@@ -273,6 +269,7 @@ def CkeywordGrammar():
                     self.four = ')'
                     return '({0} {1} {2} {3}{4}'.format(self.id, self.first, self.second,self.third,self.four)
                 return '({0} {1} {2} {3}) \n{4}'.format(self.id, self.first, self.second ,self.third ,self.four)
+
             sym=keyword('for')
             sym.std=std
             sym.first=None
@@ -281,9 +278,7 @@ def CkeywordGrammar():
             sym.four=None
             sym.__repr__=REPR
 ################################################################################
-################################################################################
-################################################################################
-## Switch Case std -> switch std
+# switch case + default std -> switch std
 ################################################################################
             def std(self,leftToken=None):
                 temp={}
@@ -305,9 +300,8 @@ def CkeywordGrammar():
             sym.second=None
             sym.arity='binary'
             sym.__repr__=REPR
-################################################################################
-## case std
-################################################################################
+
+# case std                                                                    ##
             def std(self):
                 if self.id == 'case':
                     tokenizer.advance()
@@ -322,12 +316,14 @@ def CkeywordGrammar():
 
             def REPR(self):
                 return '{0} {1}'.format(self.id, self.first)
+
             sym=keyword('case')
             sym.std=std
             sym.first=None
             sym.arity='case'
             sym.__repr__=REPR
 
+# default std                                                                 ##
             def std(self):
                 tokenizer.advance()
                 tokenizer.advance(':')
@@ -335,15 +331,15 @@ def CkeywordGrammar():
 
             def REPR(self):
                 return '{0}'.format(self.id)
+
             sym=keyword('default')
             sym.std=std
             sym.arity='case'
             sym.__repr__=REPR
+
 ################################################################################
+# Braces std
 ################################################################################
-################################################################################
-## Braces std
-#############################################################################@@@
             global previous
             global rootindex
             global root
@@ -351,47 +347,110 @@ def CkeywordGrammar():
             previous=-1
             rootindex=0
 
-            def std(self):
-                global previous
-                global rootindex
-                global root
-                previous=previous+1
-                array=[]
-                check=tokenizer.peepahead()
-                while check.id !='}':
-                        if hasattr(check,'std'):
-                           if(check.id== 'case' or check.id =='default'):
-                                temp=check.std()
-                           else:
-                            temp=parseStatement()
-                        else:
-                            temp=expression.expression(0)
-                            tokenizer.advance(';')
-                        array.append(temp)
-                        index=array.index(temp)
-                        if previous :
-                            if temp.id == 'case':
-                                self.back[temp.first.first]=root,rootindex+1
-                        else:
-                            root=self
-                            rootindex=index
-                            if temp.id == 'case':
-                                self.back[temp.first.first]=None
-                        if hasattr(temp,'std'):
-                            if temp.id == 'case':
-                                case=temp.first
-                                self.address[case.first]=index,self
-                        check=tokenizer.peepahead()
-                        if check == '(newline)':
-                            tokenizer.advance()
+            def std(self,symboltoken=None):
+                if symboltoken==None:
+                    global previous
+                    global rootindex
+                    global root
+                    previous=previous+1
+                    array=[]
+                    check=tokenizer.peepahead()
+                    while check.id !='}':
+                            if hasattr(check,'std'):
+                               if(check.id== 'case' or check.id =='default'):
+                                    temp=check.std()
+                               else:
+                                    temp=parseStatement()
+                            else:
+                                temp=expression.expression(0)
+                                if check.id=='(identifier)' and tokenizer.peepahead().first==',':
+                                    tokenizer.advance(',')
+                                elif check.id=='(identifier)' and tokenizer.peepahead().id=='}':
+                                    pass
+                                else:
+                                    tokenizer.advance(';')
+                            array.append(temp)
+                            index=array.index(temp)
+                            if previous :
+                                if temp.id == 'case':
+                                    self.back[temp.first.first]=root,rootindex+1
+                            else:
+                                root=self
+                                rootindex=index
+                                if temp.id == 'case':
+                                    self.back[temp.first.first]=None
+                            if hasattr(temp,'std'):
+                                if temp.id == 'case':
+                                    case=temp.first
+                                    self.address[case.first]=index,self
                             check=tokenizer.peepahead()
-                tokenizer.advance('}')
-                check=tokenizer.peepahead()
-                self.first=array
-                previous=previous-1
-                if previous == -1 :
-                    rootindex=0
-                return self
+                            if check == '(newline)':
+                                tokenizer.advance()
+                                check=tokenizer.peepahead()
+                    tokenizer.advance('}')
+                    check=tokenizer.peepahead()
+                    self.first=array
+                    previous=previous-1
+                    if previous == -1 :
+                        rootindex=0
+                    return self
+                else:
+                    content=symboltoken.second.first
+                    arraykeypair={}
+                    array=[]
+                    arrayset2=[]
+                    for word in content:
+                        checkAhead=tokenizer.peepahead()
+                        if checkAhead.id=='}':
+                            break
+                        array.append(checkAhead)
+                        if checkAhead.id=='.':
+                            dot=tokenizer.advance()
+                            checkAhead=tokenizer.peepahead()
+                            dot.first=checkAhead
+                            while(checkAhead.id!='}'):
+                                for word in content:
+                                    if checkAhead.first==word.first.first:
+                                        tokenizer.advance()
+                                        if tokenizer.peepahead().id=='=':
+                                            plus=tokenizer.advance()
+                                            plus.first=dot
+                                            arrayset2.append(plus)
+                                            checkAhead=tokenizer.peepahead()
+                                            plus.second=checkAhead
+                                            arraykeypair[word]=checkAhead
+                                            tokenizer.advance()
+                                            checkAhead=tokenizer.peepahead()
+                                            if checkAhead.first==',':
+                                                tokenizer.advance(',')
+                                                pass
+                                                checkAhead=tokenizer.peepahead()
+                                                if checkAhead.id=='.':
+                                                    dot=tokenizer.advance()
+                                                    pass
+                                            elif checkAhead.id=='}':
+                                                break
+                                            else:
+                                                raise SyntaxError('Invalid Statement')
+                                            checkAhead=tokenizer.peepahead()
+                                            dot.first=checkAhead
+                                        else:
+                                            raise SyntaxError ('Expected "=" after {0}'.format(word))
+
+                            tokenizer.advance('}')
+                            symboltoken.first.content=arraykeypair
+                            self.first=arrayset2
+                            return self
+                        elif checkAhead.id=='(literal)':
+                            arraykeypair[word]=tokenizer.advance()
+                            if tokenizer.peepahead().first==',':
+                                tokenizer.advance(',')
+                        else:
+                            break
+                    tokenizer.advance('}')
+                    symboltoken.first.content=arraykeypair
+                    self.first=array
+                    return self
 
             def REPR(self):
                 self.second = '}'
@@ -405,46 +464,15 @@ def CkeywordGrammar():
             sym.test='o-o'
             sym.second=None
             sym.__repr__=REPR
-
-            def REPR(self):
-                if hasattr(self,'second'):
-                    if self.second != None :
-                        return '({0} {1} {2})'.format(self.id ,self.first,self.second)
-                return '({0} {1})'.format(self.id ,self.first)
-
-            def limitedExpression(self,rightBindingPower):
-                global tokenizer
-                token=tokenizer.peepahead()
-                while(rightBindingPower<token.leftBindingPower):
-                    token=token.led(self)
-                    self=token
-                    token=tokenizer.peepahead()
-                return self
-
-            def std(self):
-                if tokenizer.peepahead().id == '(identifier)':
-                    self.first=tokenizer.advance()
-                else:
-                    self.first=expression.expression(100)
-                self=self.limitedExpression(0)
-                if tokenizer.peepahead().first == ';':
-                    tokenizer.advance()
-                return self
-
-            sym=keyword('int')
-            sym.std=std
-            sym.first=None
-            sym.second=None
-            sym.limitedExpression=limitedExpression
-            sym.__repr__=REPR
-
-            sym=keyword('double')
-            sym.std=std
-            sym.first=None
-            sym.second=None
-            sym.limitedExpression=limitedExpression
-            sym.__repr__=REPR
-
+################################################################################
+# Type std -> configure Type
+################################################################################
+            configureType('int')
+            configureType('double')
+            configureType('char')
+################################################################################
+# return + break and continue std -> return std
+################################################################################
             def std(self):
                 self.first=expression.expression(0)
                 tokenizer.advance()
@@ -458,6 +486,8 @@ def CkeywordGrammar():
             sym.first=None
             sym.__repr__=REPR
 
+# break std                                                                   ##
+# continue std                                                                ##
             def std(self):
                 if FlowControlStack != []:
                     self.braces=FlowControlStack[-1]
@@ -478,11 +508,192 @@ def CkeywordGrammar():
             sym.braces=None
             sym.first=None
             sym.__repr__=REPR
+################################################################################
+# struct std
+################################################################################
+            def std(self,attribute=None):
+                array=[]
+                check_for_redeclaration=[]
+                check_for_redeclaration2=[]
+                CheckAhead=tokenizer.peepahead()
+                if CheckAhead.id=='(identifier)':
+                    temp=''.join(self.id +' '+ CheckAhead.first)
+                    if temp in symbolTable:
+                        token=symbolTable.get(temp)()
+                        token.attribute='(configureStructType)'
+                        tokenizer.advance()
+                        token=token.std(token)
+                        tokenizer.advance(';')
+                        return token
+                    self.first=tokenizer.advance()
+                    self.first.id='StructIdentifier'
+                else:
+                    self.first=None
+                    self.second=parseStatement()
+                    if attribute!='typedef':
+                        array2=[]
+                        while tokenizer.peepahead().id=='(identifier)' and tokenizer.peepahead().first!=';' and attribute!='typedef':
+                            for word in check_for_redeclaration:
+                                if tokenizer.peepahead().first == word.first:
+                                    raise SyntaxError('Do not expect redeclaration of "{0}".'.format(word.first))
+                            check_for_redeclaration.append(tokenizer.peepahead())
+                            array2.append(tokenizer.advance())
+                            if tokenizer.peepahead().first==',':
+                                tokenizer.advance(',')
+                            elif tokenizer.peepahead().first==';':
+                                self.third=array2
+                                tokenizer.advance(';')
+                                break;
+                            else:
+                                raise SyntaxError('Invalid Statement.')
+                    return self
+                if tokenizer.peepahead().id=='{':
+                    self.second=parseStatement()
+                else:
+                    raise SyntaxError('Expect a "{0}" after "{1}".'.format('{',self.first))
+                while tokenizer.peepahead().id=='(identifier)' and tokenizer.peepahead().first!=';' and attribute!='typedef':
+                    for word in check_for_redeclaration2:
+                                if tokenizer.peepahead().first == word.first:
+                                    raise SyntaxError('Do not expect redeclaration of "{0}".'.format(word.first))
+                    check_for_redeclaration2.append(tokenizer.peepahead())
+                    array.append(tokenizer.advance())
+                    if tokenizer.peepahead().first==',':
+                        tokenizer.advance(',')
+                    elif tokenizer.peepahead().first==';':
+                        self.third=array
+                        break;
+                    else:
+                        raise SyntaxError('Invalid Statement.')
+                if attribute=='typedef':
+                    pass
+                else:
+                    tokenizer.advance(';')
+                configureType(temp,'(struct)',self.second)
+                return self
+            def REPR(self):
+                if self.second==None:
+                    return '({0} {1})'.format(self.id, self.first)
+                if self.first==None:
+                    if self.third!=None:
+                        return '({0} {1} {2})'.format(self.id, self.second,self.third)
+                    return '({0} {1})'.format(self.id, self.second)
+                if self.third==None:
+                    return '({0} {1} {2})'.format(self.id, self.first, self.second)
+                return '({0} {1} {2} {3})'.format(self.id, self.first, self.second,self.third)
 
+            sym=keyword('struct')
+            sym.std=std
+            sym.first=None
+            sym.second=None
+            sym.third=None
+            sym.__repr__=REPR
+################################################################################
+# typedef std
+################################################################################
+            def std(self,leftToken=None):
+                array1=[]
+                if hasattr(self,'struct'):
+                    self.first=tokenizer.advance()
+                    tokenizer.advance(';')
+                    return self
+                else:
+                    CheckAhead=tokenizer.peepahead()
+                if CheckAhead.id=='struct':
+                    store=tokenizer.advance()
+                    self.first=store.std('typedef')
+                    check_for_redeclaration=[]
+                    while tokenizer.peepahead().id=='(identifier)' and tokenizer.peepahead().first!=';':
+                        for word in check_for_redeclaration:
+                                if tokenizer.peepahead().first == word.first:
+                                    raise SyntaxError('Do not expect redeclaration of "{0}".'.format(word.first))
+                        check_for_redeclaration.append(tokenizer.peepahead())
+                        array1.append(tokenizer.advance())
+                        if tokenizer.peepahead().first==',':
+                            tokenizer.advance(',')
+                        elif tokenizer.peepahead().first==';':
+                            self.second=array1
+                            break;
+                        else:
+                            raise SyntaxError('Invalid Statement.')
+                    for word in self.second:
+                        configureType(word.first,'(typedef)',self.first.second,None,self.first)
+                    tokenizer.advance(';')
+                elif hasattr(CheckAhead,'std') and CheckAhead.id!='char':
+                    self.first=parseStatement()
+                    self.second=None
+                    return self
+                else:
+                        token=tokenizer.advance()
+                        token2=None
+                        if tokenizer.peepahead().id=='*':
+                            token2=tokenizer.advance()
+                        self.first=tokenizer.advance()
+                        self.second=token.std(token2)
+                return self
+            def REPR(self):
+                if self.second==None:
+                    return '({0} {1})'.format(self.id, self.first)
+                return '({0} {1} {2})'.format(self.id, self.first, self.second)
 
+            sym=keyword('typedef')
+            sym.std=std
+            sym.first=None
+            sym.second=None
+            sym.__repr__=REPR
+################################################################################
+# enum std
+################################################################################
+            def std(self,Tokenstore=None):
+                CheckAhead=tokenizer.peepahead()
+                if CheckAhead.id=='(identifier)':
+                    temp=''.join(self.id +' '+ CheckAhead.first)
+                    if temp in symbolTable:
+                        token=symbolTable.get(temp)()
+                        token.attribute='(enum)'
+                        tokenizer.advance()
+                        temporary=token.std(token)
+                        tokenizer.advance(';')
+                        return temporary
+                self.first=tokenizer.advance()
+                self.first.id='EnumIdentifier'
+                token=tokenizer.advance()
+                if tokenizer.peepahead().id != '(identifier)':
+                    raise SyntaxError('Do not allow digit')
+                else:
+                    self.second=token.std()
+                temp=''.join(self.id +' '+ self.first.first)
+                configureType(temp,True,self.second)
+                if tokenizer.peepahead().first==';':
+                    self.third=None
+                else:
+                    array=[]
+                    while tokenizer.peepahead().first!=';':
+                        array.append(tokenizer.advance())
+                        if tokenizer.peepahead().first==',':
+                            tokenizer.advance(',')
+                        elif tokenizer.peepahead().first==';':
+                            pass
+                        else:
+                            raise SyntaxError('Do not expected "{0}" , invalid statement.'.format(tokenizer.peepahead()))
+                    self.third=array
+                tokenizer.advance(';')
+                return self
+
+            def REPR(self):
+                    if hasattr(self,'struct'):
+                        return '({0} {1})'.format(self.id, self.first)
+                    return '({0} {1} {2} {3})'.format(self.id, self.first, self.second, self.third)
+
+            sym=keyword('enum')
+            sym.std=std
+            sym.first=None
+            sym.second=None
+            sym.third=None
+            sym.__repr__=REPR
 ################################################################################
 ################################################################################
-CkeywordGrammar() # all C keywordGrammar
-
+##"Call C keywordGrammar."                                                    ##
+CkeywordGrammar()
+##                                                                            ##
 
 

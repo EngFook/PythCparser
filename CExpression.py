@@ -1,25 +1,28 @@
-##########################       "files imported"
+##"Files imported."                                                           ##
 from Symbol import *
 from Tokenizer import *
-##########################
+##"Initialization."                                                           ##
 Keyword=0
 tokenizer=0
+##"Injection keyword from Cparser."                                           ##
 def configure_C_Expression(module):
     global Keyword
     Keyword=module
+##"Injection tokenizer from Cparser."                                         ##
 def configure_tokenizer_Expression(module):
     global tokenizer
     tokenizer=module
-##########################
+##"For return self value purpose."                                            ##
 def nud(self,token):
     self.first=temp.nud()
     return self
-
-def REPR(self): #for print number or symbol instead of address
+##"Print style."                                                              ##
+def REPR(self):
     if self.arity == 'binary':
         return '({0} {1} {2})'.format(self.first,self.id, self.second)
     else:
         return '({0} {1})'.format(self.id, self.first)
+##"Id categorized to infix.For e.g '+' for '2 + 3' , '-' for '10 - 5'         ##
 def infix(id, bindingPower,Type=True):
     sym=symbol(id)
     sym.left=Type
@@ -28,14 +31,14 @@ def infix(id, bindingPower,Type=True):
     sym.arity='binary'
     sym.leftBindingPower=bindingPower
     return sym
-
+##"Id categorized to prefix.For e.g '+' for '+2' , '-' for '-5'               ##
 def prefix(id, bindingPower):
     sym=symbol(id)
     sym.first=None
     sym.arity='unary'
     sym.leftBindingPower=bindingPower
     return sym
-
+##"Expression to perform every specific expression function."                 ##
 def expression(rightBindingPower):
     global tokenizer
     token=tokenizer.advance()
@@ -46,18 +49,27 @@ def expression(rightBindingPower):
             temp=token
             token=tokenizer.peepahead()
     return temp
-################################################################################
+##"The entire different type of function along CExpression."                  ##
 def CexpressionGrammar():
-
+################################################################################
+# 1st function
+################################################################################
             def REPR(self): #for print number or symbol instead of address
                 if(self.arity=='unary'):
                     return '({0} {1})'.format(self.id ,self.first)
                 elif(self.arity=='binary'):
+                    if self.second==None:
+                        return '({0} {1})'.format(self.id,self.first)
                     return '({0} {1} {2})'.format(self.first,self.id, self.second)
 
             def led(self,leftToken):
-                token=tokenizer.advance()
-                token=expression(self.leftBindingPower)
+                if hasattr(leftToken,'limitedExpression'):
+                    token=None
+                    leftToken=expression(self.leftBindingPower)
+                else:
+                    token=tokenizer.advance()
+                    token=expression(self.leftBindingPower)
+
                 self.first=leftToken
                 self.second=token
                 return self
@@ -104,7 +116,9 @@ def CexpressionGrammar():
             sym.led=led
             sym.nud=nud
             sym.__repr__=REPR
-
+################################################################################
+# 2nd function
+################################################################################
             def REPR(self):
                 if(self.arity=='postunary'):
                     return '({0}{1})'.format(self.first,self.id )
@@ -126,6 +140,14 @@ def CexpressionGrammar():
             sym.__repr__=REPR
             sym.nud=nud
             sym.led=led
+################################################################################
+# 3rd function
+################################################################################
+            def REPR(self):
+                if(self.arity=='postunary'):
+                    return '({0}{1})'.format(self.first,self.id )
+                else:
+                    return '({0} {1})'.format(self.id ,self.first)
 
             def led (self,leftToken):
                 raise SyntaxError('{0} should come before a word.Invalid Logic'.format(self.first))
@@ -138,18 +160,25 @@ def CexpressionGrammar():
             sym.__repr__=REPR
             sym.nud=nud
             sym.led=led
-
+################################################################################
+# 4th function
+################################################################################
             def nud(self):
                 raise SyntaxError('{0} should come after a word.Invalid Logic'.format(self.first))
 
             def led(self,leftToken):
                 token=tokenizer.advance()
+                if tokenizer.peepahead().id=='{':
+                    self.first=leftToken
+                    token=tokenizer.advance()
+                    self.second=token.std(leftToken)
+                    return self
                 token=expression(self.leftBindingPower-1)
                 self.first=leftToken
                 self.second=token
                 return self
 
-            def REPR(self): #for print number or symbol instead of address
+            def REPR(self):
                 if self.arity == 'unary' :
                     return '({0} {1})'.format(self.id ,self.first)
                 elif self.arity == 'binary':
@@ -210,8 +239,16 @@ def CexpressionGrammar():
             sym=infix('>>',15)
             sym.__repr__=REPR
             sym.led=led
-
-
+################################################################################
+# 5th function
+################################################################################
+            def REPR(self): #for print number or symbol instead of address
+                if self.arity == 'unary' :
+                    return '({0} {1})'.format(self.id ,self.first)
+                elif self.arity == 'binary':
+                    if self.second==None:
+                        return '({0}{1})'.format(self.id ,self.first)
+                    return '({0} {1} {2})'.format(self.first,self.id, self.second)
 
             def led(self,leftToken):
                 if(leftToken.id == '(identifier)'):
@@ -224,12 +261,14 @@ def CexpressionGrammar():
                     raise SyntaxError("Input should be identifier!")
             sym=infix('.',80)
             sym.__repr__=REPR
+            sym.arity='unary'
             sym.led=led
             sym=infix('->',80)
             sym.__repr__=REPR
             sym.led=led
-
-
+################################################################################
+# 6th function
+################################################################################
             def REPR(self): #for print number or symbol instead of address
                 if hasattr(self,'third'):
                     if self.third !=None:
@@ -248,6 +287,7 @@ def CexpressionGrammar():
             def nud(self):
                 self.arity='grouping'
                 token=expression(0)
+                self.second=None
                 self.first=token
                 tokenizer.advance()
                 self.CheckFunctionType=False
@@ -290,7 +330,9 @@ def CexpressionGrammar():
             sym.led=led
             sym.third=None
             sym.CheckFunctionType=True
-
+################################################################################
+# 7th function
+################################################################################
             def led(self,leftToken):
                 self.arity='postunary'
                 tokenizer.advance()
@@ -315,7 +357,8 @@ def CexpressionGrammar():
 
             def REPR(self): #for print number or symbol instead of address
                 if(self.arity=='grouping'):
-                    return '{0} {1}'.format(self.id,self.first)
+
+                    return '{0}{1}]'.format(self.id,self.first)
                 else:
                     return '({0} [{1}] )'.format(self.first,self.second)
 
@@ -339,7 +382,9 @@ def CexpressionGrammar():
             sym.__repr__=REPR
             sym.nud=nud
             sym.led=led
-
+################################################################################
+# 8th function
+################################################################################
             def nud(self):
                 self.first=expression(0)
                 tokenizer.advance("'")
@@ -355,6 +400,8 @@ def CexpressionGrammar():
 
             def nud(self):
                 pass
-
 ################################################################################
-CexpressionGrammar() # call C expressionGrammar
+################################################################################
+##"Call C expressionGrammar."                                                 ##
+CexpressionGrammar()
+##                                                                            ##
