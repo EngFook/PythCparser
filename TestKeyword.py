@@ -1099,7 +1099,6 @@ class TestKeyword_switchcase(unittest.TestCase):
                                    z    3"""
         root=Cparser.parse(a)
         self.assertEqual(root.id,'switch')
-        self.assertEqual(root.arity,'binary')
         choice=root.first
         self.assertEqual(valueof(choice),'choice')
         self.assertEqual(choice.id,'(identifier)')
@@ -1202,7 +1201,6 @@ class TestKeyword_switchcase(unittest.TestCase):
                                    z   4"""
         root=Cparser.parse(a)
         self.assertEqual(root.id,'switch')
-        self.assertEqual(root.arity,'binary')
         choice=root.first
         self.assertEqual(valueof(choice),'choice')
         self.assertEqual(choice.id,'(identifier)')

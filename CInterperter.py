@@ -216,13 +216,11 @@ def CInterpreterGrammar():
         a=0
         Scope.add_scope(self)
         for index in self.first:
+            if index.id == 'case':
+                break
             temp.append(index.interpreter())
         Scope.delete_current_scope(self)
         temp1=self.first.__len__()
-        while a < temp1:
-            self.first[a].interpreter()
-            a=a+1
-        return temp
 
     sym=CKeyword.keyword('{')
     sym.interpreter=interpreter
@@ -258,11 +256,22 @@ def CInterpreterGrammar():
     sym=CKeyword.keyword('floating')
     sym.interpreter=interpreter
 
+    sym=CKeyword.keyword('char')
+    sym.interpreter=interpreter
+
     def interpreter(self):
         if self.first.interpreter() :
             if self.second != None:
-                self.second.interpreter()
-        elif self.third != None :
+                temp1 = 0
+                if self.second.first.__class__()==[]:
+                    while temp1 < self.second.first.__len__():
+                        if self.second.first[temp1].id == 'case':
+                            break
+                        self.second.first[temp1].interpreter()
+                        temp1 = temp1 + 1
+                else:
+                    self.second.interpreter()
+        if self.third != None :
             temp=self.third
             if temp.first != None:
                 temp.first.interpreter()
@@ -287,7 +296,13 @@ def CInterpreterGrammar():
             if temp > 300 :
                 raise SyntaxError('Infinity loop')
             if self.second != None:
-                self.second.interpreter()
+                temp1 = 0
+                if self.second.first.__class__()==[]:
+                    while temp1 < self.second.first.__len__():
+                        self.second.first[temp1].interpreter()
+                        temp1 = temp1 + 1
+                else:
+                    self.second.interpreter()
 
     sym=CKeyword.keyword('while')
     sym.interpreter=interpreter
@@ -300,8 +315,10 @@ def CInterpreterGrammar():
             if temp > 300 :
                 raise SyntaxError('Infinity loop')
             if self.first != None:
-                self.first.interpreter()
-
+                temp1 = 0
+                while temp1 < self.first.first.__len__():
+                    self.first.first[temp1].interpreter()
+                    temp1 = temp1 + 1
     sym=CKeyword.keyword('do')
     sym.interpreter=interpreter
 
@@ -321,4 +338,36 @@ def CInterpreterGrammar():
     sym=CKeyword.keyword('for')
     sym.interpreter=interpreter
 
+    def interpreter(self):
+        for a in self.second.address.keys():
+            if self.first.interpreter() == int(a):
+                temp=self.second.address[a][0]
+                while self.second.address[a][1].first[temp+1].id != 'case':
+                    if hasattr(self.second.address[a][1].first[temp+1],'std'):
+                        self.second.address[a][1].first[temp+1].interpreter()
+                    else:
+                        self.second.address[a][1].first[temp+1].interpreter()
+                        if self.second.back[a] != None:
+                            temp1=self.second.back[a][1]
+                            while temp1 < self.second.first.__len__():
+                                temp2=self.second.first
+                                if temp2[temp1].id == 'default' or temp2[temp1].id == 'case':
+                                    return
+                                self.second.first[temp1].interpreter()
+                                temp1 = temp1 + 1
+
+                    temp = temp + 1
+                    if self.second.address[a][1].first[temp+1].id == 'default':
+                        return
+                return
+        for a in self.second.first:
+            if a.id =='default':
+                temp=self.second.first.index(a)+1
+                while   temp < self.second.first.__len__():
+                    self.second.first[temp].interpreter()
+                    temp=temp+1
+                return
+
+    sym=CKeyword.keyword('switch')
+    sym.interpreter=interpreter
 CInterpreterGrammar()

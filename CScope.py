@@ -44,18 +44,17 @@ class Scope:
         global scope
         if hasattr(self,'std'):
             if value == None :
-                scope[-1][variable.first]=(self.id,0)
+                scope[-1][variable.first]=(symbolTable[self.id],0)
             else:
                 if hasattr(value,'led'):
                     temp=value.interpreter()
                 if self.id == 'int':
                     temp=int(temp)
-                    scope[-1][self.first.first]=(self.id,temp)
+                    scope[-1][self.first.first]=(symbolTable[variable.id],temp)
                 else:
-                    scope[-1][self.first.first]=(self.id,temp)
+                    scope[-1][self.first.first]=(symbolTable[variable.id],temp)
         else:
             temp=value.interpreter()
-            if variable[0] == 'int':
+            if variable[0].id == 'int':
                 temp=int(temp)
-            scope[-1][self.first]=(variable[0],temp)
-        pass
+            scope[-1][self.first]=(symbolTable[variable[0].id],temp)

@@ -401,7 +401,6 @@ def CkeywordGrammar():
             sym.back={}
             sym.address={}
             sym.first=None
-            sym.test='o-o'
             sym.second=None
             sym.__repr__=REPR
 
@@ -452,6 +451,13 @@ def CkeywordGrammar():
             sym.__repr__=REPR
 
             sym=keyword('double')
+            sym.std=std
+            sym.first=None
+            sym.second=None
+            sym.limitedExpression=limitedExpression
+            sym.__repr__=REPR
+
+            sym=keyword('char')
             sym.std=std
             sym.first=None
             sym.second=None

@@ -32,7 +32,7 @@ class TestScope(unittest.TestCase):
         Scope.add_variable(a.first,a.first,a.second)
         temp=scope[-1][a.first.first.first]
         self.assertEqual(temp[1],2)
-        self.assertEqual(temp[0],a.first.id)
+        self.assertEqual(temp[0],symbolTable[a.first.id])
         for b in scope[-1].keys():
             self.assertEqual(b,a.first.first.first)
 
@@ -44,7 +44,7 @@ class TestScope(unittest.TestCase):
         Scope.add_variable(a.first,a.first,a.second)
         temp=Scope.find_variable(a.first,a.first)
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],a.first.id)
+        self.assertEqual(temp[0],symbolTable[a.first.id])
 
     def test_find_the_variable_in_diff_scope(self):
         global scope
@@ -54,12 +54,12 @@ class TestScope(unittest.TestCase):
         Scope.add_variable(a.first,a.first,a.second)
         temp=Scope.find_variable(a.first,a.first)
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],a.first.id)
+        self.assertEqual(temp[0],symbolTable[a.first.id])
         Scope.add_scope(self)
         self.assertEqual(scope[-1],{})
         temp=Scope.find_variable(a.first,a.first)
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],a.first.id)
+        self.assertEqual(temp[0],symbolTable[a.first.id])
 
     def test_find_the__variable_from_diff_scope_with_variables(self):
         global scope
@@ -69,18 +69,18 @@ class TestScope(unittest.TestCase):
         Scope.add_variable(a.first,a.first,a.second)
         temp=Scope.find_variable(a.first,a.first)
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],a.first.id)
+        self.assertEqual(temp[0],symbolTable[a.first.id])
         b="double b = 4 ;"
         b=root=Cparser.parse(b)
         Scope.add_variable(b.first,b.first,b.second)
         temp=Scope.find_variable(b.first,b.first)
         self.assertEqual(temp[1],4)
-        self.assertEqual(temp[0],b.first.id)
+        self.assertEqual(temp[0],symbolTable[b.first.id])
         Scope.add_scope(self)
         self.assertEqual(scope[-1],{})
         temp=Scope.find_variable(a.first,a.first)
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],a.first.id)
+        self.assertEqual(temp[0],symbolTable[a.first.id])
 
     def test_add_the__variable_to_diff_scope(self):
         global scope
@@ -90,17 +90,17 @@ class TestScope(unittest.TestCase):
         Scope.add_variable(a.first,a.first,a.second)
         temp=Scope.find_variable(a.first,a.first)
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],a.first.id)
+        self.assertEqual(temp[0],symbolTable[a.first.id])
         Scope.add_scope(self)
         b="double b = 4 ;"
         b=root=Cparser.parse(b)
         Scope.add_variable(b.first,b.first,b.second)
         temp=Scope.find_variable(b.first,b.first)
         self.assertEqual(temp[1],4)
-        self.assertEqual(temp[0],b.first.id)
+        self.assertEqual(temp[0],symbolTable[b.first.id])
         temp=Scope.find_variable(a.first,a.first)
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],a.first.id)
+        self.assertEqual(temp[0],symbolTable[a.first.id])
 
 if __name__=='__main__':
     if test_result==True:

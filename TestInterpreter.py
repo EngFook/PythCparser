@@ -228,13 +228,12 @@ class TestInterpreter(unittest.TestCase):
                     /   \
                double-b  0.1"""
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],2)
         temp=Scope.find_variable(root[1].first,root[1].first)
-        self.assertEqual(temp[0],'double')
+        self.assertEqual(temp[0],symbolTable['double'])
         self.assertEqual(temp[1],3)
 
     def test_braces_with_assigened_indentfier_interpreter(self):
@@ -298,8 +297,7 @@ class TestInterpreter(unittest.TestCase):
 
             """
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         six = root[2].interpreter()
         self.assertEqual(six,6)
 
@@ -309,15 +307,12 @@ class TestInterpreter(unittest.TestCase):
         a="""
                 int a = 5 ;
                 if ( 1 ) a = 4 ;
-                1 + a ;
-
             """
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
-        five = root[2].interpreter()
-        self.assertEqual(five,5)
-
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first,root[0].first)
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],4)
 
     def test_if_with_else_interpreter(self):
         global scope
@@ -328,10 +323,9 @@ class TestInterpreter(unittest.TestCase):
                 else  a = 3 ;
             """
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],3)
 
 
@@ -344,10 +338,9 @@ class TestInterpreter(unittest.TestCase):
                else if ( 1 ) a = 3 ;
             """
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],3)
 
     def test_if_with_else_if_false_interpreter(self):
@@ -360,10 +353,9 @@ class TestInterpreter(unittest.TestCase):
                     if ( 0 ) a = 3 ;
             """
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],5)
 
     def test_if_with_condition_interpreter(self):
@@ -375,10 +367,27 @@ class TestInterpreter(unittest.TestCase):
             """
         root=Cparser.parse(a)
         root=Cparser.parsex(a)
-        root[0].interpreter()
-        root[1].interpreter()
+        Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],5)
+
+    def test_if_with_condition_many_statement_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""
+                int a = 1 ;
+                if ( a == 1 )
+                {
+                    a = 4 ;
+                    a ++ ;
+                }
+            """
+        root=Cparser.parse(a)
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first,root[0].first)
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],5)
 
     def test_equal_without_int_error_interpreter(self):
@@ -409,7 +418,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],0)
 
     def test_equal_with_int_interpreter(self):
@@ -422,7 +431,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],1)
 
     def test_equal_with_int_zero_point_nine_interpreter(self):
@@ -435,7 +444,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],0)
 
     def test_equal_with_double_zero_point_nine_interpreter(self):
@@ -448,7 +457,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'double')
+        self.assertEqual(temp[0],symbolTable['double'])
         self.assertEqual(temp[1],0.9)
 
 
@@ -462,7 +471,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],-1)
 
     def test_int_a_without_value_interpreter(self):
@@ -473,7 +482,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parse(a)
         root.interpreter()
         temp=Scope.find_variable(root.first,root.first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],0)
 
     def test_int_a_b_c_interpreter(self):
@@ -484,13 +493,13 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parse(a)
         root.interpreter()
         temp=Scope.find_variable(root.first[0],root.first[0])
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],0)
         temp=Scope.find_variable(root.first[1],root.first[1])
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],0)
         temp=Scope.find_variable(root.first[2],root.first[2])
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],0)
 
     def test_int_a_with_value_plusplus_interpreter(self):
@@ -501,7 +510,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],2)
 
     def test_while_interpreter(self):
@@ -513,7 +522,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],1)
 
     def test_while_infinity_lopp_raise_syntax_interpreter(self):
@@ -541,7 +550,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],4)
 
 
@@ -554,8 +563,27 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],3)
+
+    def test_do_while_loop_with_many_statement_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int x , b ;
+                x = 0 ;
+                b = 1 ;
+                do {  x ++ ;
+                      b ++ ; }
+             while ( x < 3 ) ;"""
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[0],root[0].first[0])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],3)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],4)
+
 
     def test_if_none_interpreter(self):
         global scope
@@ -600,7 +628,7 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first,root[0].first)
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],5)
 
     def test_for_loop_with_working_interpreter(self):
@@ -615,10 +643,10 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first[0],root[0].first[0])
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],5)
         temp=Scope.find_variable(root[0].first[1],root[0].first[1])
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],5)
 
     def test_for_loop_with_working_interpreter(self):
@@ -632,10 +660,10 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first[0],root[0].first[0])
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],5)
         temp=Scope.find_variable(root[0].first[1],root[0].first[1])
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],5)
 
     def test_for_loop_with_multiple_working_interpreter(self):
@@ -651,14 +679,206 @@ class TestInterpreter(unittest.TestCase):
         root=Cparser.parsex(a)
         Runinterpreter(root)
         temp=Scope.find_variable(root[0].first[0],root[0].first[0])
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],5)
         temp=Scope.find_variable(root[0].first[1],root[0].first[1])
-        self.assertEqual(temp[0],'int')
+        self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],5)
         temp=Scope.find_variable(root[1].first,root[1].first)
-        self.assertEqual(temp[0],'double')
+        self.assertEqual(temp[0],symbolTable['double'])
         self.assertEqual(temp[1],4)
+
+    def test_switch_case_chose_default_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a=""" int choice , a ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ;
+                case 2 : a = 2 ;
+                default    : a = 3 ; }"""
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],3)
+
+    def test_switch_case_chose_default_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a=""" int choice , a ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ;
+                case 2 : a = 2 ;
+                default    : a = 3 ; a ++ ; }"""
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],4)
+
+    def test_switch_case_chose_case1_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a=""" int choice , a ;
+            choice = 1 ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ;
+                case 2 : a = 2 ;
+                default    : a = 3 ; }"""
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],1)
+
+    def test_switch_case_chose_case1_multiple_statement_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a=""" int choice , a ;
+            choice = 1 ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ; a ++ ;
+                case 2 : a = 2 ;
+                default    : a = 3 ; }"""
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],2)
+
+    def test_switch_case_chose_case2_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a=""" int choice , a ;
+            choice = 2 ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ; a ++ ;
+                case 2 : a = 3 ; a ++ ;
+                default    : a = 5 ; a ++ ; }"""
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],4)
+
+    def test_switch_case_with_if_loop_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int choice , a , x ;
+            choice = 2 ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ;
+                case 2 : a = 2 ;
+                    if ( x == 0 )
+                    {
+                        a ++ ;
+                        case 3 : a = 4 ;
+                    }
+                default : z = 5 ;
+            } """
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],3)
+
+    def test_switch_case_with_if_loop_true_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int choice , a , x ;
+            choice = 2 ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ;
+                case 2 : a = 2 ;
+                    if ( x == 1 )
+                    {
+                        a ++ ;
+                        case 3 : a = 4 ;
+                    }
+                default : z = 5 ;
+            } """
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],2)
+
+    def test_switch_case_with_if_loop_chose_case_in_if_loop_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int choice , a , x ;
+            choice = 3 ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ;
+                case 2 : a = 2 ;
+                    if ( x == 1 )
+                    {
+                        a ++ ;
+                        case 3 : a = 4 ;
+                    }
+                default : z = 5 ;
+            } """
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],4)
+
+    def test_switch_case_with_if_loop_run_statement_outside_if_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int choice , a , x ;
+            choice = 3 ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ;
+                case 2 : a = 2 ;
+                    if ( x == 1 )
+                    {
+                        a ++ ;
+                        case 3 : a = 4 ;
+                    }
+                    a = 5 ;
+                default : a = 6 ;
+            } """
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],5)
+
+    def test_switch_case_with_if_loop_chose_default_interpreter(self):
+        global scope
+        Scope.init_scope(self)
+        a="""int choice , a , x ;
+            choice = 5 ;
+            switch ( choice )
+            {
+                case 1 : a = 1 ;
+                case 2 : a = 2 ;
+                    if ( x == 1 )
+                    {
+                        a ++ ;
+                        case 3 : a = 4 ;
+                    }
+                    a = 5 ;
+                default : a = 6 ;
+            } """
+        root=Cparser.parsex(a)
+        Runinterpreter(root)
+        temp=Scope.find_variable(root[0].first[1],root[0].first[1])
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],6)
+
+
 
 if __name__=='__main__':
     if test_result==True:
