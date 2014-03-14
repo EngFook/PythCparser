@@ -2,62 +2,58 @@
     Have to modify . 3/13/2014
                                 """
 from CInterperter import *
-class Scope:
-    global scope
-    scope=[{}]
-    def init_scope(self):
-        global scope
-        scope.clear()
-        a={}
-        scope.append(a)
-        pass
+class Scope():
 
-    def add_scope(self):
-        global scope
-        a={}
-        scope.append(a)
-        pass
+    def createScope(self):
+        self.scopes=[]
+        self.scopes.append({})
 
-    def delete_current_scope(self):
-        global scope
-        del scope[-1]
-        pass
+    def addScope(self):
+        self.scopes.append({})
 
-    def find_variable(self,variable):
-        index=scope.__len__()
-        if hasattr(self,'std'):
-            variable=self.first
-        while index > 0:
-            if variable.first in scope[index-1].keys():
-                return scope[index-1][variable.first]
-            index=index-1
-        raise SyntaxError ('"{0}" has not declare '.format(variable.first))
+    def deleteCurrentScope(self):
+        del self.scopes[-1]
 
-    def check_variable(self,variable):
-        index=scope.__len__()
-        if hasattr(self,'std'):
-            variable=self.first
-        while index > 0:
-            if variable.first in scope[index-1].keys():
-                return scope[index-1][variable.first]
-            index=index-1
-        return None
+    def addVariable(self,root,value=0):
+        temp=root
+        while hasattr (temp,'first'):
+            temp=temp.first
+        if self.checkVariable(temp):
+            raise SyntaxError ('"{0}" cannot defined twice. '.format(temp))
+        self.scopes[-1][temp]=(symbolTable[root.first.id],value)
 
-    def add_variable(self,variable,value):
-        global scope
-        if hasattr(self,'std'):
-            if value == None :
-                scope[-1][variable.first]=(symbolTable[self.id],0)
-            else:
-                if hasattr(value,'led'):
-                    temp=value.interpreter()
-                if self.id == 'int':
-                    temp=int(temp)
-                    scope[-1][self.first.first]=(symbolTable[variable.id],temp)
-                else:
-                    scope[-1][self.first.first]=(symbolTable[variable.id],temp)
+    def checkVariable(self,variable):
+        self.index=self.scopes.__len__()
+        while self.checkParentsScope():
+            if self.checkCurrnetScope(variable) != None :
+                return True
+        else: False
+
+    def findVariable(self,variable):
+        self.index=self.scopes.__len__()
+        while self.checkParentsScope():
+            if self.checkCurrnetScope(variable) != None :
+                return self.checkCurrnetScope(variable)
+        raise SyntaxError ('"{0}" has not declare '.format(variable))
+
+    def checkParentsScope(self):
+        self.index=self.index-1
+        if self.index != -1:
+            return True
         else:
-            temp=value.interpreter()
-            if variable[0].id == 'int':
-                temp=int(temp)
-            scope[-1][self.first]=(symbolTable[variable[0].id],temp)
+            False
+
+    def checkCurrnetScope(self,variable):
+        if variable in self.scopes[self.index].keys():
+            return self.scopes[self.index][variable]
+        else: return None
+
+    def changeValueOfVariable(self,root,value=0):
+        temp=root
+        while hasattr (temp,'first'):
+            temp=temp.first
+        temp1=self.findVariable(temp)
+        self.scopes[self.index][temp]=(temp1[0],value)
+        pass
+
+

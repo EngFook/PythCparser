@@ -7,7 +7,7 @@ from TestScope import *
 from TestKeyword import *
 from TestTokenizer import *
 from TestExpression import *
-#from TestInterpreter import *
+from TestInterpreter import *
 from TestCKeywordDefine import *
 from TestCKeywordStructEnumTypedef import *
 """"""""""""""""""""""""""""""""""""""""""""
