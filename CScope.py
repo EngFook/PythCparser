@@ -3,8 +3,7 @@
                                 """
 from CInterperter import *
 class Scope():
-
-    def createScope(self):
+    def __init__(self):
         self.scopes=[]
         self.scopes.append({})
 
@@ -14,10 +13,8 @@ class Scope():
     def deleteCurrentScope(self):
         del self.scopes[-1]
 
-    def addVariable(self,root,value=0):
-        temp=root
-        while hasattr (temp,'first'):
-            temp=temp.first
+    def declareVariable(self,root,value=0):
+        temp=self.GoToVariable(root)
         if self.checkVariable(temp):
             raise SyntaxError ('"{0}" cannot defined twice. '.format(temp))
         self.scopes[-1][temp]=(symbolTable[root.first.id],value)
@@ -49,11 +46,14 @@ class Scope():
         else: return None
 
     def changeValueOfVariable(self,root,value=0):
-        temp=root
-        while hasattr (temp,'first'):
-            temp=temp.first
+        temp=self.GoToVariable(root)
         temp1=self.findVariable(temp)
         self.scopes[self.index][temp]=(temp1[0],value)
         pass
 
+    def GoToVariable(self,root):
+        temp=root
+        while hasattr (temp,'first'):
+            temp=temp.first
+        return temp
 

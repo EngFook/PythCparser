@@ -34,51 +34,51 @@ class TestInterpreter(unittest.TestCase):
         a=" 2 + 3 ;"
         root=Cparser.parse(a)
         value=root[0].interpreter()
-        self.assertEqual(value,5)
+        self.assertEqual(value,5.0)
 
-##    def test_plus_multiply_interpreter(self):
-##        a=" 2 + 3 * 4 ;"
-##        """       +
-##                /   \
-##              2      *
-##                    /  \
-##                  3      4"""
-##        root=Cparser.parse(a)
-##        value=root.interpreter()
-##        self.assertEqual(value,14)
-##
-##    def test_postfix_negative_interpreter(self):
-##        a="- 1 ;"
-##        """ -
-##            |
-##            1"""
-##        root=Cparser.parse(a)
-##        value=root.interpreter()
-##        self.assertEqual(value,-1)
-##
-##    def test_plus_before_return_interpreter(self):
-##        a=" 2 ** 2 ** 3 ;"
-##        """       **
-##                /   \
-##              2      **
-##                    /  \
-##                  2      3"""
-##        root=Cparser.parse(a)
-##        value=root.interpreter()
-##        self.assertEqual(value,256)
-##        two=root.first
-##        value=two.interpreter()
-##        self.assertEqual(value,2)
-##        eight=root.second
-##        value=eight.interpreter()
-##        self.assertEqual(value,8)
-##        two=eight.first
-##        value=two.interpreter()
-##        self.assertEqual(value,2)
-##        three=eight.second
-##        value=three.interpreter()
-##        self.assertEqual(value,3)
-##
+    def test_plus_multiply_interpreter(self):
+        a=" 2 + 3 * 4 ;"
+        """       +
+                /   \
+              2      *
+                    /  \
+                  3      4"""
+        root=Cparser.parse(a)
+        value=root[0].interpreter()
+        self.assertEqual(value,14)
+
+    def test_postfix_negative_interpreter(self):
+        a="- 1 ;"
+        """ -
+            |
+            1"""
+        root=Cparser.parse(a)
+        value=root[0].interpreter()
+        self.assertEqual(value,-1)
+
+    def test_plus_before_return_interpreter(self):
+        a=" 2 ** 2 ** 3 ;"
+        """       **
+                /   \
+              2      **
+                    /  \
+                  2      3"""
+        root=Cparser.parse(a)
+        value=root.interpreter()
+        self.assertEqual(value,256)
+        two=root.first
+        value=two.interpreter()
+        self.assertEqual(value,2)
+        eight=root.second
+        value=eight.interpreter()
+        self.assertEqual(value,8)
+        two=eight.first
+        value=two.interpreter()
+        self.assertEqual(value,2)
+        three=eight.second
+        value=three.interpreter()
+        self.assertEqual(value,3)
+
 ##    def test_braceket_interpreter(self):
 ##        a=" ( 2 + 3 ) * 4 ;"
 ##        """     *
