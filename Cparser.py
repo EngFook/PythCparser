@@ -15,13 +15,21 @@ CExpression.configure_C_Expression(CKeyword)
 ##"Global Tokenizer."                                                         ##
 global tokenizer
 
+
+def refreshSymbolTable():
+    temp1=[]
+    for temp in symbolTable:
+        if hasattr(symbolTable[temp],'attribute'):
+            temp1.append(temp)
+    temp=0
+    while temp < temp1.__len__():
+        symbolTable.pop(temp1[temp])
+        temp=temp+1
+
 ##"Parse the string to analyse."                                              ##
 def parse(str):
     array=[]
-    for temp in symbolTable:
-        if hasattr(temp,'attribute'):
-            if temp.attribute == '(configureStructType)' or temp.attribute == '(enum)':
-                symbolTable.pop(temp.id)
+    refreshSymbolTable()
     CKeyword.defineTable={}
     tokenizer=Tokenizer(str)
     token=tokenizer.peepahead()
@@ -40,11 +48,11 @@ def parse(str):
         array.append(temp)
     return array
 
-##a=parse(""" struct Datatype {
-##                int a ;
-##                int b ;
-##                            } data1 ;""")
-##print ( a)
-##a[0].interpreter()
-##a[1].interpreter()
+a=parse('''typedef struct {
+                        int a ;
+                        int b ;
+                                } Data ;''')
+print ( a)
+a[0].interpreter()
+
 

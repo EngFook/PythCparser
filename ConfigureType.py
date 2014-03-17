@@ -48,7 +48,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                         tokenizer.advance(';')
                 else:
                     if tokenizer.peepahead().id in symbolTable:
-                        raise SyntaxError ('Do not expect redeclaration of "{0}".'.format(tokenizer.peepahead().id))
+                        raise SyntaxError ('Do not expect redeclaration of "{0}".'.format(self.id))
                     raise SyntaxError ('Expected an "identifier" after {0}'.format(self.id))
             self=self.limitedExpression(0)
             return self
@@ -81,6 +81,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.origin=None
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
+        sym.attribute=None
         for struct in symbolTable:
             if struct == "struct":
                 sym.interpreter=symbolTable['struct'].interpreter

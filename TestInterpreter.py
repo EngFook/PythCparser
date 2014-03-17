@@ -873,30 +873,30 @@ class TestInterpreter(unittest.TestCase):
     def test_struct_with_two_statement_interpreter(self):
         scope.__init__()
         a="""
-            struct test2 {
+            struct test {
                 int a ;
                 int b ; } ;
-                struct test2 x ;
-                struct test2 y ; """
+                struct test x ;
+                struct test y ; """
 
         root=Cparser.parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['struct test2'])
+        self.assertEqual(temp[0],symbolTable['struct test'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
         temp=scope.findVariable('y')
-        self.assertEqual(temp[0],symbolTable['struct test2'])
+        self.assertEqual(temp[0],symbolTable['struct test'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
 
     def test_struct_point_interpreter(self):
         scope.__init__()
         a="""
-            struct test3 {
+            struct test {
                 int a ;
                 int b ; } ;
-                struct test3 x ;
+                struct test x ;
                 x . a = 3 ;
                 x . b = 4 ;"""
         root=Cparser.parse(a)
@@ -906,13 +906,13 @@ class TestInterpreter(unittest.TestCase):
         temp=scope.findVariable('x')
         self.assertEqual(temp[1]['b'][1],4)
 
-    def test_struct_point_interpreter(self):
+    def test_struct_point_with_undeclared_variable_interpreter(self):
         scope.__init__()
         a="""
-            struct test4 {
+            struct test {
                 int a ;
                 int b ; } ;
-                struct test4 x ;
+                struct test x ;
                 x . c = 2 ;"""
         root=Cparser.parse(a)
         root[0].interpreter()
@@ -934,21 +934,28 @@ class TestInterpreter(unittest.TestCase):
 
     def test_struct_with_multiple_declaration_interpreter(self):
         scope.__init__()
-
-        a=""" struct Datatype2 {
+        a=""" struct Datatype {
                 int a ;
                 int b ;
                             } data1 , data2 ;"""
         root=Cparser.parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('data1')
-        self.assertEqual(temp[0],symbolTable['struct Datatype2'])
+        self.assertEqual(temp[0],symbolTable['struct Datatype'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
         temp=scope.findVariable('data2')
-        self.assertEqual(temp[0],symbolTable['struct Datatype2'])
+        self.assertEqual(temp[0],symbolTable['struct Datatype'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+
+    def test_typedef_interpreter(self):
+        a= '''typedef struct {
+                        int a ;
+                        int b ;
+                                } Data ;'''
+        root=Cparser.parse(a)
+        Runinterpreter(root)
 
 
 

@@ -972,7 +972,7 @@ class TestKeyword_struct_enum_typedef(unittest.TestCase):
                     int b ;
                             } Data3 ;
                     Data3 x ;
-                    typedef Data3 y ;               '''
+                    typedef Data3 y ;'''
 
         """                 typedef (root[0])
                                 |

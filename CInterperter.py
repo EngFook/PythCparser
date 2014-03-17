@@ -415,4 +415,10 @@ def CInterpreterGrammar():
     sym=CExpression.infix('.',80)
     sym.interpreter=interpreter
 
+
+    def interpreter(self):
+        return
+
+    sym=CKeyword.keyword('typedef')
+    sym.interpreter=interpreter
 CInterpreterGrammar()
