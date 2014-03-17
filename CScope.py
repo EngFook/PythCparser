@@ -1,7 +1,10 @@
 """
     Have to modify . 3/13/2014
+
                                 """
+
 from CInterperter import *
+
 class Scope():
     def __init__(self):
         self.scopes=[]
@@ -13,11 +16,18 @@ class Scope():
     def deleteCurrentScope(self):
         del self.scopes[-1]
 
-    def declareVariable(self,root,value=0):
+    def declareVariable(self,root,value=0,Datatype=None):
         temp=self.GoToVariable(root)
         if self.checkVariable(temp):
             raise SyntaxError ('"{0}" cannot defined twice. '.format(temp))
-        self.scopes[-1][temp]=(symbolTable[root.first.id],value)
+        if Datatype == None:
+            temp1=root
+            while not hasattr(temp1,'std'):
+                temp1=root.first
+            self.scopes[-1][temp]=(symbolTable[temp1.id],value)
+            return
+        else:
+            self.scopes[-1][temp]=(symbolTable[Datatype],value)
 
     def checkVariable(self,variable):
         self.index=self.scopes.__len__()
@@ -57,3 +67,17 @@ class Scope():
             temp=temp.first
         return temp
 
+    def changeValueOfVariableOfStruct(self,root,value=0):
+        temp=self.GoToVariable(root)
+        temp1=self.findVariable(temp)
+        for temp2 in temp1[1]:
+            if root.first.second.first == temp2:
+                if temp1[1][temp2][0].id == 'int':
+                    value =int(value)
+                self.scopes[self.index][temp][1][temp2]=(temp1[1][temp2][0],value)
+                return
+        raise SyntaxError ('"{0}" has not declare '.format(root.first.second.first))
+
+
+global scope
+scope=Scope()

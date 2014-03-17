@@ -20,11 +20,13 @@ def keyword(id):
 def configureType(type,attribute=None,content=None,userDefined=None,setorigin=None):
     global tokenizer
     check_for_redeclaration=[]
+
     def REPR(self):
         if hasattr(self,'second'):
             if self.second != None :
                 return '({0} {1})'.format(self.id ,self.first)
         return '({0} {1})'.format(self.id ,self.first)
+
     def limitedExpression(self,rightBindingPower):
         token=tokenizer.peepahead()
         while(rightBindingPower<token.leftBindingPower):
@@ -32,6 +34,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             self=token
             token=tokenizer.peepahead()
         return self
+
     def std(self,token=None):
         if hasattr(self,'attribute'):
             for word in check_for_redeclaration:
@@ -78,6 +81,10 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.origin=None
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
+        for struct in symbolTable:
+            if struct == "struct":
+                sym.interpreter=symbolTable['struct'].interpreter
+                sym.assign=symbolTable['struct'].assign
 
     elif attribute=='(typedef)':
         sym.std=std

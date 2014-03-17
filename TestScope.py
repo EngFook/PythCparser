@@ -77,7 +77,7 @@ class TestScope(unittest.TestCase):
         scope.changeValueOfVariable(root[1],int(root[1].second.interpreter()))
         temp=scope.findVariable('a')
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],symbolTable[root[0].first.id])
+        self.assertEqual(temp[0],symbolTable[root[0].id])
 
     def test_cannot_declare_twice(self):
         scope=Scope()
