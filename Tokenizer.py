@@ -1,5 +1,5 @@
 ##"Files imported."                                                           ##
-from Symbol import *
+from CSymbol import *
 ##"Injection defineTable from Ckeyword."                                      ##
 defineTable={}
 def configure_defineTable(table):

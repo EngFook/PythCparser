@@ -1,25 +1,28 @@
 ##"Files imported."                                                           ##
 import unittest
-import Cparser
+import CParser
 ##"Test all here."                                                            ##
-"""          Add Test Module Here:       """
-from TestScope import *
-from TestKeyword import *
+"""                         Add Test Module Here:                            """
+from TestCScope import *
 from TestTokenizer import *
-from TestExpression import *
-from TestInterpreter import *
-from TestCKeywordDefine import *
-from TestCKeywordStructEnumTypedef import *
-""""""""""""""""""""""""""""""""""""""""""""
+from TestCExpression import *
+from TestCKeyword_enum import *
+from TestCKeyword_define import *
+from TestCKeyword_struct import *
+from TestCKeyword_typedef import *
+from TestCKeyword_if_else import *
+from TestCKeyword_do_while import *
+from TestCKeyword_for_loop import *
+from TestCKeyword_switch_case import *
+from TestCInterpreter_CKeyword import *
+from TestCInterpreter_CExpression import *
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """
-    Test start here.
-    set On/Off -> False = Off ; True = On.
+                                Test start here
 
-                                          """
-test_result=True
+                                                                             """
 def valueof(symObj):
     return symObj.first
 
 if __name__=='__main__':
-    if test_result==True:
         unittest.main()

@@ -14,8 +14,7 @@ CKeyword.configure_C_Keyword(CExpression)
 CExpression.configure_C_Expression(CKeyword)
 ##"Global Tokenizer."                                                         ##
 global tokenizer
-
-
+##"Refresh the SymbolTable when user defined."                                ##
 def refreshSymbolTable():
     temp1=[]
     for temp in symbolTable:
@@ -25,7 +24,6 @@ def refreshSymbolTable():
     while temp < temp1.__len__():
         symbolTable.pop(temp1[temp])
         temp=temp+1
-
 ##"Parse the string to analyse."                                              ##
 def parse(str):
     array=[]
@@ -47,7 +45,11 @@ def parse(str):
         token=tokenizer.peepahead()
         array.append(temp)
     return array
-
+################################################################################
+################################################################################
+"""
+                            Manual Test here.
+                                                                             """
 a=parse(''' enum DAY4
                         {
                             saturday ,

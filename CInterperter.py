@@ -1,14 +1,12 @@
-"""
-    Have to modify. 3/13/2014
-                                """
+##"Files imported."                                                           ##
 from Tokenizer import *
 from CScope import *
 import CKeyword
 import CExpression
-
+##"Global assignTable."                                                       ##
 global assignTable
 assignTable={}
-
+##                                                                            ##
 def CInterpreterGrammar():
     def interpreter(self):
         if self.arity == 'binary':
@@ -47,7 +45,6 @@ def CInterpreterGrammar():
 
     sym=symbol('(literal)')
     sym.interpreter=interpreter
-
 
     def interpreter(self):
         temp=scope.findVariable(self.first)
@@ -433,5 +430,8 @@ def CInterpreterGrammar():
 
     sym=CKeyword.keyword('typedef')
     sym.interpreter=interpreter
-
+################################################################################
+################################################################################
+##"Call C InterpreterGrammar()."                                              ##
 CInterpreterGrammar()
+##                                                                            ##

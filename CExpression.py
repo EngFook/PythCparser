@@ -1,5 +1,5 @@
 ##"Files imported."                                                           ##
-from Symbol import *
+from CSymbol import *
 from Tokenizer import *
 ##"Initialization."                                                           ##
 Keyword=0

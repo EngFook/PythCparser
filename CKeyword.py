@@ -1,7 +1,7 @@
 ##"Files imported."                                                           ##
-from Symbol import *
+from CSymbol import *
 from Tokenizer import *
-from ConfigureType import *
+from ConfigureCType import *
 ##"DefineTable created.                                                       ##
 defineTable={}
 ##"Add id to the defineTable if defineTable don't contain it."                ##
@@ -697,5 +697,3 @@ def CkeywordGrammar():
 ##"Call C keywordGrammar."                                                    ##
 CkeywordGrammar()
 ##                                                                            ##
-
-

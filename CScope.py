@@ -1,10 +1,6 @@
-"""
-    Have to modify . 3/13/2014
-
-                                """
-
+##"Files imported."                                                           ##
 from CInterperter import *
-
+##"Class created for scope with specific function."                           ##
 class Scope():
     def __init__(self):
         self.scopes=[]
@@ -77,7 +73,9 @@ class Scope():
                 self.scopes[self.index][temp][1][temp2]=(temp1[1][temp2][0],value)
                 return
         raise SyntaxError ('"{0}" has not declare '.format(root.first.second.first))
-
-
+################################################################################
+################################################################################
+##"Create global scope."                                                      ##
 global scope
 scope=Scope()
+##                                                                            ##

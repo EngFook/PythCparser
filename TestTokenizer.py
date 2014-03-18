@@ -1,18 +1,13 @@
 ##"Files imported."                                                           ##
 import unittest
-import Cparser
+import CParser
 from Tokenizer import *
 def valueof(symObj):
     return symObj.first
 ##                                                                            ##
 """
-    This module is for test Tokenizer.
-                                                            """
-'''
-    Set On/Off -> False = Off ; True = On
-    To debug_all: set debug_all=True
-                                            '''
-debug_all=True
+                     This module is to test -> Tokenizer
+                                                                             """
 ##"Test start."                                                               ##
 class TestTokenizer(unittest.TestCase):
 
@@ -114,6 +109,5 @@ class TestTokenizer(unittest.TestCase):
 ################################################################################
 ################################################################################
 if __name__=='__main__':
-    if debug_all==True:
         suite = unittest.TestLoader().loadTestsFromTestCase(TestTokenizer)
         unittest.TextTestRunner(verbosity=2).run(suite)
