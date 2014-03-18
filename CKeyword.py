@@ -664,7 +664,7 @@ def CkeywordGrammar():
                 else:
                     self.second=token.std()
                 temp=''.join(self.id +' '+ self.first.first)
-                configureType(temp,True,self.second)
+                configureType(temp,'(enum)',self.second)
                 if tokenizer.peepahead().first==';':
                     self.third=None
                 else:

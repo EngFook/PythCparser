@@ -950,13 +950,106 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
 
     def test_typedef_interpreter(self):
-        a= '''typedef struct {
+        scope.__init__()
+        a= """typedef struct {
                         int a ;
                         int b ;
-                                } Data ;'''
+                                } Data ;"""
         root=Cparser.parse(a)
         Runinterpreter(root)
+        self.assertEqual(symbolTable['Data'].id,'Data')
+        self.assertEqual(symbolTable['Data'].second.first[0].first.first,'a')
+        self.assertEqual(symbolTable['Data'].second.first[1].first.first,'b')
 
+    def test_typedef_datatype_interpreter(self):
+        scope.__init__()
+        a="""typedef struct Datatype1 {
+                    int a ;
+                    int b ;
+                            } Datatype ;"""
+        root=Cparser.parse(a)
+        Runinterpreter(root)
+        self.assertEqual(symbolTable['Datatype'].id,'Datatype')
+        self.assertEqual(symbolTable['Datatype'].second.first[0].first.first,'a')
+        self.assertEqual(symbolTable['Datatype'].second.first[1].first.first,'b')
+        self.assertEqual(symbolTable['struct Datatype1'].id,'struct Datatype1')
+        self.assertEqual(symbolTable['struct Datatype1'].second.first[0].first.first,'a')
+        self.assertEqual(symbolTable['struct Datatype1'].second.first[1].first.first,'b')
+
+    def test_typedef_interpreter(self):
+        scope.__init__()
+        a="""typedef struct {
+                    int a ;
+                    int b ;
+                            } Data2 ;
+                    Data2 x ; """
+        root=Cparser.parse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('x')
+        self.assertEqual(temp[0],symbolTable['Data2'])
+        self.assertEqual(temp[1]['a'][0],symbolTable['int'])
+        self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+
+    def test_typedef_struct_with_two_declaration_interpreter(self):
+        scope.__init__()
+        a="""typedef struct {
+                    int a ;
+                    int b ;
+                            } Data3 ;
+                    Data3 x ;
+                    typedef Data3 y ;"""
+        root=Cparser.parse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('x')
+        self.assertEqual(temp[0],symbolTable['Data3'])
+        self.assertEqual(temp[1]['a'][0],symbolTable['int'])
+        self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+        temp=scope.findVariable('y')
+        self.assertEqual(temp[0],symbolTable['Data3'])
+        self.assertEqual(temp[1]['a'][0],symbolTable['int'])
+        self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+
+    def test_enum_with_workdays_interpreter(self):
+        scope.__init__()
+        a=''' enum DAY {
+                            saturday ,
+                            sunday
+                                        } workday ; '''
+        root=Cparser.parse(a)
+        Runinterpreter(root)
+        self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
+        temp=scope.findVariable('workday')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(valueof(temp[1][0]),'saturday')
+        self.assertEqual(valueof(temp[1][1]),'sunday')
+
+    def test_enum_with_two_variable_interpreter(self):
+        scope.__init__()
+        a=''' enum DAY {
+                            saturday ,
+                            sunday
+                                        } workday , weekend ; '''
+        root=Cparser.parse(a)
+        Runinterpreter(root)
+        self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
+        temp=scope.findVariable('workday')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(valueof(temp[1][0]),'saturday')
+        self.assertEqual(valueof(temp[1][1]),'sunday')
+        temp=scope.findVariable('weekend')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(valueof(temp[1][0]),'saturday')
+        self.assertEqual(valueof(temp[1][1]),'sunday')
+
+    def test_enum_with_no_variable_interpreter(self):
+        scope.__init__()
+        a=''' enum DAY {
+                            saturday ,
+                            sunday
+                                        } ; '''
+        root=Cparser.parse(a)
+        Runinterpreter(root)
+        self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
 
 
 

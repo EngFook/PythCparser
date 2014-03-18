@@ -850,7 +850,7 @@ class TestKeyword_struct_enum_typedef(unittest.TestCase):
                                 |
                        ----------------------------------
                        |                                |
-                       |                                []--Data
+                       |                                []--Datatype
                        |
                        |
                      Struct

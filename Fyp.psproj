@@ -43,7 +43,7 @@ FileName=$[Project-Path]TestCKeywordDefine.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node8]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestCKeywordDefine.py
+FileName=$[Project-Path]TestCKeywordStructEnumTypedef.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node9]
 ClassName=TProjectFileNode

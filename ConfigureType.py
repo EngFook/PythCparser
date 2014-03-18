@@ -96,10 +96,22 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.origin=setorigin
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
+        for struct in symbolTable:
+            if struct == "struct":
+                sym.interpreter=symbolTable['struct'].interpreter
+                sym.assign=symbolTable['struct'].assign
+    elif attribute == '(enum)':
+        sym.std=std
+        sym.first=None
+        sym.second=None
+        sym.attribute=None
+        sym.limitedExpression=limitedExpression
+        sym.__repr__=REPR
+
     else:
         sym.std=std
         sym.first=None
         sym.second=None
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
-##                                                                            ##
+                                                                            ##

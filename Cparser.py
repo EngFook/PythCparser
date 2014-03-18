@@ -48,10 +48,14 @@ def parse(str):
         array.append(temp)
     return array
 
-a=parse('''typedef struct {
-                        int a ;
-                        int b ;
-                                } Data ;''')
+a=parse(''' enum DAY4
+                        {
+                            saturday ,
+                            sunday = 0  ,
+                            friday
+                                        } workday ;
+
+                enum DAY4 x ; ''')
 print ( a)
 a[0].interpreter()
 

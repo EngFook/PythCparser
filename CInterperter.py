@@ -410,6 +410,18 @@ def CInterpreterGrammar():
     sym.assign=assign
 
     def interpreter(self):
+        temp=0
+        if self.third != None:
+            datatype=self.id +' '+self.first.first
+            while temp <self.third.__len__():
+                scope.declareVariable(self.third[temp],self.second.first,datatype)
+                temp = temp + 1
+
+    sym=CKeyword.keyword('enum')
+    sym.interpreter=interpreter
+    sym.assign=assign
+
+    def interpreter(self):
         return scope.findVariable(self.first.first)
 
     sym=CExpression.infix('.',80)
@@ -417,8 +429,9 @@ def CInterpreterGrammar():
 
 
     def interpreter(self):
-        return
+        self.first.interpreter()
 
     sym=CKeyword.keyword('typedef')
     sym.interpreter=interpreter
+
 CInterpreterGrammar()
