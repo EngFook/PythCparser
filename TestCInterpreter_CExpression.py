@@ -8,7 +8,7 @@ def valueof(symObj):
     return symObj.first
 ##                                                                            ##
 """
-                     This module is to test -> Interpreter - operator
+                     This module is to test -> Interpreter - CExpression
                                                                              """
 ##"Interpreter the array root[i],i=1,2,3,...                                  ##
 def Runinterpreter(self):
@@ -17,10 +17,10 @@ def Runinterpreter(self):
         self[index].interpreter()
         index = index + 1
 ##"Test start."                                                               ##
-class TestInterpreter(unittest.TestCase):
+class TestInterpreter_CExpression(unittest.TestCase):
     def test_plus_interpreter(self):
         a=" 2 + 3 ;"
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,5.0)
 
@@ -31,7 +31,7 @@ class TestInterpreter(unittest.TestCase):
               2      *
                     /  \
                   3      4"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,14)
 
@@ -40,7 +40,7 @@ class TestInterpreter(unittest.TestCase):
         """ -
             |
             1"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,-1)
 
@@ -51,7 +51,7 @@ class TestInterpreter(unittest.TestCase):
               2      **
                     /  \
                   2      3"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,256)
         two=root[0].first
@@ -76,7 +76,7 @@ class TestInterpreter(unittest.TestCase):
              +
            /   \
           2     3 """
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,20)
         bracket=root[0].first
@@ -100,7 +100,7 @@ class TestInterpreter(unittest.TestCase):
         """ ==
            /  \
           1    1"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertTrue(value)
 
@@ -109,7 +109,7 @@ class TestInterpreter(unittest.TestCase):
         """ >
            /  \
           2    1"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertTrue(value)
 
@@ -118,7 +118,7 @@ class TestInterpreter(unittest.TestCase):
         """ <
            /  \
           2    1"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertFalse(value)
 
@@ -127,7 +127,7 @@ class TestInterpreter(unittest.TestCase):
         """ >=
            /  \
           2    1"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertTrue(value)
 
@@ -136,7 +136,7 @@ class TestInterpreter(unittest.TestCase):
         """ <=
            /  \
           2    1"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertFalse(value)
 
@@ -145,7 +145,7 @@ class TestInterpreter(unittest.TestCase):
         """ <<
            /  \
           1    3"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,8)
 
@@ -154,7 +154,7 @@ class TestInterpreter(unittest.TestCase):
         """ >>
            /  \
           8    3"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,1)
 
@@ -163,7 +163,7 @@ class TestInterpreter(unittest.TestCase):
         """ &
            /  \
           5    6"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,4)
 
@@ -172,7 +172,7 @@ class TestInterpreter(unittest.TestCase):
         """ ~
             |
             2"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,-3)
 
@@ -181,7 +181,7 @@ class TestInterpreter(unittest.TestCase):
         """ !
             |
             2"""
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         value=root[0].interpreter()
         self.assertEqual(value,0)
 
@@ -198,7 +198,7 @@ class TestInterpreter(unittest.TestCase):
                     / \
                    2   3"""
 
-        root=CParser.parse(a)
+        root=CParser.oneTimeParse(a)
         three=root[0].first[0].interpreter()
         five=root[0].first[1].interpreter()
         self.assertEqual(three,3)
@@ -206,5 +206,5 @@ class TestInterpreter(unittest.TestCase):
 ################################################################################
 ################################################################################
 if __name__=='__main__':
-        suite = unittest.TestLoader().loadTestsFromTestCase(TestInterpreter_Keyword)
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestInterpreter_CExpression)
         unittest.TextTestRunner(verbosity=2).run(suite)

@@ -26,7 +26,7 @@ CExpression.configure_C_Expression(CKeyword)
 ##"Global Tokenizer."                                                         ##
 global tokenizer
 ##"Refresh the SymbolTable when user defined."                                ##
-def refreshSymbolTable():
+def clearParseEnviroment():
     temp1=[]
     for temp in symbolTable:
         if hasattr(symbolTable[temp],'attribute'):
@@ -38,7 +38,6 @@ def refreshSymbolTable():
 ##"Parse the string to analyse."                                              ##
 def parse(str):
     array=[]
-    refreshSymbolTable()
     CKeyword.defineTable={}
     tokenizer=Tokenizer(str)
     token=tokenizer.peepahead()
@@ -56,20 +55,32 @@ def parse(str):
         token=tokenizer.peepahead()
         array.append(temp)
     return array
+
+def oneTimeParse(str):
+        temp=parse(str)
+        clearParseEnviroment()
+        return temp
+
+def Parse(str):
+    return parse(str)
+
 ################################################################################
 ################################################################################
 """
                             Manual Test here.
                                                                              """
-a=parse(''' enum DAY4
-                        {
-                            saturday ,
-                            sunday = 0  ,
-                            friday
-                                        } workday ;
+a=oneTimeParse(''' struct Number2 {
+                int a ;
+                int b ;
+                            } ; ''')
 
-                enum DAY4 x ; ''')
 print ( a)
-a[0].interpreter()
+
+b=Parse(''' struct Number2 {
+                int a ;
+                int b ;
+                            } ; ''')
+print ( b)
+
 
 
