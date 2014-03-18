@@ -23,7 +23,7 @@ FileName=$[Project-Path]CKeyword.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]ConfigureType.py
+FileName=$[Project-Path]ConfigureCType.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node4]
 ClassName=TProjectFileNode
@@ -35,46 +35,70 @@ FileName=$[Project-Path]CScope.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node6]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Symbol.py
+FileName=$[Project-Path]CSymbol.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node7]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestCKeywordDefine.py
+FileName=$[Project-Path]TestCExpression.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node8]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestCKeywordStructEnumTypedef.py
+FileName=$[Project-Path]TestCInterpreter_CExpression.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node9]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestCparser.py
+FileName=$[Project-Path]TestCInterpreter_CKeyword.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node10]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestExpression.py
+FileName=$[Project-Path]TestCKeyword_define.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node11]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestInterpreter.py
+FileName=$[Project-Path]TestCKeyword_do_while.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node12]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestKeyword.py
+FileName=$[Project-Path]TestCKeyword_enum.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node13]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestScope.py
+FileName=$[Project-Path]TestCKeyword_for_loop.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node14]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]TestTokenizer.py
+FileName=$[Project-Path]TestCKeyword_if_else.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node15]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestCKeyword_struct.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node16]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestCKeyword_switch_case.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node17]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestCKeyword_typedef.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node18]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestCparser.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node19]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestCScope.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node20]
+ClassName=TProjectFileNode
+FileName=$[Project-Path]TestTokenizer.py
+
+[Project\ChildNodes\Node0\ChildNodes\Node21]
 ClassName=TProjectFileNode
 FileName=$[Project-Path]Tokenizer.py
 
 [Project\ChildNodes\Node0\ChildNodes]
-Count=16
+Count=22
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode

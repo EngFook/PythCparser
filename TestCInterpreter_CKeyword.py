@@ -23,7 +23,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         CParser.clearParseEnviroment()
 
     def test_int_a_double_b_interpreter(self):
-        scope.__init__()
         a="""
                 int a = 2 ;
                 double b = 3 ;
@@ -45,7 +44,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1],3)
 
     def test_with_assigened_indentfier_interpreter(self):
-        scope.__init__()
         a="""   int c = 2 ;
                 1 + c ;
             """
@@ -73,7 +71,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertRaises(SyntaxError,root[0].interpreter)
 
     def test_minusminus_after_indentifier_interpreter(self):
-        scope.__init__()
         a="""
                 int a = 5 ;
                 a -- ;
@@ -94,7 +91,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(three,3)
 
     def test_equal_without_int_error_interpreter(self):
-        scope.__init__()
         a="a = 1 ;"
         """ =
           /   \
@@ -103,7 +99,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertRaises(SyntaxError,root[0].interpreter)
 
     def test_int_a_without_value_interpreter(self):
-        scope.__init__()
         a="int a ;"
         """int-a"""
         root=CParser.oneTimeParse(a)
@@ -113,7 +108,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1],0)
 
     def test_declate_twice_raise_error_interpreter(self):
-        scope.__init__()
         a="""int a ;
              double a ;"""
         root=CParser.oneTimeParse(a)
@@ -121,7 +115,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertRaises(SyntaxError,root[1].interpreter)
 
     def test_equal_with_int_interpreter(self):
-        scope.__init__()
         a="int a = 1 ;"
         """     =
               /   \
@@ -133,7 +126,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1],1)
 
     def test_int_a_with_a_divide_by_two_interpreter(self):
-        scope.__init__()
         a="""int a = 1 ;
             a = a / 2 ;
             """
@@ -144,7 +136,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1],0)
 
     def test_equal_with_int_zero_point_nine_interpreter(self):
-        scope.__init__()
         a="int a = 0.9 ;"
         """     =
               /   \
@@ -156,7 +147,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1],0)
 
     def test_equal_with_double_zero_point_nine_interpreter(self):
-        scope.__init__()
         a="double a = 0.9 ;"
         """     =
               /   \
@@ -169,7 +159,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 
 
     def test_int_a_with_negative_value_interpreter(self):
-        scope.__init__()
         a="int a = -1 ;"
         """     =
               /   \
@@ -181,7 +170,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1],-1)
 
     def test_int_a_b_c_interpreter(self):
-        scope.__init__()
         a="int a , b , c ;"
         """int-a"""
         root=CParser.oneTimeParse(a)
@@ -197,7 +185,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1],0.)
 
     def test_int_a_with_value_plusplus_interpreter(self):
-        scope.__init__()
         a="""int a = 1 ;
             a ++ ;"""
         root=CParser.oneTimeParse(a)
@@ -207,7 +194,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1] , 2 )
 
     def test_if_false_interpreter(self):
-        scope.__init__()
         a="""
                 int a = 5 ;
                 if ( 0 ) a = 4 ;
@@ -220,7 +206,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 
 
     def test_if_true_interpreter(self):
-        scope.__init__()
         a="""
                 int a = 5 ;
                 if ( 1 ) a = 4 ;
@@ -232,7 +217,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 4 )
 
     def test_if_with_else_interpreter(self):
-        scope.__init__()
         a="""
                 int a = 5 ;
                 if ( 0 ) a = 4 ;
@@ -246,7 +230,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 
 
     def test_if_with_else_if_true_interpreter(self):
-        scope.__init__()
         a="""
                int a = 5 ;
                if ( 0 ) a = 4 ;
@@ -259,7 +242,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 3 )
 
     def test_if_with_else_if_false_interpreter(self):
-        scope.__init__()
         a="""
                int a = 5 ;
                if ( 0 ) a = 4 ;
@@ -273,7 +255,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 5 )
 
     def test_if_with_condition_interpreter(self):
-        scope.__init__()
         a="""
                 int a = 5 ;
                 if ( a == 1 ) a = 4 ;
@@ -285,7 +266,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 5 )
 
     def test_if_with_condition_many_statement_interpreter(self):
-        scope.__init__()
         a="""
                 int a = 1 ;
                 if ( a == 1 )
@@ -301,7 +281,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 5 )
 
     def test_while_interpreter(self):
-        scope.__init__()
         a="""int x = - 1 ;
             while ( x < 1 ) x ++ ;
             """
@@ -312,7 +291,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 1 )
 
     def test_while_infinity_lopp_raise_syntax_interpreter(self):
-        scope.__init__()
         a="""int x = 0 ;
              while ( 1 ) x ++ ;
             """
@@ -321,7 +299,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertRaises(SyntaxError,root[1].interpreter)
 
     def test_while_loop_with_many_statment_interpreter(self):
-        scope.__init__()
         a="""int x = 0 ;
              while ( x < 4 )
              {
@@ -338,7 +315,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 4 )
 
     def test_while_loop_with_many_statment_diff_variable_interpreter(self):
-        scope.__init__()
         a="""int x = 0 ;
              int b = 1 ;
              int c = 2 ;
@@ -364,7 +340,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 
 
     def test_do_while_loop_interpreter(self):
-        scope.__init__()
         a="""int x = 0
                 do {  x ++ ; }
              while ( x < 3 ) ;"""
@@ -375,7 +350,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 3)
 
     def test_do_while_loop_with_many_statement_interpreter(self):
-        scope.__init__()
         a="""int x , b ;
                 x = 0 ;
                 b = 1 ;
@@ -392,7 +366,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 4)
 
     def test_while_loop_None_interpreter(self):
-        scope.__init__()
         a="""int x = 0 ;
              while ( x == 0 )  ;
             """
@@ -401,7 +374,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertRaises(SyntaxError,root[1].interpreter)
 
     def test_do_while_loop_interpreter(self):
-        scope.__init__()
         a="""int x = 0
                 do { }
              while ( x < 3 ) ;"""
@@ -410,13 +382,11 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertRaises(SyntaxError,root[1].interpreter)
 
     def test_for_loop_withouth_declaration_interpreter(self):
-        scope.__init__()
         a="""for ( x = 0 ; x == 5 ; x ++ ) ;"""
         root=CParser.oneTimeParse(a)
         self.assertRaises(SyntaxError,root[0].interpreter)
 
     def test_for_loop_with_declaration_interpreter(self):
-        scope.__init__()
         a="""int x ;
              for ( x = 0 ; x < 5 ; x ++ ) ;"""
         root=CParser.oneTimeParse(a)
@@ -427,7 +397,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 
 
     def test_for_loop_with_working_interpreter(self):
-        scope.__init__()
         a="""int x , b ;
              b = 0 ;
              for ( x = 0 ; x < 5 ; x ++ )
@@ -441,7 +410,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 5)
 
     def test_for_loop_with_multiple_working_interpreter(self):
-        scope.__init__()
         a="""int x , b ;
              double a ;
              for ( x = 0 ; x < 5 ; x ++ )
@@ -459,7 +427,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 4)
 
     def test_switch_case_chose_default_interpreter(self):
-        scope.__init__()
         a=""" int choice , a ;
             switch ( choice )
             {
@@ -473,7 +440,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 3 )
 
     def test_switch_case_chose_default_interpreter(self):
-        scope.__init__()
         a=""" int choice , a ;
             switch ( choice )
             {
@@ -487,7 +453,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 4 )
 
     def test_switch_case_chose_case1_interpreter(self):
-        scope.__init__()
         a=""" int choice , a ;
             choice = 1 ;
             switch ( choice )
@@ -502,7 +467,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 1 )
 
     def test_switch_case_chose_case1_multiple_statement_interpreter(self):
-        scope.__init__()
         a=""" int choice , a ;
             choice = 1 ;
             switch ( choice )
@@ -518,7 +482,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 
 
     def test_switch_case_chose_case2_interpreter(self):
-        scope.__init__()
         a=""" int choice , a ;
             choice = 2 ;
             switch ( choice )
@@ -533,7 +496,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 4 )
 
     def test_switch_case_with_if_loop_interpreter(self):
-        scope.__init__()
         a="""int choice , a , x ;
             choice = 2 ;
             switch ( choice )
@@ -554,7 +516,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 3 )
 
     def test_switch_case_with_if_loop_true_interpreter(self):
-        scope.__init__()
         a="""int choice , a , x ;
             choice = 2 ;
             switch ( choice )
@@ -575,7 +536,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 2 )
 
     def test_switch_case_with_if_loop_chose_case_in_if_loop_interpreter(self):
-        scope.__init__()
         a="""int choice , a , x ;
             choice = 3 ;
             switch ( choice )
@@ -596,7 +556,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 4 )
 
     def test_switch_case_with_if_loop_run_statement_outside_if_interpreter(self):
-        scope.__init__()
         a="""int choice , a , x ;
             choice = 3 ;
             switch ( choice )
@@ -618,7 +577,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 5 )
 
     def test_switch_case_with_if_loop_chose_default_interpreter(self):
-        scope.__init__()
         a="""int choice , a , x ;
             choice = 5 ;
             switch ( choice )
@@ -640,7 +598,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 6 )
 
     def test_define_only_one_statement_interpreter(self):
-        scope.__init__()
         a="""#define Str  2 + 3 +
             int a = 0 ;
            { a = Str 4 }"""
@@ -651,7 +608,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 9 )
 
     def test_define_two_statement_interpreter(self):
-        scope.__init__()
         a="""#define Str for ( x = 0 ; x
             int x , y , z ;
             { Str < 5 ; x ++ ) z = x + 1 ; }"""
@@ -665,7 +621,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 6 )
 
     def test_struct_interpreter(self):
-        scope.__init__()
         a="""
             struct test {
                 int a ;
@@ -678,9 +633,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['struct test'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+        CParser.clearParseEnviroment()
 
     def test_struct_with_two_statement_interpreter(self):
-        scope.__init__()
         a="""
             struct test {
                 int a ;
@@ -698,9 +653,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['struct test'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+        CParser.clearParseEnviroment()
 
     def test_struct_point_interpreter(self):
-        scope.__init__()
         a="""
             struct test {
                 int a ;
@@ -714,9 +669,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1]['a'][1],3)
         temp=scope.findVariable('x')
         self.assertEqual(temp[1]['b'][1],4)
+        CParser.clearParseEnviroment()
 
     def test_struct_point_with_undeclared_variable_interpreter(self):
-        scope.__init__()
         a="""
             struct test {
                 int a ;
@@ -727,9 +682,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root[0].interpreter()
         root[1].interpreter()
         self.assertRaises(SyntaxError,root[2].interpreter)
+        CParser.clearParseEnviroment()
 
     def test_struct_with_declaration_interpreter(self):
-        scope.__init__()
         a=""" struct Datatype {
                 int a ;
                 int b ;
@@ -740,9 +695,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['struct Datatype'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+        CParser.clearParseEnviroment()
 
     def test_struct_with_multiple_declaration_interpreter(self):
-        scope.__init__()
         a=""" struct Datatype {
                 int a ;
                 int b ;
@@ -757,9 +712,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['struct Datatype'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+        CParser.clearParseEnviroment()
 
     def test_typedef_interpreter(self):
-        scope.__init__()
         a= """typedef struct {
                         int a ;
                         int b ;
@@ -769,9 +724,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(symbolTable['Data'].id,'Data')
         self.assertEqual(symbolTable['Data'].second.first[0].first.first,'a')
         self.assertEqual(symbolTable['Data'].second.first[1].first.first,'b')
+        CParser.clearParseEnviroment()
 
     def test_typedef_datatype_interpreter(self):
-        scope.__init__()
         a="""typedef struct Datatype1 {
                     int a ;
                     int b ;
@@ -784,9 +739,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(symbolTable['struct Datatype1'].id,'struct Datatype1')
         self.assertEqual(symbolTable['struct Datatype1'].second.first[0].first.first,'a')
         self.assertEqual(symbolTable['struct Datatype1'].second.first[1].first.first,'b')
+        CParser.clearParseEnviroment()
 
     def test_typedef_interpreter(self):
-        scope.__init__()
         a="""typedef struct {
                     int a ;
                     int b ;
@@ -798,9 +753,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['Data2'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+        CParser.clearParseEnviroment()
 
     def test_typedef_struct_with_two_declaration_interpreter(self):
-        scope.__init__()
         a="""typedef struct {
                     int a ;
                     int b ;
@@ -817,9 +772,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['Data3'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+        CParser.clearParseEnviroment()
 
     def test_enum_with_workdays_interpreter(self):
-        scope.__init__()
         a=""" enum DAY {
                             saturday ,
                             sunday
@@ -830,9 +785,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('workday')
         self.assertEqual(temp[0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],None)
+        CParser.clearParseEnviroment()
 
     def test_enum_with_two_variable_interpreter(self):
-        scope.__init__()
         a=""" enum DAY {
                             saturday ,
                             sunday
@@ -846,9 +801,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('weekend')
         self.assertEqual(temp[0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],None)
+        CParser.clearParseEnviroment()
 
     def test_enum_with_no_variable_interpreter(self):
-        scope.__init__()
         a=""" enum DAY {
                             saturday ,
                             sunday
@@ -856,9 +811,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.parse(a)
         Runinterpreter(root)
         self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
+        CParser.clearParseEnviroment()
 
     def test_enum_with_variable_declare_interpreter(self):
-        scope.__init__()
         a=""" enum DAY
                         {
                             saturday ,
@@ -873,9 +828,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('x')
         self.assertEqual(temp[0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],0)
+        CParser.clearParseEnviroment()
 
 ##    def test_enum_with_variable_assign_interpreter(self):
-##        scope.__init__()
 ##        a=""" enum DAY
 ##                        {
 ##                            saturday ,
@@ -892,7 +847,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 ##        self.assertEqual(temp[1],3)
 
 ##    def test_enum_with_no_variable_interpreter(self):
-##        scope.__init__()
 ##        a=''' enum DAY {
 ##                            saturday ,
 ##                            sunday
