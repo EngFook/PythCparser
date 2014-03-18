@@ -419,11 +419,24 @@ def CInterpreterGrammar():
 
     def interpreter(self):
         temp=0
-        if self.third != None:
-            datatype=self.id +' '+self.first.first
-            while temp <self.third.__len__():
-                scope.declareVariable(self.third[temp],self.second.first,datatype)
-                temp = temp + 1
+        if self.id == 'enum':
+            if self.third != None:
+                datatype=self.id +' '+self.first.first
+                while temp <self.third.__len__():
+                    scope.declareVariable(self.third[temp],None,datatype)
+                    temp = temp + 1
+        else:
+            if self.first.__class__() == []:
+                length=self.first.__len__()
+                temp=0
+                temp1=self.first
+                while temp < length:
+                    self.first=temp1[temp]
+                    scope.declareVariable(self)
+                    temp=temp+1
+            else:
+                scope.declareVariable(self)
+
 
     sym=CKeyword.keyword('enum')
     sym.interpreter=interpreter

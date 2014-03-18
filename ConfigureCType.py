@@ -111,6 +111,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             if struct == "struct":
                 sym.interpreter=symbolTable['struct'].interpreter
                 sym.assign=symbolTable['struct'].assign
+
     elif attribute == '(enum)':
         sym.std=std
         sym.first=None
@@ -118,6 +119,10 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.attribute=None
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
+        for enum in symbolTable:
+            if enum == "enum":
+                sym.interpreter=symbolTable['enum'].interpreter
+                sym.assign=symbolTable['enum'].assign
 
     else:
         sym.std=std
