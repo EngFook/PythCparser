@@ -82,6 +82,15 @@ class TestScope(unittest.TestCase):
         scope.declareVariable(root[0])
         self.assertRaises(SyntaxError,scope.declareVariable,root[1])
 
+    def test_can_declare_twice_in_diif_scope(self):
+        scope=Scope()
+        a="""int a ;
+             int a ;"""
+        root=CParser.parse(a)
+        scope.declareVariable(root[0])
+        scope.addScope()
+        scope.declareVariable(root[1])
+
     def test_need_to_declare_before_assign(self):
         scope=Scope()
         a="""a = 3 ;"""

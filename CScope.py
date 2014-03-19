@@ -25,7 +25,7 @@ class Scope():
 
     def declareVariable(self,root,value=0,Datatype=None):
         temp=self.GoToVariable(root)
-        if self.checkVariable(temp):
+        if self.checkCurrnetScope(temp) != None :
             raise SyntaxError ('"{0}" cannot defined twice. '.format(temp))
         if Datatype == None:
             temp1=root
@@ -46,8 +46,8 @@ class Scope():
     def findVariable(self,variable):
         self.index=self.scopes.__len__()
         while self.checkParentsScope():
-            if self.checkCurrnetScope(variable) != None :
-                return self.checkCurrnetScope(variable)
+            if self.checkScope(variable) != None :
+                return self.checkScope(variable)
         raise SyntaxError ('"{0}" has not declare '.format(variable))
 
     def checkParentsScope(self):
@@ -57,9 +57,14 @@ class Scope():
         else:
             False
 
-    def checkCurrnetScope(self,variable):
+    def checkScope(self,variable):
         if variable in self.scopes[self.index].keys():
             return self.scopes[self.index][variable]
+        else: return None
+
+    def checkCurrnetScope(self,variable):
+        if variable in self.scopes[-1].keys():
+            return self.scopes[-1][variable]
         else: return None
 
     def changeValueOfVariable(self,root,value=0):

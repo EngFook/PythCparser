@@ -11,10 +11,10 @@ def valueof(symObj):
                This module is to test -> Interpreter - Ckeyword
                                                                              """
 ##"Interpreter the array root[i],i=1,2,3,...                                  ##
-def Runinterpreter(self,root=None):
+def Runinterpreter(self):
     index=0
     while index < self.__len__():
-        if root!=None:
+        if self[index].arity == 'function':
             self[index].interpreter(self)
         else:
             self[index].interpreter()
@@ -897,11 +897,102 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 ##             enum DAY4 x , y  ;'''
 
 
-    def test_function_declaration_interpreter(self):
-        a=""" int add ( int , int ) ;"""
+    def test_main_function_interpreter(self):
+        a=""" int main ( )
+                {
+                    int a ;
+                    a = 3 ;
+                }"""
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],3)
 
+    def test_add_function_declaration_interpreter(self):
+        a="""int add ( int , int ) ;
+            int add ( int a , int b ) { }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('add')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],root[1])
+
+    def test_add_function_declaration_raise_error_interpreter(self):
+        a="""int add ( int , int ) ;
+            int add ( int a , int b , int c ) { }"""
+        root=CParser.oneTimeParse(a)
+        self.assertRaises(SyntaxError,root[0].interpreter,root)
+
+    def test_add_function_declaration_raise_error_interpreter(self):
+        a="""int add ( int , int ) ;
+            int add ( int a , int b , int c ) { }"""
+        root=CParser.oneTimeParse(a)
+        self.assertRaises(SyntaxError,root[0].interpreter,root)
+
+    def test_add_function_declaration_raise_error2_interpreter(self):
+        a="""int add ( int , int ) ;
+            double add ( int a , int b ) { }"""
+        root=CParser.oneTimeParse(a)
+        self.assertRaises(SyntaxError,root[0].interpreter,root)
+
+    def test_add_function_declaration_raise_error3_interpreter(self):
+        a="""int add ( int , int ) ;
+             int add ( int a , double b ) { }"""
+        root=CParser.oneTimeParse(a)
+        self.assertRaises(SyntaxError,root[0].interpreter,root)
+
+    def test_call_function_interpreter(self):
+        a="""int add ( int , int ) ;
+             int main ( )
+             {
+                int a ;
+                a = add ( 2 , 3 ) ;
+                return 0 ;
+             }
+
+             int add ( int a , int b )
+             {
+                return a + b ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],5)
+
+    def test_call_function_twice_interpreter(self):
+        a="""int add ( int , int ) ;
+             int main ( )
+             {
+                int a ;
+                a = add ( 2 , 3 ) + add ( 3 , 4 ) ;
+                return 0 ;
+             }
+
+             int add ( int a , int b )
+             {
+                return a + b ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],12)
+
+    def test_int_a_b_c_equal_2_3_interpreter(self):
+        a="""int a = 1 , b , c = 4 ; """
+        root=CParser.oneTimeParse(a)
+        Ruuninterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],1)
+        temp=scope.findVariable('b')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],0)
+        temp=scope.findVariable('c')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],4)
 
 ################################################################################
 ################################################################################

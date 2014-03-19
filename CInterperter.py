@@ -196,15 +196,20 @@ def CInterpreterGrammar():
     sym=CExpression.prefix('~',90)
     sym.interpreter=interpreter
 
-    def interpreter(self):
+    def interpreter(self,main=None):
         temp=[]
         a=0
-        scope.addScope()
+        if main != 'main':
+            scope.addScope()
         for index in self.first:
             if index.id == 'case':
                 break
-            index.interpreter()
-        scope.deleteCurrentScope()
+            temp=index.interpreter()
+            if main == 'function':
+                scope.deleteCurrentScope()
+                return temp
+        if main != 'main':
+            scope.deleteCurrentScope()
 
     sym=CKeyword.keyword('{')
     sym.interpreter=interpreter
@@ -474,13 +479,45 @@ def CInterpreterGrammar():
         if self.arity != 'function':
             return self.first.interpreter()
         else:
-            temp=scope.GoToVariable(self)
-            if temp != 'main':
-                scope.declareVariable(self)
+            functionname=scope.GoToVariable(self)
+            if not hasattr(self.first,'std'):
+                function=scope.findVariable(functionname)
+                scope.addScope()
+                temp=0
+                while temp < function[1].second.__len__():
+                    scope.declareVariable(function[1].second[temp],self.second[temp].interpreter())
+                    temp=temp+1
+                temp=function[1].third.interpreter('function')
+                scope.deleteCurrentScope()
+                return temp
+            if scope.checkVariable(functionname):
+                return
+            if functionname != 'main':
+                temp=root.__len__()-1
+                while temp != -1:
+                    functiondeclare=scope.GoToVariable(root[temp])
+                    if functiondeclare == functionname:
+                        token=root[temp]
+                        break
+                    temp=temp-1
+                if token == self or token.second.__len__() != self.second.__len__() or token.first.id != self.first.id :
+                    raise SyntaxError('Function has not declared correctly.')
+                temp=0
+                while temp < self.second.__len__():
+                    if self.second[temp].id != token.second[temp].id:
+                        raise SyntaxError('Function has not declared correctly.')
+                    temp=temp+1
+                scope.declareVariable(self,token)
             else:
-                self.third.interpreter()
+                self.third.interpreter('main')
 
     sym=CExpression.infix('(',50)
+    sym.interpreter=interpreter
+
+    def interpreter(self):
+        return self.first.interpreter()
+
+    sym=CKeyword.keyword('return')
     sym.interpreter=interpreter
 ################################################################################
 ################################################################################
