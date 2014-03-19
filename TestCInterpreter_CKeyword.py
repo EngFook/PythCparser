@@ -11,10 +11,13 @@ def valueof(symObj):
                This module is to test -> Interpreter - Ckeyword
                                                                              """
 ##"Interpreter the array root[i],i=1,2,3,...                                  ##
-def Runinterpreter(self):
+def Runinterpreter(self,root=None):
     index=0
     while index < self.__len__():
-        self[index].interpreter()
+        if root!=None:
+            self[index].interpreter(self)
+        else:
+            self[index].interpreter()
         index = index + 1
 ##"Test start."                                                               ##
 class TestInterpreter_CKeyword(unittest.TestCase):
@@ -633,7 +636,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['struct test'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
-        CParser.clearParseEnviroment()
 
     def test_struct_with_two_statement_interpreter(self):
         a="""
@@ -653,7 +655,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['struct test'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
-        CParser.clearParseEnviroment()
 
     def test_struct_point_interpreter(self):
         a="""
@@ -669,7 +670,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1]['a'][1],3)
         temp=scope.findVariable('x')
         self.assertEqual(temp[1]['b'][1],4)
-        CParser.clearParseEnviroment()
 
     def test_struct_point_with_undeclared_variable_interpreter(self):
         a="""
@@ -682,7 +682,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root[0].interpreter()
         root[1].interpreter()
         self.assertRaises(SyntaxError,root[2].interpreter)
-        CParser.clearParseEnviroment()
 
     def test_struct_with_declaration_interpreter(self):
         a=""" struct Datatype {
@@ -695,7 +694,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['struct Datatype'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
-        CParser.clearParseEnviroment()
 
     def test_struct_with_multiple_declaration_interpreter(self):
         a=""" struct Datatype {
@@ -712,7 +710,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['struct Datatype'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
-        CParser.clearParseEnviroment()
 
     def test_typedef_interpreter(self):
         a= """typedef struct {
@@ -724,7 +721,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(symbolTable['Data'].id,'Data')
         self.assertEqual(symbolTable['Data'].second.first[0].first.first,'a')
         self.assertEqual(symbolTable['Data'].second.first[1].first.first,'b')
-        CParser.clearParseEnviroment()
 
     def test_typedef_datatype_interpreter(self):
         a="""typedef struct Datatype1 {
@@ -739,7 +735,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(symbolTable['struct Datatype1'].id,'struct Datatype1')
         self.assertEqual(symbolTable['struct Datatype1'].second.first[0].first.first,'a')
         self.assertEqual(symbolTable['struct Datatype1'].second.first[1].first.first,'b')
-        CParser.clearParseEnviroment()
 
     def test_typedef_interpreter(self):
         a="""typedef struct {
@@ -753,7 +748,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['Data2'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
-        CParser.clearParseEnviroment()
 
     def test_typedef_struct_with_two_declaration_interpreter(self):
         a="""typedef struct {
@@ -772,7 +766,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['Data3'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
-        CParser.clearParseEnviroment()
 
     def test_enum_with_workdays_interpreter(self):
         a=""" enum DAY {
@@ -785,7 +778,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('workday')
         self.assertEqual(temp[0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],None)
-        CParser.clearParseEnviroment()
 
     def test_enum_with_two_variable_interpreter(self):
         a=""" enum DAY {
@@ -801,7 +793,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('weekend')
         self.assertEqual(temp[0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],None)
-        CParser.clearParseEnviroment()
 
     def test_enum_with_no_variable_interpreter(self):
         a=""" enum DAY {
@@ -811,7 +802,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.parse(a)
         Runinterpreter(root)
         self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
-        CParser.clearParseEnviroment()
 
     def test_enum_with_variable_declare_interpreter(self):
         a=""" enum DAY
@@ -828,23 +818,76 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('x')
         self.assertEqual(temp[0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],0)
-        CParser.clearParseEnviroment()
 
-##    def test_enum_with_variable_assign_interpreter(self):
-##        a=""" enum DAY
-##                        {
-##                            saturday ,
-##                            sunday = 0  ,
-##                            friday
-##                                        } workday ;
-##
-##                enum DAY x = 3 ; """
-##        root=CParser.parse(a)
-##        Runinterpreter(root)
-##        self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
-##        temp=scope.findVariable('x')
-##        self.assertEqual(temp[0],symbolTable['enum DAY'])
-##        self.assertEqual(temp[1],3)
+    def test_enum_with_variable_assign_with_integer_directly_interpreter(self):
+        a=""" enum DAY
+                        {
+                            saturday ,
+                            sunday = 0  ,
+                            friday
+                                        } workday ;
+
+                enum DAY x = 1 ; """
+        root=CParser.parse(a)
+        Runinterpreter(root)
+        self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
+        temp=scope.findVariable('x')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[1],1)
+
+    def test_enum_with_variable_assign_with_integer_interpreter(self):
+        a=""" enum DAY
+                        {
+                            saturday ,
+                            sunday = 0  ,
+                            friday
+                                        } workday ;
+
+                enum DAY x ;
+                x = 1 ; """
+        root=CParser.parse(a)
+        Runinterpreter(root)
+        self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
+        temp=scope.findVariable('x')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[1],1)
+
+    def test_enum_with_variable_assign_with_integer_interpreter(self):
+        a=""" enum DAY
+                        {
+                            saturday ,
+                            sunday ,
+                            friday
+                                        } workday ;
+
+                enum DAY x = saturday ; """
+        root=CParser.parse(a)
+        Runinterpreter(root)
+        self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
+        temp=scope.findVariable('x')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[1],0)
+
+    def test_enum_with_two_variable_assign_with_integer_interpreter(self):
+        a=""" enum DAY
+                        {
+                            saturday ,
+                            sunday = 0  ,
+                            friday
+                                        } workday ;
+
+                enum DAY x = sunday ;
+                enum DAY y = friday ;"""
+        root=CParser.parse(a)
+        Runinterpreter(root)
+        self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
+        temp=scope.findVariable('x')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[1],0)
+        temp=scope.findVariable('y')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[1],1)
+        CParser.clearParseEnviroment()
 
 ##    def test_enum_with_no_variable_interpreter(self):
 ##        a=''' enum DAY {
@@ -852,6 +895,12 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 ##                            sunday
 ##                                        } ;
 ##             enum DAY4 x , y  ;'''
+
+
+    def test_function_declaration_interpreter(self):
+        a=""" int add ( int , int ) ;"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
 
 
 ################################################################################

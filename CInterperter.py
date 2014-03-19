@@ -67,12 +67,6 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        return self.first.interpreter()
-
-    sym=CExpression.infix('(',50)
-    sym.interpreter=interpreter
-
-    def interpreter(self):
         global assignTable
         if self.first.id == '(literal)':
             raise SyntaxError('{0} is not identifier'.format(self))
@@ -417,6 +411,27 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
     sym.assign=assign
 
+    def assign(self,root):
+        AssignYet=False
+        number=0
+        List=symbolTable[root.first.id].second.first
+        if hasattr(self,'std'):
+            for temp in List:
+                if temp.id == '=':
+                    number=int(temp.second.interpreter())
+                    temp=temp.first
+                    number=number+1
+                else:
+                    number=number+1
+                if temp.first == root.second.first:
+                    scope.declareVariable(root,number-1)
+                    AssignYet=True
+            if not AssignYet:
+                scope.declareVariable(root,int(root.second.interpreter()))
+        else:
+            scope.changeValueOfVariable(root,int(root.second.interpreter()))
+
+
     def interpreter(self):
         temp=0
         if self.id == 'enum':
@@ -453,6 +468,19 @@ def CInterpreterGrammar():
         self.first.interpreter()
 
     sym=CKeyword.keyword('typedef')
+    sym.interpreter=interpreter
+
+    def interpreter(self,root=None):
+        if self.arity != 'function':
+            return self.first.interpreter()
+        else:
+            temp=scope.GoToVariable(self)
+            if temp != 'main':
+                scope.declareVariable(self)
+            else:
+                self.third.interpreter()
+
+    sym=CExpression.infix('(',50)
     sym.interpreter=interpreter
 ################################################################################
 ################################################################################

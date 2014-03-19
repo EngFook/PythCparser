@@ -304,10 +304,13 @@ def CexpressionGrammar():
                 tokenizer.advance()
                 self.CheckFunctionType=False
                 return self
+
             global functiondeclare
             functiondeclare=False
+
             def led(self,leftToken):
                 global functiondeclare
+                token = None
                 if leftToken.arity == 'binary':
                     raise SyntaxError('Should not enter "{0}" '.format(self.id))
                 self.arity='function'
@@ -330,12 +333,17 @@ def CexpressionGrammar():
                 if(comma):
                     self.second=temp
                 else:
-                    self.second=token
+                    if token != None:
+                        self.second=token
+                    else:
+                        tokenizer.advance(')')
                 if hasattr(leftToken,'CheckFunctionType'):
                     if leftToken.CheckFunctionType :
                         raise SyntaxError('Should not enter "{0}" '.format(leftToken.id))
                 check =tokenizer.peepahead()
                 if hasattr(check,'std'):
+                    if self.first.first.first == 'main':
+                        self.third=Keyword.parseStatement()
                     if self.second != None :
                         self.third=Keyword.parseStatement()
                 return self

@@ -75,6 +75,8 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                     self.first=temp
             elif token !=None:
                 self.first=token.led(self)
+            elif tokenizer.peepahead().first == ',' or tokenizer.peepahead().id==')':
+                return self
             else:
                 self.first=expression.expression(100)
             self=self.limitedExpression(0)
@@ -115,8 +117,8 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
     elif attribute == '(enum)':
         sym.std=std
         sym.first=None
-        sym.second=None
-        sym.attribute=None
+        sym.second=content
+        sym.attribute='(enum)'
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
         for enum in symbolTable:
