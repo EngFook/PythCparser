@@ -31,7 +31,6 @@ def keyword(id):
 def configureType(type,attribute=None,content=None,userDefined=None,setorigin=None):
     global tokenizer
     check_for_redeclaration=[]
-
     def REPR(self):
         if hasattr(self,'second'):
             if self.second != None :
@@ -47,6 +46,8 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         return self
 
     def std(self,token=None):
+        arrayfirst=[]
+        arraysecond=[]
         if hasattr(self,'attribute'):
             for word in check_for_redeclaration:
                 if tokenizer.peepahead().first == word.first and self.attribute!='(enum)':
@@ -62,6 +63,29 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                         raise SyntaxError ('Do not expect redeclaration of "{0}".'.format(self.id))
                     raise SyntaxError ('Expected an "identifier" after {0}'.format(self.id))
             self=self.limitedExpression(0)
+            checkahead=tokenizer.peepahead()
+            if hasattr(self,'first'):
+                if hasattr(self.first,'type'):
+                    while checkahead.first==',':
+                        if hasattr(self,'second'):
+                            arrayfirst.append(self.first)
+                            arraysecond.append(self.second)
+                        else:
+                            arrayfirst.append(self)
+                            arraysecond.append(None)
+                        if tokenizer.peepahead().first!=';':
+                            checkahead=tokenizer.advance()
+                        else:
+                            checkahead=tokenizer.peepahead()
+                        if checkahead.first==';':
+                            temp=arrayfirst[0]
+                            arrayfirst[0]=temp.first
+                            self=symbolTable.get('=')()
+                            self.first=temp
+                            temp.first=arrayfirst
+                            self.second=arraysecond
+                            return self
+                        self=expression.expression(0)
             return self
         else:
             temp=[]
@@ -80,8 +104,29 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             else:
                 self.first=expression.expression(100)
             self=self.limitedExpression(0)
-            if tokenizer.peepahead().first == ';':
+            checkahead=tokenizer.peepahead()
+            if checkahead.first == ';':
                 tokenizer.advance()
+            if hasattr(self,'first'):
+                if hasattr(self.first,'type'):
+                    while checkahead.first==',':
+                        if hasattr(self,'second'):
+                            arrayfirst.append(self.first)
+                            arraysecond.append(self.second)
+                        else:
+                            arrayfirst.append(self)
+                            arraysecond.append(None)
+                        checkahead=tokenizer.advance()
+                        if checkahead.first==';':
+                            tokenizer.advance()
+                            temp=arrayfirst[0]
+                            arrayfirst[0]=temp.first
+                            self=symbolTable.get('=')()
+                            self.first=temp
+                            temp.first=arrayfirst
+                            self.second=arraysecond
+                            return self
+                        self=expression.expression(0)
             return self
 
 #Type Declaration                                                             ##
@@ -118,6 +163,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.std=std
         sym.first=None
         sym.second=content
+        sym.type=userDefined
         sym.attribute='(enum)'
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
@@ -130,6 +176,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.std=std
         sym.first=None
         sym.second=None
+        sym.type=None
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
 ##                                                                            ##

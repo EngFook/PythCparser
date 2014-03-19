@@ -7,6 +7,7 @@ from TestCScope import *
 from TestTokenizer import *
 from TestCExpression import *
 from TestCKeyword_enum import *
+from TestCKeyword_type import *
 from TestCKeyword_define import *
 from TestCKeyword_struct import *
 from TestCKeyword_typedef import *

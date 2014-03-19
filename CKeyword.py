@@ -451,7 +451,6 @@ def CkeywordGrammar():
                                             dot.first=checkAhead
                                         else:
                                             raise SyntaxError ('Expected "=" after {0}'.format(word))
-
                             tokenizer.advance('}')
                             symboltoken.first.content=arraykeypair
                             self.first=arrayset2
