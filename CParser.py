@@ -69,7 +69,4 @@ def Parse(str):
 """
                             Manual Test here.
                                                                              """
-##a="""int a = 1 , b , c = 4 ; """
-##root=oneTimeParse(a)
-##root[0].interpreter()
 
