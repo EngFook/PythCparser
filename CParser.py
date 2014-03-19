@@ -69,19 +69,6 @@ def Parse(str):
 """
                             Manual Test here.
                                                                              """
-a="""int add ( int , int ) ;
-     int main ( )
-     {
-        int a ;
-        a = add ( 2 , 3 ) ;
-        return 0 ;
-     }
+a=parse("""int main ( ) { }  """)
 
-     int add ( int a , int b )
-     {
-        return a + b ;
-     }"""
-root=oneTimeParse(a)
-root[0].interpreter(root)
-root[1].interpreter(root)
-
+print (a)

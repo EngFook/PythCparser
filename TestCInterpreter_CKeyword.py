@@ -980,20 +980,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],12)
 
-    def test_int_a_b_c_equal_2_3_interpreter(self):
-        a="""int a = 1 , b , c = 4 ; """
-        root=CParser.oneTimeParse(a)
-        Ruuninterpreter(root)
-        temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
-        self.assertEqual(temp[1],1)
-        temp=scope.findVariable('b')
-        self.assertEqual(temp[0],symbolTable['int'])
-        self.assertEqual(temp[1],0)
-        temp=scope.findVariable('c')
-        self.assertEqual(temp[0],symbolTable['int'])
-        self.assertEqual(temp[1],4)
-
 ################################################################################
 ################################################################################
 if __name__=='__main__':

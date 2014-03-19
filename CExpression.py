@@ -340,12 +340,15 @@ def CexpressionGrammar():
                 if hasattr(leftToken,'CheckFunctionType'):
                     if leftToken.CheckFunctionType :
                         raise SyntaxError('Should not enter "{0}" '.format(leftToken.id))
-                check =tokenizer.peepahead()
+                check=tokenizer.peepahead()
                 if hasattr(check,'std'):
-                    if self.first.first.first == 'main':
                         self.third=Keyword.parseStatement()
-                    if self.second != None :
-                        self.third=Keyword.parseStatement()
+                if hasattr(self,'first'):
+                    if hasattr(self.first,'first'):
+                        if hasattr(self.first.first,'first'):
+                            if self.first.first.first == 'main':
+                                    if check.id!='{':
+                                        raise SyntaxError ('Expected a "{" after int main().')
                 return self
 
             sym=infix('(',50)
