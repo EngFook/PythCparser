@@ -72,3 +72,24 @@ def Parse(str):
 
 a=oneTimeParse(''' int a = 3 , b = 6 , c = 4 , d , e = 5 ; ''')
 print (a)
+
+b=oneTimeParse('''enum DAY1
+                        {
+                            saturday ,
+                            sunday  ,
+                            monday ,
+                            tuesday ,
+                            wednesday ,
+                            thursday ,
+                            friday
+                                        } workday ;
+                    enum DAY1 x = 1 , y = 2 , z , a = 5 ;''')
+
+print(b)
+c=oneTimeParse('''struct Number1 {
+                int a ;
+                int b ;
+                            } ;
+              struct Number1 x = 1 , y = 3 , z , a , b , c , d = 0 ;''')
+
+print(c)
