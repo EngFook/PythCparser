@@ -69,18 +69,9 @@ def Parse(str):
 """
                             Manual Test here.
                                                                              """
-a=oneTimeParse(''' struct Number2 {
-                int a ;
-                int b ;
-                            } ; ''')
+a=oneTimeParse(''' int a = 3 , b = 6 , c = 4 , d , e = 5 ; ''')
 
 print ( a)
-
-b=Parse(''' struct Number2 {
-                int a ;
-                int b ;
-                            } ; ''')
-print ( b)
 
 
 

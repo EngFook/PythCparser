@@ -184,7 +184,8 @@ def CexpressionGrammar():
                     token=tokenizer.advance()
                     self.second=token.std(leftToken)
                     return self
-                token=expression(self.leftBindingPower-1)
+                else:
+                    token=(expression(self.leftBindingPower-1))
                 self.first=leftToken
                 self.second=token
                 return self

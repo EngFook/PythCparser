@@ -360,7 +360,7 @@ def CkeywordGrammar():
             rootindex=0
 
             def std(self,symboltoken=None):
-                if symboltoken==None:
+                if symboltoken==None or symboltoken=='(enum)':
                     global previous
                     global rootindex
                     global root
@@ -374,6 +374,9 @@ def CkeywordGrammar():
                                else:
                                     temp=parseStatement()
                             else:
+                                if symboltoken=='(enum)':
+                                    enumtoken=tokenizer.peepahead()
+                                    enumtoken.enumtype='onlyallowdigit'
                                 temp=expression.expression(0)
                                 if check.id=='(identifier)' and tokenizer.peepahead().first==',':
                                     tokenizer.advance(',')
@@ -673,7 +676,7 @@ def CkeywordGrammar():
                 if tokenizer.peepahead().id != '(identifier)':
                     raise SyntaxError('Do not allow digit')
                 else:
-                    self.second=token.std()
+                    self.second=token.std('(enum)')
                 temp=''.join(self.id +' '+ self.first.first)
                 configureType(temp,'(enum)',self.second)
                 if tokenizer.peepahead().first==';':
@@ -690,6 +693,42 @@ def CkeywordGrammar():
                             raise SyntaxError('Do not expected "{0}" , invalid statement.'.format(tokenizer.peepahead()))
                     self.third=array
                 tokenizer.advance(';')
+                for word in self.second.first:
+                    if word.id =='=':
+                        if word.second.id=='(literal)':
+                            return self
+                        elif word.second.id == '(identifier)':
+                             raise SyntaxError ('Expected a digit but not {0}.'.format(word.second))
+                        else:
+                            def scan(token):
+                                if hasattr(token,'first'):
+                                        if token.first.id=='(identifier)':
+                                            raise SyntaxError ('Expected a digit but not {0}.'.format(token.first))
+                                if hasattr(token,'second'):
+                                        if token.second.id=='(identifier)':
+                                            raise SyntaxError ('Expected a digit but not {0}.'.format(token.second))
+
+                            def scanstartingpoint(token):
+                                if token.second.id =='(literal)':
+                                    if token.first.id!='(literal)':
+                                        scanstartingpoint(token.first)
+                                    return
+                                elif token.second.id =='(identifier)':
+                                    raise SyntaxError ('Expected a digit but not {0}.'.format(token.second))
+                                else:
+                                    scan(token.second)
+                                    scanstartingpoint(token.second)
+                                    if token.first.id =='(literal)':
+                                        return
+                                    elif token.first.id =='(identifier)':
+                                        raise SyntaxError ('Expected a digit but not {0}.'.format(token.second))
+                                    else:
+                                        scan(token.first)
+                                        scanstartingpoint(token.first)
+
+                            scanstartingpoint(word.second)
+
+
                 return self
 
             def REPR(self):
