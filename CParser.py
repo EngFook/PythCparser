@@ -69,18 +69,30 @@ def Parse(str):
 """
                             Manual Test here.
                                                                              """
-a=oneTimeParse(''' struct Number2 {
-                int a ;
-                int b ;
-                            } ; ''')
+##a=Parse(""" enum DAY
+##                        {
+##                            saturday ,
+##                            sunday = 0  ,
+##                            monday
+##                            } workday ;
+##
+##                enum DAY x = sunday ;
+##                enum DAY y = friday ;""")
+##
+##print ( a)
+##a[0].interpreter()
+##a[1].interpreter()
+##
+##a=oneTimeParse(""" int choice , a ;
+##            choice = 2 ;
+##            switch ( choice )
+##            {
+##                case 1 : a = 1 ; a ++ ;
+##                case 2 : a = 3 ; a ++ ;
+##                default    : a = 5 ; a ++ ; }""")
+##
 
-print ( a)
 
-b=Parse(''' struct Number2 {
-                int a ;
-                int b ;
-                            } ; ''')
-print ( b)
 
 
 

@@ -115,8 +115,8 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
     elif attribute == '(enum)':
         sym.std=std
         sym.first=None
-        sym.second=None
-        sym.attribute=None
+        sym.second=content
+        sym.attribute='(enum)'
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
         for enum in symbolTable:
