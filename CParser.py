@@ -70,5 +70,5 @@ def Parse(str):
                             Manual Test here.
                                                                              """
 
-##a=oneTimeParse(''' int a = 3 , b = 6 , c = 4 , d , e = 5 ; ''')
-##print (a)
+a=oneTimeParse(''' int a = 3 , b = 6 , c = 4 , d , e = 5 ; ''')
+print (a)

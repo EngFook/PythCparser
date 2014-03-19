@@ -31,11 +31,12 @@ def keyword(id):
 def configureType(type,attribute=None,content=None,userDefined=None,setorigin=None):
     global tokenizer
     check_for_redeclaration=[]
-
+    arrayfirst=[]
+    arraysecond=[]
     def REPR(self):
         if hasattr(self,'second'):
             if self.second != None :
-                return '({0} {1})'.format(self.id ,self.first)
+                return '({0} {1} {2})'.format(self.id ,self.first , self.second)
         return '({0} {1})'.format(self.id ,self.first)
 
     def limitedExpression(self,rightBindingPower):
@@ -80,8 +81,28 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             else:
                 self.first=expression.expression(100)
             self=self.limitedExpression(0)
-            if tokenizer.peepahead().first == ';':
+            checkahead=tokenizer.peepahead()
+            if checkahead.first == ';':
                 tokenizer.advance()
+            if hasattr(self,'first'):
+                if hasattr(self.first,'type'):
+                    while checkahead.first==',':
+                        arrayfirst.append(self.first)
+                        if hasattr(self,'second'):
+                            arraysecond.append(self.second)
+                        else:
+                            arraysecond.append(None)
+                        checkahead=tokenizer.advance()
+                        if checkahead.first==';':
+                            tokenizer.advance()
+                            temp=arrayfirst[0]
+                            arrayfirst[0]=temp.first
+                            self=symbolTable.get('=')()
+                            self.first=temp
+                            temp.first=arrayfirst
+                            self.second=arraysecond
+                            return self
+                        self=expression.expression(0)
             return self
 
 #Type Declaration                                                             ##
@@ -130,6 +151,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.std=std
         sym.first=None
         sym.second=None
+        sym.type=None
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
 ##                                                                            ##
