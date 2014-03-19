@@ -67,12 +67,6 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        return self.first.interpreter()
-
-    sym=CExpression.infix('(',50)
-    sym.interpreter=interpreter
-
-    def interpreter(self):
         global assignTable
         if self.first.id == '(literal)':
             raise SyntaxError('{0} is not identifier'.format(self))
@@ -474,6 +468,19 @@ def CInterpreterGrammar():
         self.first.interpreter()
 
     sym=CKeyword.keyword('typedef')
+    sym.interpreter=interpreter
+
+    def interpreter(self,root=None):
+        if self.arity != 'function':
+            return self.first.interpreter()
+        else:
+            temp=scope.GoToVariable(self)
+            if temp != 'main':
+                scope.declareVariable(self)
+            else:
+                self.third.interpreter()
+
+    sym=CExpression.infix('(',50)
     sym.interpreter=interpreter
 ################################################################################
 ################################################################################

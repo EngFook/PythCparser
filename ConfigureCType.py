@@ -75,6 +75,8 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                     self.first=temp
             elif token !=None:
                 self.first=token.led(self)
+            elif tokenizer.peepahead().first == ',' or tokenizer.peepahead().id==')':
+                return self
             else:
                 self.first=expression.expression(100)
             self=self.limitedExpression(0)

@@ -748,6 +748,24 @@ class TestExperession(unittest.TestCase):
         two=root[0].second
         self.assertEqual(two.id,'(literal)')
         self.assertEqual(valueof(two),'2')
+
+    def test_function_declare(self):
+        a="""int add ( int , int ) ;"""
+        root=CParser.parse(a)
+        self.assertEqual(root[0].id,'(')
+        INT=root[0].first
+        self.assertEqual(INT.id,'int')
+        a=INT.first
+        self.assertEqual(a.id,'(identifier)')
+        self.assertEqual(valueof(a),'add')
+        List=root[0].second
+        INT=List[0]
+        self.assertEqual(INT.id,'int')
+        INT=List[1]
+        self.assertEqual(INT.id,'int')
+
+
+
 ################################################################################
 ################################################################################
 if __name__=='__main__':

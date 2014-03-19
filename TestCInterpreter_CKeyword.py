@@ -11,10 +11,13 @@ def valueof(symObj):
                This module is to test -> Interpreter - Ckeyword
                                                                              """
 ##"Interpreter the array root[i],i=1,2,3,...                                  ##
-def Runinterpreter(self):
+def Runinterpreter(self,root=None):
     index=0
     while index < self.__len__():
-        self[index].interpreter()
+        if root!=None:
+            self[index].interpreter(self)
+        else:
+            self[index].interpreter()
         index = index + 1
 ##"Test start."                                                               ##
 class TestInterpreter_CKeyword(unittest.TestCase):
@@ -892,6 +895,12 @@ class TestInterpreter_CKeyword(unittest.TestCase):
 ##                            sunday
 ##                                        } ;
 ##             enum DAY4 x , y  ;'''
+
+
+    def test_function_declaration_interpreter(self):
+        a=""" int add ( int , int ) ;"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
 
 
 ################################################################################

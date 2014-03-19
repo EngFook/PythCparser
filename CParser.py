@@ -69,30 +69,23 @@ def Parse(str):
 """
                             Manual Test here.
                                                                              """
-##a=Parse(""" enum DAY
-##                        {
-##                            saturday ,
-##                            sunday = 0  ,
-##                            monday
-##                            } workday ;
-##
-##                enum DAY x = sunday ;
-##                enum DAY y = friday ;""")
-##
-##print ( a)
-##a[0].interpreter()
-##a[1].interpreter()
-##
-##a=oneTimeParse(""" int choice , a ;
-##            choice = 2 ;
-##            switch ( choice )
+
+
+
+a=""" int main ( ) {
+    int a ;
+    a = 3 ; }"""
+##        int add ( int a , int b )
+##        {
+##            int c ;
+##            c = a + b ;
+##        } """
+root=oneTimeParse(a)
+root[0].interpreter(root)
+
+
+##a="""int func ( int x , int y )
 ##            {
-##                case 1 : a = 1 ; a ++ ;
-##                case 2 : a = 3 ; a ++ ;
-##                default    : a = 5 ; a ++ ; }""")
-##
-
-
-
-
-
+##                return a + b ;
+##            } """
+##root=oneTimeParse(a)
