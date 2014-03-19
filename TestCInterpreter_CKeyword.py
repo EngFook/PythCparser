@@ -983,7 +983,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
     def test_int_a_b_c_equal_2_3_interpreter(self):
         a="""int a = 1 , b , c = 4 ; """
         root=CParser.oneTimeParse(a)
-        Ruuninterpreter(root)
+        Runinterpreter(root)
         temp=scope.findVariable('a')
         self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],1)

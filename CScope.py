@@ -23,8 +23,8 @@ class Scope():
     def deleteCurrentScope(self):
         del self.scopes[-1]
 
-    def declareVariable(self,root,value=0,Datatype=None):
-        temp=self.GoToVariable(root)
+    def declareVariable(self,root,value=0,Datatype=None,index=None):
+        temp=self.GoToVariable(root,index)
         if self.checkCurrnetScope(temp) != None :
             raise SyntaxError ('"{0}" cannot defined twice. '.format(temp))
         if Datatype == None:
@@ -73,10 +73,12 @@ class Scope():
         self.scopes[self.index][temp]=(temp1[0],value)
         pass
 
-    def GoToVariable(self,root):
+    def GoToVariable(self,root,index=0):
         temp=root
         while hasattr (temp,'first'):
             temp=temp.first
+            if temp.__class__()==[]:
+                temp=temp[index]
         return temp
 
     def changeValueOfVariableOfStruct(self,root,value=0):
