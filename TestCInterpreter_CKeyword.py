@@ -980,7 +980,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],12)
 
-<<<<<<< HEAD
+
     def test_int_a_b_c_equal_2_3_interpreter(self):
         a="""int a = 1 , b , c = 4 ; """
         root=CParser.oneTimeParse(a)
@@ -995,8 +995,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],4)
 
-=======
->>>>>>> 4f522dab8cb1f93638f5805debff4127540adde6
+
 ################################################################################
 ################################################################################
 if __name__=='__main__':

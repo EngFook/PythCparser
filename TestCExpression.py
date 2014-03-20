@@ -500,19 +500,6 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(a),'a')
         self.assertEqual(func.id,'(identifier)')
 
-
-    def test_Int_a(self):
-        a='int a ;'
-        """  int
-             |
-             a"""
-
-        root=CParser.parse(a)
-        self.assertEqual(root[0].id,'int')
-        a=root[0].first
-        self.assertEqual(valueof(a),'a')
-        self.assertEqual(a.id,'(identifier)')
-
     def test_bracket_with_declaration(self):
         a='func ( int a ) ;'
         """   (
