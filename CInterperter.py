@@ -242,8 +242,17 @@ def CInterpreterGrammar():
             scope.declareVariable(self)
 
     def assign(self,root):
+        temp=0
         if hasattr(self,'std'):
-            scope.declareVariable(root,int(root.second.interpreter()))
+            if self.first.__class__() == []:
+                while temp<self.first.__len__():
+                    if root.second[temp]!=None:
+                        scope.declareVariable(root,int(root.second[temp].interpreter()),None,temp)
+                    else:
+                        scope.declareVariable(root,0,None,temp)
+                    temp=temp+1
+            else:
+                scope.declareVariable(root,int(root.second.interpreter()))
         else:
             scope.changeValueOfVariable(root,int(root.second.interpreter()))
 
