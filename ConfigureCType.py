@@ -48,6 +48,8 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
     def std(self,token=None):
         arrayfirst=[]
         arraysecond=[]
+        Passonce=False
+#  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" #
         if hasattr(self,'attribute'):
             for word in check_for_redeclaration:
                 if tokenizer.peepahead().first == word.first and self.attribute!='(enum)':
@@ -62,73 +64,118 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                     if tokenizer.peepahead().id in symbolTable:
                         raise SyntaxError ('Do not expect redeclaration of "{0}".'.format(self.id))
                     raise SyntaxError ('Expected an "identifier" after {0}'.format(self.id))
+#  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" #
             self=self.limitedExpression(0)
             checkahead=tokenizer.peepahead()
-            if hasattr(self,'first'):
-                if hasattr(self.first,'type'):
-                    while checkahead.first==',':
-                        if hasattr(self,'second'):
-                            arrayfirst.append(self.first)
-                            arraysecond.append(self.second)
-                        else:
+# """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
+            if hasattr (self ,'type'):
+                    if hasattr(self,'second'):
+                            Passonce=True
+            if hasattr(checkahead,'first'):
+                while checkahead.first==',':
+                    if hasattr(self,'second'):
+                        if Passonce==True:
+                            Passonce=False
                             arrayfirst.append(self)
                             arraysecond.append(None)
-                        if tokenizer.peepahead().first!=';':
-                            checkahead=tokenizer.advance()
                         else:
-                            checkahead=tokenizer.peepahead()
-                        if checkahead.first==';':
-                            temp=arrayfirst[0]
-                            arrayfirst[0]=temp.first
-                            self=symbolTable.get('=')()
-                            self.first=temp
-                            temp.first=arrayfirst
-                            self.second=arraysecond
-                            return self
-                        self=expression.expression(0)
-            return self
-        else:
-            temp=[]
-            if tokenizer.peepahead().id == '(identifier)':
-                self.first=tokenizer.advance()
-                temp.append(self.first)
-                while tokenizer.peepahead().first == ',' and not expression.functiondeclare:
-                    tokenizer.advance()
-                    temp.append(tokenizer.advance())
-                if temp.__len__() != 1:
-                    self.first=temp
-            elif token !=None:
-                self.first=token.led(self)
-            elif tokenizer.peepahead().first == ',' or tokenizer.peepahead().id==')':
-                return self
-            else:
-                self.first=expression.expression(100)
-            self=self.limitedExpression(0)
-            checkahead=tokenizer.peepahead()
-            if checkahead.first == ';':
-                tokenizer.advance()
-            if hasattr(self,'first'):
-                if hasattr(self.first,'type'):
-                    while checkahead.first==',':
-                        if hasattr(self,'second'):
                             arrayfirst.append(self.first)
                             arraysecond.append(self.second)
-                        else:
-                            arrayfirst.append(self)
-                            arraysecond.append(None)
+                    else:
+                        arrayfirst.append(self)
+                        arraysecond.append(None)
+                    if tokenizer.peepahead().first!=';':
                         checkahead=tokenizer.advance()
-                        if checkahead.first==';':
-                            tokenizer.advance()
-                            temp=arrayfirst[0]
-                            arrayfirst[0]=temp.first
-                            self=symbolTable.get('=')()
-                            self.first=temp
-                            temp.first=arrayfirst
-                            self.second=arraysecond
+                    else:
+                        checkahead=tokenizer.peepahead()
+                    if checkahead.first==';':
+                        temp=arrayfirst[0]
+                        arrayfirst[0]=temp.first
+                        self=symbolTable.get('=')()
+                        self.first=temp
+                        temp.first=arrayfirst
+                        for word in arraysecond:
+                            NoValue=False
+                            if word != None:
+                                NoValue=True
+                                break
+                        if NoValue == False:
+                            self=temp
+                            self.first=arrayfirst
                             return self
-                        self=expression.expression(0)
+                        self.second=arraysecond
+                        return self
+                    self=expression.expression(0)
             return self
+# """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
+        else:
+                Passonce=False
+                temp=[]
+# """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
+                if tokenizer.peepahead().id == '(identifier)':
+                    self.first=tokenizer.advance()
+                    temp.append(self.first)
+                    if hasattr(self,'type'):
+                        pass
+                    else:
+                        while tokenizer.peepahead().first == ',' and not expression.functiondeclare:
+                            tokenizer.advance()
+                            temp.append(tokenizer.advance())
+                    if temp.__len__() != 1:
+                        self.first=temp
+                elif token !=None:
+                    self.first=token.led(self)
+                elif tokenizer.peepahead().first == ',' or tokenizer.peepahead().id==')':
+                    return self
+                else:
+                    self.first=expression.expression(100)
+# """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
+                self=self.limitedExpression(0)
+                checkahead=tokenizer.peepahead()
+                if checkahead.first == ';':
+                    tokenizer.advance()
+# """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
+                if hasattr(self,'function_attribute'):
+                   return self
+                if hasattr(self,'type'):
+                    if hasattr(self,'second'):
+                        Passonce=True
+                if hasattr(self,'first'):
+                    if hasattr(self.first,'type') or Passonce==True:
+                        while checkahead.first==',':
+                            checkahead=tokenizer.advance()
+                            if hasattr(self,'second'):
+                                if Passonce==True:
+                                    Passonce=False
+                                    arrayfirst.append(self)
+                                    arraysecond.append(None)
+                                else:
+                                    arrayfirst.append(self.first)
+                                    arraysecond.append(self.second)
+                            else:
+                                arrayfirst.append(self)
+                                arraysecond.append(None)
 
+                            if checkahead.first==';':
+                                temp=arrayfirst[0]
+                                arrayfirst[0]=temp.first
+                                self=symbolTable.get('=')()
+                                self.first=temp
+                                temp.first=arrayfirst
+                                for word in arraysecond:
+                                    NoValue=False
+                                    if word != None:
+                                        NoValue=True
+                                        break
+                                if NoValue == False:
+                                    self=temp
+                                    self.first=arrayfirst
+                                    return self
+                                self.second=arraysecond
+                                return self
+                            self=expression.expression(0)
+        return self
+# """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
 #Type Declaration                                                             ##
     sym=keyword(type)
     if attribute=='(struct)':
@@ -177,6 +224,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.first=None
         sym.second=None
         sym.type=None
+        sym.normal=None
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
 ##                                                                            ##

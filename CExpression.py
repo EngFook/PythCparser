@@ -320,6 +320,8 @@ def CexpressionGrammar():
                 check=tokenizer.peepahead()
                 while(check.id != ')'):
                     if hasattr(tokenizer.peepahead(),'std'):
+                        if hasattr(tokenizer.peepahead(),'type') and hasattr(tokenizer.peepahead(),'normal'):
+                            tokenizer.peepahead().function_attribute=None
                         functiondeclare=True
                         token=Keyword.parseStatement()
                         functiondeclare=False

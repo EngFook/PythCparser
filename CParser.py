@@ -69,6 +69,54 @@ def Parse(str):
 """
                             Manual Test here.
                                                                              """
-a=parse("""int main ( ) { }  """)
+##a=oneTimeParse(''' function ( int a , double b ) ; ''')
+##print (a)
+##
+##a1=oneTimeParse(''' int a , b , c  ; ''')
+##print (a1)
+##
+##a2=oneTimeParse(''' int a = 3 , b , c ; ''')
+##print (a2)
+##
+##
+##b=oneTimeParse('''enum DAY1
+##                        {
+##                            saturday ,
+##                            sunday  ,
+##                            monday ,
+##                            tuesday ,
+##                            wednesday ,
+##                            thursday ,
+##                            friday
+##                                        } workday ;
+##                    enum DAY1 x , y ;''')
+##
+##print(b)
+##c=oneTimeParse('''struct Number1 {
+##                int a ;
+##                int b ;
+##                            } ;
+##              struct Number1 x , y = 3 , z , a , b , c , d = 0 ;''')
+##
+##print(c)
+##
+##d=oneTimeParse('''enum DAY1
+##                        {
+##                            saturday ,
+##                            sunday  ,
+##                            monday ,
+##                            tuesday ,
+##                            wednesday ,
+##                            thursday ,
+##                            friday
+##                                        } workday ;
+##                    enum DAY1 x = 4 , y ;''')
+##
+##print(d)
+e=oneTimeParse('''struct Number1 {
+                int a ;
+                int b ;
+                            } ;
+              struct Number1 x , y ;''')
 
-print (a)
+print(e)

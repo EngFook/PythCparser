@@ -513,27 +513,6 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(a),'a')
         self.assertEqual(a.id,'(identifier)')
 
-    def test_Int_a_b_c(self):
-        a='int a , b , c ;'
-        """  int
-             |
-             |-a
-             |-b
-             |-c"""
-
-        root=CParser.parse(a)
-        self.assertEqual(root[0].id,'int')
-        a=root[0].first[0]
-        self.assertEqual(valueof(a),'a')
-        self.assertEqual(a.id,'(identifier)')
-        a=root[0].first[1]
-        self.assertEqual(valueof(a),'b')
-        self.assertEqual(a.id,'(identifier)')
-        a=root[0].first[2]
-        self.assertEqual(valueof(a),'c')
-        self.assertEqual(a.id,'(identifier)')
-
-
     def test_bracket_with_declaration(self):
         a='func ( int a ) ;'
         """   (
