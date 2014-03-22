@@ -10,15 +10,8 @@ def valueof(symObj):
 """
                This module is to test -> Interpreter - Ckeyword
                                                                              """
-##"Interpreter the array root[i],i=1,2,3,...                                  ##
-def Runinterpreter(self):
-    index=0
-    while index < self.__len__():
-        if self[index].arity == 'function':
-            self[index].interpreter(self)
-        else:
-            self[index].interpreter()
-        index = index + 1
+
+
 ##"Test start."                                                               ##
 class TestInterpreter_CKeyword(unittest.TestCase):
     def setUp(self):
@@ -889,12 +882,45 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1],1)
         CParser.clearParseEnviroment()
 
-##    def test_enum_with_no_variable_interpreter(self):
-##        a=''' enum DAY {
-##                            saturday ,
-##                            sunday
-##                                        } ;
-##             enum DAY4 x , y  ;'''
+    def test_struct_inside_a_struct_interpreter(self):
+        a="""        typedef struct {
+                    float x ;
+                    float y ;
+                    } coordinate ;
+
+                   typedef struct Data {
+                   int a ;
+                   int  b ;
+                   double c ;
+                   coordinate d ;
+                   } Data ;
+
+                   int main ( ) {
+                   Data data ;
+                                      } """
+
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('data')
+        self.assertEqual(temp[0],symbolTable['Data'])
+        self.assertEqual(temp[1]['d'][0],symbolTable['coordinate'])
+        self.assertEqual(temp[1]['d'][1]['x'][0],symbolTable['float'])
+        self.assertEqual(temp[1]['d'][1]['y'][0],symbolTable['float'])
+
+
+
+    def test_enum_with_no_variable_interpreter(self):
+        a=''' enum DAY {
+                            saturday ,
+                            sunday
+                                        } ;
+             enum DAY4 x , y  ;'''
+        temp=scope.findVariable('x')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[1],0)
+        temp=scope.findVariable('y')
+        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[1],0)
 
 
     def test_main_function_interpreter(self):
@@ -994,6 +1020,8 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('c')
         self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],4)
+
+
 
 
 ################################################################################

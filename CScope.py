@@ -80,17 +80,28 @@ class Scope():
             if temp.__class__()==[]:
                 temp=temp[index]
         return temp
-
-    def changeValueOfVariableOfStruct(self,root,value=0):
-        temp=self.GoToVariable(root)
-        temp1=self.findVariable(temp)
-        for temp2 in temp1[1]:
-            if root.first.second.first == temp2:
-                if temp1[1][temp2][0].id == 'int':
+    assign=False
+    global assign
+    def changeValueOfVariableOfStruct(self,variable,biggest,contentofvariable,value=0):
+        assign=False
+        global assign
+        for key in biggest[1]:
+            if biggest[1][key][1].__class__() == {}:
+                temp=biggest[1][key]
+                self.changeValueOfVariableOfStruct(variable,temp,contentofvariable,value)
+                if assign == True :
+                    return
+            if contentofvariable == key:
+                if biggest[1][key][0].id == 'int':
                     value =int(value)
-                self.scopes[self.index][temp][1][temp2]=(temp1[1][temp2][0],value)
+                self.scopes[self.index][variable][1][contentofvariable]=(biggest[1][key][0],value)
+                assign=True
                 return
-        raise SyntaxError ('"{0}" has not declare '.format(root.first.second.first))
+        if assign:
+            return
+        else:
+            raise SyntaxError ('"{0}" has not declare '.format(root.first.second.first))
+
 ################################################################################
 ################################################################################
 ##"Create global scope."                                                      ##

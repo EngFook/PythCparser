@@ -17,6 +17,15 @@ import CExpression
 ##"Global assignTable."                                                       ##
 global assignTable
 assignTable={}
+##"Interpreter the array root[i],i=1,2,3,...                                  ##
+def Runinterpreter(self):
+    index=0
+    while index < self.__len__():
+        if self[index].arity == 'function':
+            self[index].interpreter(self)
+        else:
+            self[index].interpreter()
+        index = index + 1
 ##                                                                            ##
 def CInterpreterGrammar():
     def interpreter(self):
@@ -270,7 +279,7 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
     sym.assign=assign
 
-    sym=CKeyword.keyword('floating')
+    sym=CKeyword.keyword('float')
     sym.interpreter=interpreter
 
     sym=CKeyword.keyword('char')
@@ -395,35 +404,67 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def assign(self,root):
-        scope.changeValueOfVariableOfStruct(root,root.second.interpreter())
+        variable=scope.GoToVariable(root)
+        biggest=scope.findVariable(variable)
+        contentofvariable=root.first.second.first
+        scope.changeValueOfVariableOfStruct(variable,biggest,contentofvariable,root.second.interpreter())
+
+    def findthecontent(self,Class):
+        List={}
+        index=0
+        temp=symbolTable[Class].second.first
+        while index < temp.__len__ () :
+            Variable=temp[index].first.first
+            if symbolTable[temp[index].id].second != None:
+                temp2=self.findthecontent(temp[index].id)
+                List[Variable]=(symbolTable[temp[index].id],temp2)
+            else:
+                List[Variable]=(symbolTable[temp[index].id],None)
+            index =index + 1
+        return List
 
 
-    def interpreter(self):
+    def interpreter(self,root=None):
         List={}
         temp=0
+        if root != None :
+            self.third =root.second
         if self.id == 'struct':
-            if self.third != None :
-                temp2=0
-                datatype=self.id +' '+self.first.first
-                while temp2 < self.third.__len__():
-                    while temp < self.second.first.__len__():
-                        Class=self.second.first[temp].id
-                        Variable=self.second.first[temp].first.first
-                        temp=temp+1
-                        List[Variable]=(symbolTable[Class],None)
-                    scope.declareVariable(self.third[temp2],List,datatype)
-                    temp2=temp2+1
+            temp2=0
+            while temp2 < self.third.__len__():
+                if self.first == None :
+                    if root.id == 'typedef':
+                        datatype=self.third[temp2].first
+                    else:
+                        datatype="NamELesS"+' '+self.third[temp2].first
+                else:
+                    datatype=self.id +' '+self.first.first
+                while temp < self.second.first.__len__():
+                    Class=self.second.first[temp].id
+                    Variable=self.second.first[temp].first.first
+                    temp=temp+1
+                    List[Variable]=(symbolTable[Class],None)
+                scope.declareVariable(self.third[temp2],List,datatype)
+                temp2=temp2+1
         else:
+            temp3=0
+            store=[]
             while temp < self.second.first.__len__():
                 Class=self.second.first[temp].id
                 Variable=self.second.first[temp].first.first
                 temp=temp+1
-                List[Variable]=(symbolTable[Class],None)
+                Checkstruct=symbolTable[Class].second
+                if Checkstruct != None:
+                    value=self.findthecontent(Class)
+                    List[Variable]=(symbolTable[Class],value)
+                else:
+                    List[Variable]=(symbolTable[Class],None)
             scope.declareVariable(self,List)
 
     sym=CKeyword.keyword('struct')
     sym.interpreter=interpreter
     sym.assign=assign
+    sym.findthecontent=findthecontent
 
     def assign(self,root):
         AssignYet=False
@@ -472,14 +513,15 @@ def CInterpreterGrammar():
     sym.assign=assign
 
     def interpreter(self):
-        return scope.findVariable(self.first.first)
+        temp=Scope.GoToVariable(None,self)
+        return scope.findVariable(temp)
 
     sym=CExpression.infix('.',80)
     sym.interpreter=interpreter
 
 
     def interpreter(self):
-        self.first.interpreter()
+        self.first.interpreter(self)
 
     sym=CKeyword.keyword('typedef')
     sym.interpreter=interpreter

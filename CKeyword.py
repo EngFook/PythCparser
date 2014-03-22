@@ -484,7 +484,7 @@ def CkeywordGrammar():
             configureType('int')
             configureType('double')
             configureType('char')
-            configureType('floating')
+            configureType('float')
 ################################################################################
 # return + break and continue std -> return std
 ################################################################################
@@ -557,6 +557,9 @@ def CkeywordGrammar():
                                 tokenizer.advance(',')
                             elif tokenizer.peepahead().first==';':
                                 self.third=array2
+                                for word in self.third:
+                                    temp=''.join('NamELesS' +' '+ word.first)
+                                    configureType(temp,'(struct)',self.second)
                                 tokenizer.advance(';')
                                 break;
                             else:
@@ -627,6 +630,8 @@ def CkeywordGrammar():
                             tokenizer.advance(',')
                         elif tokenizer.peepahead().first==';':
                             self.second=array1
+                            for word in self.second:
+                                    configureType(word,'(struct)',self.first)
                             break;
                         else:
                             raise SyntaxError('Invalid Statement.')

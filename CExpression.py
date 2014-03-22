@@ -80,7 +80,6 @@ def CexpressionGrammar():
                 else:
                     token=tokenizer.advance()
                     token=expression(self.leftBindingPower)
-
                 self.first=leftToken
                 self.second=token
                 return self
@@ -263,7 +262,7 @@ def CexpressionGrammar():
                     return '({0} {1} {2})'.format(self.first,self.id, self.second)
 
             def led(self,leftToken):
-                if(leftToken.id == '(identifier)'):
+                if(leftToken.id == '(identifier)') or leftToken.id == '.':
                     tokenizer.advance()
                     token=expression(self.leftBindingPower)
                     self.first=leftToken
@@ -271,6 +270,7 @@ def CexpressionGrammar():
                     return self
                 else:
                     raise SyntaxError("Input should be identifier!")
+
             sym=infix('.',80)
             sym.__repr__=REPR
             sym.arity='unary'

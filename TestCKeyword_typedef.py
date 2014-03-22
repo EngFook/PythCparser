@@ -292,9 +292,9 @@ class TestKeyword_typedef(unittest.TestCase):
                        |                                |
                        |                                *
                        |                                |
-                     alias                              [
-                                                       / \
-                                                      80  None
+                     alias                              ['
+                                                        |
+                                                        80
 
                                                                     """
         root=CParser.parse(a)

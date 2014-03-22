@@ -10,12 +10,7 @@ def valueof(symObj):
 """
                      This module is to test -> Interpreter - CExpression
                                                                              """
-##"Interpreter the array root[i],i=1,2,3,...                                  ##
-def Runinterpreter(self):
-    index=0
-    while index < self.__len__():
-        self[index].interpreter()
-        index = index + 1
+
 ##"Test start."                                                               ##
 class TestInterpreter_CExpression(unittest.TestCase):
     def test_plus_interpreter(self):

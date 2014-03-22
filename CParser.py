@@ -70,4 +70,22 @@ def Parse(str):
                             Manual Test here.
                                                                              """
 
+a=Parse('''        typedef struct {
+                    float x ;
+                    float y ;
+                    } coordinate ;
+
+                   typedef struct Data {
+                   int a ;
+                   int  b ;
+                   double c ;
+                   coordinate d ;
+                   } Data ;
+
+                   int main ( ) {
+                   Data data ;
+                   data . d . x  = 5 ;
+                                      } ''')
+print(a)
+CInterperter.Runinterpreter(a)
 
