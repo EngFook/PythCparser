@@ -263,36 +263,17 @@ def CInterpreterGrammar():
             else:
                 scope.declareVariable(root,int(root.second.interpreter()))
         else:
-            if root.second.id == '.':
-                mainvariable=scope.GoToVariable(root.second)
-                temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
-                scope.changeValueOfVariable(root,int(temp))
-            else:
-                scope.changeValueOfVariable(root,int(root.second.interpreter()))
+            scope.changeValueOfVariable(root,int(root.second.interpreter()))
 
     sym=CKeyword.keyword('int')
     sym.interpreter=interpreter
     sym.assign=assign
 
     def assign(self,root):
-        temp=0
         if hasattr(self,'std'):
-            if self.first.__class__() == []:
-                while temp<self.first.__len__():
-                    if root.second[temp]!=None:
-                        scope.declareVariable(root,root.second[temp].interpreter(),None,temp)
-                    else:
-                        scope.declareVariable(root,0,None,temp)
-                    temp=temp+1
-            else:
-                scope.declareVariable(root,root.second.interpreter())
+            scope.declareVariable(root,root.second.interpreter())
         else:
-            if root.second.id == '.':
-                mainvariable=scope.GoToVariable(root.second)
-                temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
-                scope.changeValueOfVariable(root,temp)
-            else:
-                scope.changeValueOfVariable(root,root.second.interpreter())
+            scope.changeValueOfVariable(root,root.second.interpreter())
 
     sym=CKeyword.keyword('double')
     sym.interpreter=interpreter
@@ -394,6 +375,16 @@ def CInterpreterGrammar():
 
 
     sym=CKeyword.keyword('switch')
+    sym.interpreter=interpreter
+
+    def interpreter(self,list):
+        temp=list.index(self)+1
+        while   temp < list.__len__():
+            list[temp].interpreter()
+            temp=temp+1
+        return
+
+    sym=CKeyword.keyword('default')
     sym.interpreter=interpreter
 
     def interpreter(self,list):
@@ -525,10 +516,6 @@ def CInterpreterGrammar():
     def interpreter(self):
         temp=Scope.GoToVariable(None,self)
         return scope.findVariable(temp)
-
-##    def interpreter(self):
-##        temp=Scope.GoToVariable(None,self)
-##        return scope.findValueOfVariableOfStruct(self,temp)
 
     sym=CExpression.infix('.',80)
     sym.interpreter=interpreter

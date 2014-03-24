@@ -13,8 +13,9 @@
 from CSymbol import *
 from Tokenizer import *
 from ConfigureCType import *
-##"DefineTable created.                                                       ##
+##"DefineTable and stringTable created.                                       ##
 defineTable={}
+stringTable={}
 ##"Add id to the defineTable if defineTable don't contain it."                ##
 def define(id,constant_token):
     global defineTable
@@ -28,6 +29,15 @@ def define(id,constant_token):
         else:
             raise SyntaxError('Invalid Statement : #define ')
         return
+##"Add string to the stringTable if stringTable don't contain it."            ##
+def string(id,constant_token):
+    global stringTable
+    if id not in stringTable:
+        stringTable[id]=constant_token
+        return
+    else:
+            raise SyntaxError('Do not expect redeclaration: "{0}".'.format(id))
+
 ##"Initialization."                                                           ##
 expression=0
 tokenizer=0
@@ -482,11 +492,10 @@ def CkeywordGrammar():
 # Type std -> configure Type
 ################################################################################
             configureType('int')
+            configureType('short')
             configureType('double')
             configureType('char')
             configureType('float')
-            configureType('unsigned')
-
 ################################################################################
 # return + break and continue std -> return std
 ################################################################################
@@ -748,7 +757,41 @@ def CkeywordGrammar():
             sym.second=None
             sym.third=None
             sym.__repr__=REPR
+################################################################################
+# string std
+################################################################################
+            def std(self,Tokenstore=None):
+                temp=''
+                CheckAhead=tokenizer.advance()
+                while CheckAhead.id !='"':
+                    if temp=='':
+                        space=''
+                    else:
+                        space=' '
+                    if CheckAhead.id == '(identifier)' or CheckAhead.id == '(literal)':
+                        temp=temp+''.join(space + CheckAhead.first)
+                    else:
+                        temp=temp+''.join(space + CheckAhead.id)
+                    CheckAhead=tokenizer.advance()
+                length=len(temp)
+                while length>int(Tokenstore.second.first):
+                    temp=temp[:-1]
+                    length=length-1
+                    temp=''.join(temp)
+                    if length==int(Tokenstore.second.first):
+                        SyntaxWarning('array out of range.')
+                        break
+                tokenizer.advance(';')
+                string(Tokenstore.first.first.first,temp)
+                self.first=temp
+                return self.first
 
+            def REPR(self):
+                    return '({0})'.format(self.first)
+            sym=keyword('"')
+            sym.std=std
+            sym.first=None
+            sym.__repr__=REPR
 ################################################################################
 ################################################################################
 ##"Call C keywordGrammar."                                                    ##

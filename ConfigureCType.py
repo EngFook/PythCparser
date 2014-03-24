@@ -222,6 +222,9 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                 sym.assign=symbolTable['enum'].assign
 
     else:
+        if type == 'short':
+            def std(self,token=None):
+                pass
         sym.std=std
         sym.first=None
         sym.second=None
