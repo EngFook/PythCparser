@@ -919,7 +919,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
                    double c ;
                    coordinate d ;
                    } Data ;
-
                    int main ( ) {
                    Data data ;
                    data . d . x = 3 ;

@@ -183,6 +183,9 @@ def CexpressionGrammar():
                     token=tokenizer.advance()
                     self.second=token.std(leftToken)
                     return self
+                elif tokenizer.peepahead().id=='"':
+                    token=tokenizer.advance()
+                    temp=token.std(leftToken)
                 else:
                     token=(expression(self.leftBindingPower-1))
                 self.first=leftToken
