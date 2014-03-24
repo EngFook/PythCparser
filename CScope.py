@@ -80,13 +80,32 @@ class Scope():
             if temp.__class__()==[]:
                 temp=temp[index]
         return temp
-    assign=False
+
+    def findValueOfVariableOfStruct(self,root,mainvariable,current=None):
+        current = root
+        temp=[]
+        while current.id == '.':
+            temp.append(current.second.first)
+            current=current.first
+        store=scope.scopes[self.index][mainvariable]
+        while temp != [] :
+            temp1 = temp.pop()
+            if temp1 not in store[1] :
+                raise SyntaxError ('wrong format')
+            store=store[1][temp1]
+        return store[1]
+
     global assign
+    assign=False
+
     def changeValueOfVariableOfStruct(self,variable,biggest,contentofvariable,value=0):
-        assign=False
+
         global assign
+        assign=False
         for key in biggest[1]:
             if biggest[1][key][1].__class__() == {}:
+                if key == contentofvariable:
+                    raise SyntaxError ('wrong format')
                 temp=biggest[1][key]
                 self.changeValueOfVariableOfStruct(variable,temp,contentofvariable,value)
                 if assign == True :
@@ -94,10 +113,10 @@ class Scope():
             if contentofvariable == key:
                 if biggest[1][key][0].id == 'int':
                     value =int(value)
-                self.scopes[self.index][variable][1][contentofvariable]=(biggest[1][key][0],value)
+                biggest[1][contentofvariable]=(biggest[1][key][0],value)
                 assign=True
                 return
-        if assign:
+        if assign or biggest !=  self.scopes[self.index][variable]:
             return
         else:
             raise SyntaxError ('"{0}" has not declare '.format(root.first.second.first))

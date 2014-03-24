@@ -907,7 +907,89 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1]['d'][1]['x'][0],symbolTable['float'])
         self.assertEqual(temp[1]['d'][1]['y'][0],symbolTable['float'])
 
+    def test_struct_inside_a_struct_interpreter(self):
+        a="""        typedef struct {
+                    float x ;
+                    float y ;
+                    } coordinate ;
 
+                   typedef struct Data {
+                   int a ;
+                   int  b ;
+                   double c ;
+                   coordinate d ;
+                   } Data ;
+                   int main ( ) {
+                   Data data ;
+                   data . d . x = 3 ;
+                   data . c = 4 ;
+                                      } """
+
+        root=CParser.Parse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('data')
+        self.assertEqual(temp[0],symbolTable['Data'])
+        self.assertEqual(temp[1]['d'][0],symbolTable['coordinate'])
+        self.assertEqual(temp[1]['d'][1]['x'][0],symbolTable['float'])
+        self.assertEqual(temp[1]['d'][1]['x'][1],3)
+        self.assertEqual(temp[1]['c'][0],symbolTable['double'])
+        self.assertEqual(temp[1]['c'][1],4)
+
+    def test_struct_assign_struct_to_variable_interpreter(self):
+        a="""        typedef struct {
+                    float x ;
+                    float y ;
+                    } coordinate ;
+
+                   typedef struct Data {
+                   int a ;
+                   int  b ;
+                   double c ;
+                   coordinate d ;
+                   } Data ;
+
+                   int main ( ) {
+                   Data data ;
+                   int z ;
+                   data . c = 3 ;
+                   z = data . c
+                                      } """
+
+        root=CParser.Parse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('data')
+        self.assertEqual(temp[0],symbolTable['Data'])
+        self.assertEqual(temp[1]['c'][0],symbolTable['double'])
+        self.assertEqual(temp[1]['c'][1],3)
+        temp=scope.findVariable('z')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],3)
+
+    def test_struct_assign_struct_to_variable_struct_in_sturct_interpreter(self):
+        a="""        typedef struct {
+                    float x ;
+                    float y ;
+                    } coordinate ;
+
+                   typedef struct Data {
+                   int a ;
+                   int  b ;
+                   double c ;
+                   coordinate d ;
+                   } Data ;
+
+                   int main ( ) {
+                   Data data ;
+                   int z ;
+                   data . d . x = 3 ;
+                   z = data . d . x ;
+                                      } """
+
+        root=CParser.Parse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('z')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],3)
 
     def test_enum_with_x_and_y_interpreter(self):
         a=''' enum DAY {
@@ -1022,9 +1104,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('c')
         self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],4)
-
-
-
 
 ################################################################################
 ################################################################################
