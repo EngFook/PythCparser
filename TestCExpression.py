@@ -730,10 +730,10 @@ class TestExperession(unittest.TestCase):
         INT=List[1]
         self.assertEqual(INT.id,'int')
 
-    def test_unsigned_int(self):
-        a =""" short int a ; """
-        """  short - int - a """
-        root=CParser.parse(a)
+##    def test_unsigned_int(self):
+##        a =""" short int a ; """
+##        """  short - int - a """
+##        root=CParser.parse(a)
 
 
 

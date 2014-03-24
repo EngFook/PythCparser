@@ -199,7 +199,6 @@ class TestInterpreter_CExpression(unittest.TestCase):
         self.assertEqual(three,3)
         self.assertEqual(five,5)
 
-    def test_short_int(self):
 ################################################################################
 ################################################################################
 if __name__=='__main__':

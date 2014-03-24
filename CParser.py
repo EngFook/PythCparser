@@ -70,8 +70,4 @@ def Parse(str):
                             Manual Test here.
                                                                              """
 
-a=Parse( """ unsigned      int x ;
-                                      } """)
-print(a)
-CInterperter.Runinterpreter(a)
 
