@@ -485,6 +485,8 @@ def CkeywordGrammar():
             configureType('double')
             configureType('char')
             configureType('float')
+            configureType('unsigned')
+
 ################################################################################
 # return + break and continue std -> return std
 ################################################################################
@@ -746,6 +748,7 @@ def CkeywordGrammar():
             sym.second=None
             sym.third=None
             sym.__repr__=REPR
+
 ################################################################################
 ################################################################################
 ##"Call C keywordGrammar."                                                    ##

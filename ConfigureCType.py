@@ -220,7 +220,6 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             if enum == "enum":
                 sym.interpreter=symbolTable['enum'].interpreter
                 sym.assign=symbolTable['enum'].assign
-                sym.findthecontent=symbolTable['enum'].findthecontent
 
     else:
         sym.std=std
