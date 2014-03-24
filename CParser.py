@@ -39,6 +39,7 @@ def clearParseEnviroment():
 def parse(str):
     array=[]
     CKeyword.defineTable={}
+    CKeyword.stringTable={}
     tokenizer=Tokenizer(str)
     token=tokenizer.peepahead()
     CExpression.configure_tokenizer_Expression(tokenizer)
@@ -70,22 +71,7 @@ def Parse(str):
                             Manual Test here.
                                                                              """
 
-a=Parse('''        typedef struct {
-                    float x ;
-                    float y ;
-                    } coordinate ;
-
-                   typedef struct Data {
-                   int a ;
-                   int  b ;
-                   double c ;
-                   coordinate d ;
-                   } Data ;
-
-                   int main ( ) {
-                   Data data ;
-                   data . d . x  = 5 ;
-                                      } ''')
+a=Parse('''short int a = 555555 ; ''')
 print(a)
-CInterperter.Runinterpreter(a)
+##CInterperter.Runinterpreter(a)
 

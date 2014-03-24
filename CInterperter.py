@@ -430,22 +430,23 @@ def CInterpreterGrammar():
         if root != None :
             self.third =root.second
         if self.id == 'struct':
-            temp2=0
-            while temp2 < self.third.__len__():
-                if self.first == None :
-                    if root.id == 'typedef':
-                        datatype=self.third[temp2].first
+            if self.third != None :
+                temp2=0
+                while temp2 < self.third.__len__():
+                    if self.first == None :
+                        if root.id == 'typedef':
+                            datatype=self.third[temp2].first
+                        else:
+                            datatype="NamELesS"+' '+self.third[temp2].first
                     else:
-                        datatype="NamELesS"+' '+self.third[temp2].first
-                else:
-                    datatype=self.id +' '+self.first.first
-                while temp < self.second.first.__len__():
-                    Class=self.second.first[temp].id
-                    Variable=self.second.first[temp].first.first
-                    temp=temp+1
-                    List[Variable]=(symbolTable[Class],None)
-                scope.declareVariable(self.third[temp2],List,datatype)
-                temp2=temp2+1
+                        datatype=self.id +' '+self.first.first
+                    while temp < self.second.first.__len__():
+                        Class=self.second.first[temp].id
+                        Variable=self.second.first[temp].first.first
+                        temp=temp+1
+                        List[Variable]=(symbolTable[Class],None)
+                    scope.declareVariable(self.third[temp2],List,datatype)
+                    temp2=temp2+1
         else:
             temp3=0
             store=[]

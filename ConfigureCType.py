@@ -220,9 +220,11 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             if enum == "enum":
                 sym.interpreter=symbolTable['enum'].interpreter
                 sym.assign=symbolTable['enum'].assign
-                sym.findthecontent=symbolTable['enum'].findthecontent
 
     else:
+        if type == 'short':
+            def std(self,token=None):
+                pass
         sym.std=std
         sym.first=None
         sym.second=None
