@@ -71,7 +71,7 @@ def Parse(str):
                             Manual Test here.
                                                                              """
 
-a=Parse('''short int a = 555555 ; ''')
+a=Parse('''char name [ 80 ] = " fuck " ; ''')
 print(a)
 ##CInterperter.Runinterpreter(a)
 
