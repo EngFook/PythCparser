@@ -71,8 +71,4 @@ def Parse(str):
                             Manual Test here.
                                                                              """
 
-a=Parse('''signed char a = 3147483649 , b = - 3147483649 ;''')
-##a=Parse(""" int a = 2 ; """)
-print(a)
-##CInterperter.Runinterpreter(a)
 

@@ -794,37 +794,31 @@ def CkeywordGrammar():
             sym.__repr__=REPR
 
             def REPR(self):
+                if hasattr (self,'first'):
                     return '({0} {1})'.format(self.id,self.first)
+                else:
+                    return '({0})'.format(self.id)
 
             def std(self,previous=None):
                 if tokenizer.peepahead().id != 'int' :
                     raise SyntaxError ('Should enter int nt {0}.'.format(tokenizer.peepahead().id))
                 temp=tokenizer.advance().std()
+                temp1=self.id + ' '+'int'
+                sym=symbol(temp1)
+                sym.__repr__=REPR
+                sym.arity='binary'
+                sym.interpreter=symbolTable['short'].interpreter
+                sym.std=symbolTable['short'].std
+                sym.assign=symbolTable['short'].assign
+                sym.value=0xffff
+                temp2=symbolTable[temp1]()
                 if temp.id == '=':
-                    self.first=temp.first
-                    temp.first=self
+                    temp2.first=temp.first.first
+                    temp.first=temp2
+                    return temp
                 elif temp.id == 'int':
-                    self.first=temp
-                    return self
-                if previous==None:
-                    if temp.second.__class__() == [] :
-                        temp1=0
-                        while temp1 < temp.second.__len__():
-                            if temp.second[temp1]==None:
-                                pass
-                            elif temp.second[temp1].id == '-':
-                                if int(temp.second[temp1].first.first)>32767:
-                                    temp.second[temp1].first.first='32767'
-                            elif int(temp.second[temp1].first)>32767:
-                                temp.second[temp1].first='32767'
-                            temp1=temp1+1
-                    else:
-                        if temp.second.id == '-':
-                            if int(temp.second.first)>32767:
-                                temp.second.first='32767'
-                        elif int(temp.second.first)>32767:
-                            temp.second.first='32767'
-                return temp
+                    temp2.first=temp.first
+                    return temp2
 
             sym=keyword('short')
             sym.std=std
@@ -832,17 +826,37 @@ def CkeywordGrammar():
             sym.__repr__=REPR
 
             def std(self):
-                List= ['short','int','char']
+                List= ['double','int']
                 if tokenizer.peepahead().id not in List:
                     raise SyntaxError ('Enter the wrong format after {0}.'.format(self.id))
                 temp=tokenizer.advance().std()
+                if temp.id != '=':
+                    temp1=self.id + ' '+temp.id
+                    if temp.id == 'double':
+                        value=None
+                    else:
+                        value=0xffffffff
+                else:
+                    temp1=self.id +' '+temp.first.id
+                    if temp.first.id == 'double':
+                        value=None
+                    else:
+                        value=0xffffffff
+                sym=symbol(temp1)
+                sym.__repr__=REPR
+                sym.arity='binary'
+                sym.interpreter=symbolTable['long'].interpreter
+                sym.std=symbolTable['long'].std
+                sym.assign=symbolTable['long'].assign
+                sym.value=value
+                temp2=symbolTable[temp1]()
                 if temp.id == '=':
-                    self.first=temp.first
-                    temp.first=self
+                    temp2.first=temp.first.first
+                    temp.first=temp2
+                    return temp
                 elif temp.id == 'int':
-                    self.first=temp
-                    return self
-                return
+                    temp2.first=temp.first
+                    return temp2
 
             sym=keyword('long')
             sym.std=std
@@ -854,34 +868,37 @@ def CkeywordGrammar():
                 if tokenizer.peepahead().id not in List:
                     raise SyntaxError ('Enter the wrong format after {0}.'.format(self.id))
                 temp=tokenizer.advance().std(self.id)
+                if temp.id != '=':
+                    temp1=self.id + ' '+temp.id
+                    if temp.id == 'short int':
+                        value=0xffff
+                    elif temp.id == 'int':
+                        value=0xffffffff
+                    else:
+                        value=0xff
+                else:
+                    temp1=self.id +' '+temp.first.id
+                    if temp.first.id == 'short int':
+                        value=0xffff
+                    elif temp.first.id == 'int':
+                        value=0xffffffff
+                    else:
+                        value=0xff
+                sym=symbol(temp1)
+                sym.__repr__=REPR
+                sym.arity='binary'
+                sym.interpreter=symbolTable['unsigned'].interpreter
+                sym.std=symbolTable['unsigned'].std
+                sym.assign=symbolTable['unsigned'].assign
+                sym.value=value
+                temp2=symbolTable[temp1]()
                 if temp.id == '=':
-                    self.first=temp.first
-                    temp.first=self
-                elif temp.id == 'int':
-                    self.first=temp
-                    return self
-                if self.first.id == 'short':
-                    value ='65535'
-                elif self.first.id == 'int':
-                    value ='4294967295'
+                    temp2.first=temp.first.first
+                    temp.first=temp2
+                    return temp
                 else:
-                    value='255'
-                if temp.second.__class__() == [] :
-                    temp1=0
-                    while temp1 < temp.second.__len__():
-                        if temp.second[temp1]==None:
-                            pass
-                        elif temp.second[temp1].id == '-':
-                            temp.second[temp1]=createLiteral('0')
-                        elif int(temp.second[temp1].first)>int(value):
-                            temp.second[temp1].first=value
-                        temp1=temp1+1
-                else:
-                    if temp.second.id == '-':
-                        temp.second=createLiteral('0')
-                    elif int(temp.second.first)>int(value):
-                        temp.second.first=value
-                return temp
+                    temp2.first=temp.first
+                    return temp2
 
             sym=keyword('unsigned')
             sym.std=std
@@ -889,33 +906,25 @@ def CkeywordGrammar():
             sym.__repr__=REPR
 
             def std(self):
-                if tokenizer.peepahead().id != 'char':
+                if tokenizer.peepahead().id != 'char' :
                     raise SyntaxError ('Should enter char nt {0}.'.format(tokenizer.peepahead().id))
                 temp=tokenizer.advance().std()
+                temp1=self.id + ' '+'char'
+                sym=symbol(temp1)
+                sym.__repr__=REPR
+                sym.arity='binary'
+                sym.interpreter=symbolTable['signed'].interpreter
+                sym.std=symbolTable['signed'].std
+                sym.assign=symbolTable['signed'].assign
+                sym.value=0xff
+                temp2=symbolTable[temp1]()
                 if temp.id == '=':
-                    self.first=temp.first
-                    temp.first=self
-                elif temp.id == 'int':
-                    self.first=temp
-                    return self
-                if temp.second.__class__() == [] :
-                    temp1=0
-                    while temp1 < temp.second.__len__():
-                        if temp.second[temp1]==None:
-                            pass
-                        elif temp.second[temp1].id == '-':
-                            if int(temp.second[temp1].first.first)>128:
-                                temp.second[temp1].first.first='128'
-                        elif int(temp.second[temp1].first)>127:
-                            temp.second[temp1].first='127'
-                        temp1=temp1+1
-                else:
-                    if temp.second.id == '-':
-                        if int(temp.second.first.first)>128:
-                            temp.second.first.first=128
-                    elif int(temp.second.first)>127:
-                        temp.second.first='127'
-                return temp
+                    temp2.first=temp.first.first
+                    temp.first=temp2
+                    return temp
+                elif temp.id == 'char':
+                    temp2.first=temp.first
+                    return temp2
 
             sym=keyword('signed')
             sym.std=std

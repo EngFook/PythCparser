@@ -256,19 +256,38 @@ def CInterpreterGrammar():
             if self.first.__class__() == []:
                 while temp<self.first.__len__():
                     if root.second[temp]!=None:
-                        scope.declareVariable(root,int(root.second[temp].interpreter()),None,temp)
+                        temp1=root.second[temp].interpreter()
+                        if temp1 > (0xffffffff-1)/2:
+                            temp1=(0xffffffff-1)/2
+                        elif temp1 < -1*(0xffffffff+1)/2:
+                            temp1=-1*(0xffffffff+1)/2
+                        scope.declareVariable(root,int(temp1),None,temp)
                     else:
                         scope.declareVariable(root,0,None,temp)
                     temp=temp+1
             else:
-                scope.declareVariable(root,int(root.second.interpreter()))
+                temp1=root.second.interpreter()
+                if temp1 > (0xffffffff-1)/2:
+                    temp1=(0xffffffff-1)/2
+                elif temp1 < -1*(0xffffffff+1)/2:
+                    temp1=-1*(0xffffffff+1)/2
+                scope.declareVariable(root,int(temp1))
         else:
             if root.second.id == '.':
                 mainvariable=scope.GoToVariable(root.second)
                 temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
+                if temp > (0xffffffff-1)/2:
+                    temp=(0xffffffff-1)/2
+                elif temp < -1*(0xffffffff+1)/2:
+                    temp=-1*(0xffffffff+1)/2
                 scope.changeValueOfVariable(root,int(temp))
             else:
-                scope.changeValueOfVariable(root,int(root.second.interpreter()))
+                temp=root.second.interpreter()
+                if temp > (0xffffffff-1)/2:
+                    temp=(0xffffffff-1)/2
+                elif temp < -1*(0xffffffff+1)/2:
+                    temp=-1*(0xffffffff+1)/2
+                scope.changeValueOfVariable(root,int(temp))
 
     sym=CKeyword.keyword('int')
     sym.interpreter=interpreter
@@ -300,9 +319,11 @@ def CInterpreterGrammar():
 
     sym=CKeyword.keyword('float')
     sym.interpreter=interpreter
+    sym.assign=assign
 
     sym=CKeyword.keyword('char')
     sym.interpreter=interpreter
+    sym.assign=assign
 
     def interpreter(self):
         if self.first.interpreter() :
@@ -526,10 +547,6 @@ def CInterpreterGrammar():
         temp=Scope.GoToVariable(None,self)
         return scope.findVariable(temp)
 
-##    def interpreter(self):
-##        temp=Scope.GoToVariable(None,self)
-##        return scope.findValueOfVariableOfStruct(self,temp)
-
     sym=CExpression.infix('.',80)
     sym.interpreter=interpreter
 
@@ -584,6 +601,160 @@ def CInterpreterGrammar():
 
     sym=CKeyword.keyword('return')
     sym.interpreter=interpreter
+
+    def interpreter(self):
+        if self.first.__class__() == []:
+            length=self.first.__len__()
+            temp=0
+            temp1=self.first
+            while temp < length:
+                self.first=temp1[temp]
+                scope.declareVariable(self)
+                temp=temp+1
+        else:
+            scope.declareVariable(self)
+
+    def assign(self,root):
+        temp=0
+        if hasattr(self,'std'):
+            if self.first.__class__() == []:
+                while temp<self.first.__len__():
+                    if root.second[temp]!=None:
+                        temp1=root.second[temp].interpreter()
+                        if temp1 > (self.value-1)/2:
+                            temp1=(self.value-1)/2
+                        elif temp1 < -1*(self.value+1)/2:
+                            temp1=-1*(self.value+1)/2
+                        scope.declareVariable(root,int(temp1),None,temp)
+                    else:
+                        scope.declareVariable(root,0,None,temp)
+                    temp=temp+1
+            else:
+                temp1=root.second.interpreter()
+                if temp1 > (self.value-1)/2:
+                    temp1=(self.value-1)/2
+                elif temp1 < -1*(self.value+1)/2:
+                    temp1=-1*(self.value+1)/2
+                scope.declareVariable(root,int(temp1))
+        else:
+            if root.second.id == '.':
+                mainvariable=scope.GoToVariable(root.second)
+                temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
+                if temp > (self.value-1)/2:
+                    temp=(self.value-1)/2
+                elif temp < -1*(self.value+1)/2:
+                    temp=-1*(self.value+1)/2
+                scope.changeValueOfVariable(root,int(temp))
+            else:
+                temp=root.second.interpreter()
+                if temp > (self.value-1)/2:
+                    temp=(self.value-1)/2
+                elif temp < -1*(self.value+1)/2:
+                    temp=-1*(self.value+1)/2
+                scope.changeValueOfVariable(root,int(temp))
+
+    sym=CKeyword.keyword('short')
+    sym.interpreter=interpreter
+    sym.assign=assign
+
+    sym=CKeyword.keyword('signed')
+    sym.interpreter=interpreter
+    sym.assign=assign
+
+    def assign(self,root):
+        temp=0
+        if hasattr(self,'std'):
+            if self.first.__class__() == []:
+                while temp<self.first.__len__():
+                    if root.second[temp]!=None:
+                        temp1=root.second[temp].interpreter()
+                        if temp1 > (self.value-1)/2:
+                            temp1=(self.value-1)/2
+                        elif temp1 < 0:
+                            temp1=0
+                        scope.declareVariable(root,int(temp1),None,temp)
+                    else:
+                        scope.declareVariable(root,0,None,temp)
+                    temp=temp+1
+            else:
+                temp1=root.second.interpreter()
+                if temp1 > (self.value-1)/2:
+                    temp1=(self.value-1)/2
+                elif temp1 < 0:
+                    temp1=0
+                scope.declareVariable(root,int(temp1))
+        else:
+            if root.second.id == '.':
+                mainvariable=scope.GoToVariable(root.second)
+                temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
+                if temp > (self.value-1)/2:
+                    temp=(self.value-1)/2
+                elif temp <  0:
+                    temp=0
+                scope.changeValueOfVariable(root,int(temp))
+            else:
+                temp=root.second.interpreter()
+                if temp > (self.value-1)/2:
+                    temp=(self.value-1)/2
+                elif temp < 0:
+                    temp=0
+                scope.changeValueOfVariable(root,int(temp))
+
+    sym=CKeyword.keyword('unsigned')
+    sym.interpreter=interpreter
+    sym.assign=assign
+
+    def assign(self,root):
+        temp=0
+        if hasattr(self,'std'):
+            if self.first.__class__() == []:
+                while temp<self.first.__len__():
+                    if root.second[temp]!=None:
+                        temp1=root.second[temp].interpreter()
+                        if self.value != None:
+                            if temp1 > (self.value-1)/2:
+                                temp1=(self.value-1)/2
+                            elif temp1 < -1*(self.value+1)/2:
+                                temp1=-1*(self.value+1)/2
+                            temp1=int(temp1)
+                        scope.declareVariable(root,temp1)
+                    else:
+                        scope.declareVariable(root,0,None,temp)
+                    temp=temp+1
+            else:
+                temp1=root.second.interpreter()
+                if self.value != None:
+                    if temp1 > (self.value-1)/2:
+                        temp1=(self.value-1)/2
+                    elif temp1 < -1*(self.value+1)/2:
+                        temp1=-1*(self.value+1)/2
+                    temp1=int(temp1)
+                scope.declareVariable(root,temp1)
+        else:
+            if root.second.id == '.':
+                mainvariable=scope.GoToVariable(root.second)
+                temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
+                if self.value != None:
+                    if temp > (self.value-1)/2:
+                        temp=(self.value-1)/2
+                    elif temp < -1*(self.value+1)/2:
+                        temp=-1*(self.value+1)/2
+                    temp=int(temp)
+                scope.changeValueOfVariable(root,temp)
+            else:
+                temp=root.second.interpreter()
+                if self.value != None:
+                    if temp > (self.value-1)/2:
+                        temp=(self.value-1)/2
+                    elif temp < -1*(self.value+1)/2:
+                        temp=-1*(self.value+1)/2
+                    temp=int(temp)
+                scope.changeValueOfVariable(root,temp)
+
+    sym=CKeyword.keyword('long')
+    sym.interpreter=interpreter
+    sym.assign=assign
+
 ################################################################################
 ################################################################################
 ##"Call C InterpreterGrammar()."                                              ##
