@@ -172,8 +172,28 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                                     self.first=arrayfirst
                                     return self
                                 self.second=arraysecond
+                                temp1=0
+                                if self.first.id == 'int':
+                                    if token != 'unsigned':
+                                        while temp1 < self.second.__len__():
+                                            if self.second[temp1] == None :
+                                                pass
+                                            elif self.second[temp1].id == '-':
+                                                if float(self.second[temp1].first.first)>2147483648:
+                                                    self.second[temp1].first.first='2147483648'
+                                            elif float(self.second[temp1].first)>2147483648:
+                                                self.second[temp1].first='2147483648'
+                                            temp1=temp1+1
                                 return self
                             self=expression.expression(0)
+                if token != 'unsigned':
+                    if self.first.id == 'int' and self.arity != 'function':
+                        if self.second.id == '-':
+                            if float(self.second.first.first)>2147483648:
+                                self.second.first.first='2147483648'
+                        elif float(self.second.first)>2147483648:
+                            self.second.first='2147483648'
+
         return self
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
 #Type Declaration                                                             ##

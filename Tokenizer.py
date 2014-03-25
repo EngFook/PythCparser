@@ -71,8 +71,7 @@ class Tokenizer:
             if self.wordAhead is not None:
                 if expected is not None:
                     if expected is not self.word:
-                        raise SyntaxError('Expected {0}, but encounterd {1}'
-                                          .format(expected,self.word))
+                        raise SyntaxError('Expected {0}, but encounterd {1}'.format(expected,self.word))
                 temp=self.wordAhead
                 self.wordAhead=None
                 return temp

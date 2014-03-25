@@ -792,6 +792,135 @@ def CkeywordGrammar():
             sym.std=std
             sym.first=None
             sym.__repr__=REPR
+
+            def REPR(self):
+                    return '({0} {1})'.format(self.id,self.first)
+
+            def std(self,previous=None):
+                if tokenizer.peepahead().id != 'int' :
+                    raise SyntaxError ('Should enter int nt {0}.'.format(tokenizer.peepahead().id))
+                temp=tokenizer.advance().std()
+                if temp.id == '=':
+                    self.first=temp.first
+                    temp.first=self
+                elif temp.id == 'int':
+                    self.first=temp
+                    return self
+                if previous==None:
+                    if temp.second.__class__() == [] :
+                        temp1=0
+                        while temp1 < temp.second.__len__():
+                            if temp.second[temp1]==None:
+                                pass
+                            elif temp.second[temp1].id == '-':
+                                if int(temp.second[temp1].first.first)>32767:
+                                    temp.second[temp1].first.first='32767'
+                            elif int(temp.second[temp1].first)>32767:
+                                temp.second[temp1].first='32767'
+                            temp1=temp1+1
+                    else:
+                        if temp.second.id == '-':
+                            if int(temp.second.first)>32767:
+                                temp.second.first='32767'
+                        elif int(temp.second.first)>32767:
+                            temp.second.first='32767'
+                return temp
+
+            sym=keyword('short')
+            sym.std=std
+            sym.first=None
+            sym.__repr__=REPR
+
+            def std(self):
+                List= ['short','int','char']
+                if tokenizer.peepahead().id not in List:
+                    raise SyntaxError ('Enter the wrong format after {0}.'.format(self.id))
+                temp=tokenizer.advance().std()
+                if temp.id == '=':
+                    self.first=temp.first
+                    temp.first=self
+                elif temp.id == 'int':
+                    self.first=temp
+                    return self
+                return
+
+            sym=keyword('long')
+            sym.std=std
+            sym.first=None
+            sym.__repr__=REPR
+
+            def std(self):
+                List= ['short','int','char']
+                if tokenizer.peepahead().id not in List:
+                    raise SyntaxError ('Enter the wrong format after {0}.'.format(self.id))
+                temp=tokenizer.advance().std(self.id)
+                if temp.id == '=':
+                    self.first=temp.first
+                    temp.first=self
+                elif temp.id == 'int':
+                    self.first=temp
+                    return self
+                if self.first.id == 'short':
+                    value ='65535'
+                elif self.first.id == 'int':
+                    value ='4294967295'
+                else:
+                    value='255'
+                if temp.second.__class__() == [] :
+                    temp1=0
+                    while temp1 < temp.second.__len__():
+                        if temp.second[temp1]==None:
+                            pass
+                        elif temp.second[temp1].id == '-':
+                            temp.second[temp1]=createLiteral('0')
+                        elif int(temp.second[temp1].first)>int(value):
+                            temp.second[temp1].first=value
+                        temp1=temp1+1
+                else:
+                    if temp.second.id == '-':
+                        temp.second=createLiteral('0')
+                    elif int(temp.second.first)>int(value):
+                        temp.second.first=value
+                return temp
+
+            sym=keyword('unsigned')
+            sym.std=std
+            sym.first=None
+            sym.__repr__=REPR
+
+            def std(self):
+                if tokenizer.peepahead().id != 'char':
+                    raise SyntaxError ('Should enter char nt {0}.'.format(tokenizer.peepahead().id))
+                temp=tokenizer.advance().std()
+                if temp.id == '=':
+                    self.first=temp.first
+                    temp.first=self
+                elif temp.id == 'int':
+                    self.first=temp
+                    return self
+                if temp.second.__class__() == [] :
+                    temp1=0
+                    while temp1 < temp.second.__len__():
+                        if temp.second[temp1]==None:
+                            pass
+                        elif temp.second[temp1].id == '-':
+                            if int(temp.second[temp1].first.first)>128:
+                                temp.second[temp1].first.first='128'
+                        elif int(temp.second[temp1].first)>127:
+                            temp.second[temp1].first='127'
+                        temp1=temp1+1
+                else:
+                    if temp.second.id == '-':
+                        if int(temp.second.first.first)>128:
+                            temp.second.first.first=128
+                    elif int(temp.second.first)>127:
+                        temp.second.first='127'
+                return temp
+
+            sym=keyword('signed')
+            sym.std=std
+            sym.first=None
+            sym.__repr__=REPR
 ################################################################################
 ################################################################################
 ##"Call C keywordGrammar."                                                    ##

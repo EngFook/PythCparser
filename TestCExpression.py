@@ -730,6 +730,107 @@ class TestExperession(unittest.TestCase):
         INT=List[1]
         self.assertEqual(INT.id,'int')
 
+    def test_short_int(self):
+        a =""" short int a = 2 ; """
+        """   =
+            /   \
+        short    2
+          |
+         int
+          |
+          a"""
+        root=CParser.parse(a)
+        self.assertEqual(root[0].id,'=')
+        short=root[0].first
+        self.assertEqual(short.id,'short')
+        INT=short.first
+        self.assertEqual(INT.id,'int')
+
+    def test_short_short_int(self):
+        a =""" short short int a = 2 ; """
+        """   =
+            /   \
+        short    2
+          |
+         int
+          |
+          a"""
+        self.assertRaises(SyntaxError,CParser.parse,a)
+
+    def test_short_long_int(self):
+        a =""" short long int a = 2 ; """
+        self.assertRaises(SyntaxError,CParser.parse,a)
+
+    def test_signed_int(self):
+        a =""" signed int a = 2 ; """
+        self.assertRaises(SyntaxError,CParser.parse,a)
+
+
+    def test_unsigned_short_int(self):
+        a ="""unsigned short int a = 2 ; """
+        """   =
+            /   \
+        unsigned 2
+          |
+        short
+          |
+         int
+          |
+          a"""
+        root=CParser.parse(a)
+        self.assertEqual(root[0].id,'=')
+        unsigned=root[0].first
+        self.assertEqual(unsigned.id,'unsigned')
+        short=unsigned.first
+        self.assertEqual(short.id,'short')
+        INT=short.first
+        self.assertEqual(INT.id,'int')
+
+    def test_int_limit(self):
+        a="""int a = 3147483649 , b = - 3147483649 ;"""
+        root=CParser.parse(a)
+        self.assertEqual(valueof(root[0].second[0]),'2147483648')
+        self.assertEqual(valueof(root[0].second[1].first),'2147483648')
+        self.assertEqual(root[0].second[1].id,'-')
+
+    def test_short_int_limit(self):
+        a='''short int a = 40000 , b = - 400000 ; '''
+        root=CParser.parse(a)
+        self.assertEqual(valueof(root[0].second[0]),'32767')
+        self.assertEqual(valueof(root[0].second[1].first),'32767')
+        self.assertEqual(root[0].second[1].id,'-')
+
+    def test_unsigned_short_int_limit(self):
+        a="""unsigned short int a = - 70000 , b = 700000 ;"""
+        root=CParser.parse(a)
+        self.assertEqual(valueof(root[0].second[0]),'0')
+        self.assertEqual(valueof(root[0].second[1]),'65535')
+
+    def test_unsigned_int_limit(self):
+        a="""unsigned int a = - 5294967295 , b = 5294967295 ;"""
+        root=CParser.parse(a)
+        self.assertEqual(valueof(root[0].second[0]),'0')
+        self.assertEqual(valueof(root[0].second[1]),'4294967295')
+
+    def test_long_int_limit(self):
+        a="""int a = 3147483649 , b = - 3147483649 ;"""
+        root=CParser.parse(a)
+        self.assertEqual(valueof(root[0].second[0]),'2147483648')
+        self.assertEqual(valueof(root[0].second[1].first),'2147483648')
+        self.assertEqual(root[0].second[1].id,'-')
+
+    def test_unsigned_char_limit(self):
+        a="""unsigned char a = 3147483649 , b = - 3147483649 ;"""
+        root=CParser.parse(a)
+        self.assertEqual(valueof(root[0].second[0]),'255')
+        self.assertEqual(valueof(root[0].second[1]),'0')
+
+    def test_signed_char_limit(self):
+        a="""signed char a = 3147483649 , b = - 3147483649 ;"""
+        root=CParser.parse(a)
+        self.assertEqual(valueof(root[0].second[0]),'127')
+        self.assertEqual(valueof(root[0].second[1].first),'128')
+        self.assertEqual(root[0].second[1].id,'-')
 
 
 ################################################################################
