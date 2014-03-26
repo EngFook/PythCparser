@@ -71,26 +71,7 @@ def Parse(str):
                             Manual Test here.
                                                                              """
 
-<<<<<<< HEAD
-a=Parse("""int main ( )
-             {
-                short int a = 70000 , b = - 70000 ;
-                unsigned short int c = 70000 , d = - 70000 ;
-                unsigned int e = 5000000000 , f = - 5000000000 ;
-                int g = 5000000000 , h = - 5000000000 ;
-                long int i = 5000000000 , j = - 5000000000 ;
-             }""")
+
+a=parse('''  typedef char alias [ 80 ] ''')
 
 print(a)
-CInterperter.Runinterpreter(a)
-CScope.scope.scopes
-=======
-a=parse('''  int main ( ) {
-
-               int z = a ;
-               data . d . x = 3 ;
-               z = data . d . x ; } ''')
-
-print(a)
-
->>>>>>> 7d521ef61a785388f790c71fc2905f0dd22a45b1
