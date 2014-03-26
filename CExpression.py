@@ -373,6 +373,7 @@ def CexpressionGrammar():
                 self.arity='postunary'
                 tokenizer.advance()
                 temp=[]
+                token=None
                 comma=False
                 check=tokenizer.peepahead()
                 while(check.id != ']'):
@@ -388,7 +389,10 @@ def CexpressionGrammar():
                 if(comma):
                     self.second=temp
                 else:
-                    self.second=token
+                    if token != None :
+                        self.second=token
+                    else:
+                        tokenizer.advance(']')
                 return self
 
             def REPR(self): #for print number or symbol instead of address
