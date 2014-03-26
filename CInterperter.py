@@ -640,17 +640,19 @@ def CInterpreterGrammar():
             if root.second.id == '.':
                 mainvariable=scope.GoToVariable(root.second)
                 temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
-                if temp > (self.value-1)/2:
-                    temp=(self.value-1)/2
-                elif temp < -1*(self.value+1)/2:
-                    temp=-1*(self.value+1)/2
+                temp1=scope.findVariable(self.first)
+                if temp > (temp1[0].value-1)/2:
+                    temp=(temp1[0].value-1)/2
+                elif temp < -1*(temp1[0].value+1)/2:
+                    temp=-1*(temp1[0].value+1)/2
                 scope.changeValueOfVariable(root,int(temp))
             else:
                 temp=root.second.interpreter()
-                if temp > (self.value-1)/2:
-                    temp=(self.value-1)/2
-                elif temp < -1*(self.value+1)/2:
-                    temp=-1*(self.value+1)/2
+                temp1=scope.findVariable(self.first)
+                if temp > (temp1[0].value-1)/2:
+                    temp=(temp1[0].value-1)/2
+                elif temp < -1*(temp1[0].value+1)/2:
+                    temp=-1*(temp1[0].value+1)/2
                 scope.changeValueOfVariable(root,int(temp))
 
     sym=CKeyword.keyword('short')
@@ -668,8 +670,8 @@ def CInterpreterGrammar():
                 while temp<self.first.__len__():
                     if root.second[temp]!=None:
                         temp1=root.second[temp].interpreter()
-                        if temp1 > (self.value-1)/2:
-                            temp1=(self.value-1)/2
+                        if temp1 > (self.value):
+                            temp1=(self.value)
                         elif temp1 < 0:
                             temp1=0
                         scope.declareVariable(root,int(temp1),None,temp)
@@ -678,8 +680,8 @@ def CInterpreterGrammar():
                     temp=temp+1
             else:
                 temp1=root.second.interpreter()
-                if temp1 > (self.value-1)/2:
-                    temp1=(self.value-1)/2
+                if temp1 > (self.value):
+                    temp1=(self.value)
                 elif temp1 < 0:
                     temp1=0
                 scope.declareVariable(root,int(temp1))
@@ -687,15 +689,17 @@ def CInterpreterGrammar():
             if root.second.id == '.':
                 mainvariable=scope.GoToVariable(root.second)
                 temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
-                if temp > (self.value-1)/2:
-                    temp=(self.value-1)/2
+                temp1=scope.findVariable(self.first)
+                if temp > (temp1[0].value):
+                    temp=(temp1[0].value)
                 elif temp <  0:
                     temp=0
                 scope.changeValueOfVariable(root,int(temp))
             else:
                 temp=root.second.interpreter()
-                if temp > (self.value-1)/2:
-                    temp=(self.value-1)/2
+                temp1=scope.findVariable(self.first)
+                if temp > (temp1[0].value):
+                    temp=(temp1[0].value)
                 elif temp < 0:
                     temp=0
                 scope.changeValueOfVariable(root,int(temp))
@@ -717,7 +721,7 @@ def CInterpreterGrammar():
                             elif temp1 < -1*(self.value+1)/2:
                                 temp1=-1*(self.value+1)/2
                             temp1=int(temp1)
-                        scope.declareVariable(root,temp1)
+                        scope.declareVariable(root,temp1,None,temp)
                     else:
                         scope.declareVariable(root,0,None,temp)
                     temp=temp+1
@@ -743,11 +747,12 @@ def CInterpreterGrammar():
                 scope.changeValueOfVariable(root,temp)
             else:
                 temp=root.second.interpreter()
-                if self.value != None:
-                    if temp > (self.value-1)/2:
-                        temp=(self.value-1)/2
-                    elif temp < -1*(self.value+1)/2:
-                        temp=-1*(self.value+1)/2
+                temp1=scope.findVariable(self.first)
+                if temp1[0].value != None:
+                    if temp > (temp1[0].value-1)/2:
+                        temp=(temp1[0].value-1)/2
+                    elif temp < -1*(temp1[0].value+1)/2:
+                        temp=-1*(temp1[0].value+1)/2
                     temp=int(temp)
                 scope.changeValueOfVariable(root,temp)
 

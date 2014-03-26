@@ -730,6 +730,68 @@ class TestExperession(unittest.TestCase):
         INT=List[1]
         self.assertEqual(INT.id,'int')
 
+    def test_short_int_a(self):
+        a="""short int a ; """
+        root=CParser.parse(a)
+        shortint=root[0]
+        self.assertEqual(shortint.id,'short int')
+        a=shortint.first
+        self.assertEqual(a.id,'(identifier)')
+        self.assertEqual(valueof(a),'a')
+
+    def test_short_int_a(self):
+        a="""short int a ; """
+        root=CParser.parse(a)
+        shortint=root[0]
+        self.assertEqual(shortint.id,'short int')
+        a=shortint.first
+        self.assertEqual(a.id,'(identifier)')
+        self.assertEqual(valueof(a),'a')
+
+    def test_short_double_a(self):
+        a=""" short double a ; """
+        self.assertRaises(SyntaxError,CParser.parse,a)
+
+    def test_unsigned_short_int_a(self):
+        a="""unsigned short int a ; """
+        root=CParser.parse(a)
+        unsignedshortint=root[0]
+        self.assertEqual(unsignedshortint.id,'unsigned short int')
+        a=unsignedshortint.first
+        self.assertEqual(a.id,'(identifier)')
+        self.assertEqual(valueof(a),'a')
+
+    def test_unsigned_int_a(self):
+        a="""unsigned int a ; """
+        root=CParser.parse(a)
+        unsignedint=root[0]
+        self.assertEqual(unsignedint.id,'unsigned int')
+        a=unsignedint.first
+        self.assertEqual(a.id,'(identifier)')
+        self.assertEqual(valueof(a),'a')
+
+    def test_long_double_a(self):
+        a="""long double a ; """
+        root=CParser.parse(a)
+        longdouble=root[0]
+        self.assertEqual(longdouble.id,'long double')
+        a=longdouble.first
+        self.assertEqual(a.id,'(identifier)')
+        self.assertEqual(valueof(a),'a')
+
+    def test_long_char_a(self):
+        a="""long char a ; """
+        self.assertRaises(SyntaxError,CParser.parse,a)
+
+    def test_unsigned_char_a(self):
+        a="""unsigned char a ;"""
+        root=CParser.parse(a)
+        unsignedchar=root[0]
+        self.assertEqual(unsignedchar.id,'unsigned char')
+        a=unsignedchar.first
+        self.assertEqual(a.id,'(identifier)')
+        self.assertEqual(valueof(a),'a')
+
 ################################################################################
 ################################################################################
 if __name__=='__main__':

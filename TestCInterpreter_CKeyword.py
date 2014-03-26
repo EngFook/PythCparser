@@ -1105,6 +1105,138 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1],4)
 
+    def test_int_limit_interpreter(self):
+        a="""int main ( )
+             {
+                short int a , b ;
+                unsigned short int c , d ;
+                unsigned int e , f ;
+                int g , h ;
+                long int i , j ;
+                a = 70000 ;
+                b = - 70000 ;
+                c = 70000 ;
+                d = - 70000 ;
+                e = 5000000000 ;
+                f = - 5000000000 ;
+                g = 5000000000 ;
+                h = - 5000000000 ;
+                i = 5000000000 ;
+                j = - 5000000000 ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[1],32767)
+        temp=scope.findVariable('b')
+        self.assertEqual(temp[1],-32768)
+        temp=scope.findVariable('c')
+        self.assertEqual(temp[1],65535)
+        temp=scope.findVariable('d')
+        self.assertEqual(temp[1],0)
+        temp=scope.findVariable('e')
+        self.assertEqual(temp[1],4294967295)
+        temp=scope.findVariable('f')
+        self.assertEqual(temp[1],0)
+        temp=scope.findVariable('g')
+        self.assertEqual(temp[1],2147483647)
+        temp=scope.findVariable('h')
+        self.assertEqual(temp[1],-2147483648)
+        temp=scope.findVariable('i')
+        self.assertEqual(temp[1],2147483647)
+        temp=scope.findVariable('j')
+        self.assertEqual(temp[1],-2147483648)
+
+    def test_char_limit_interpreter(self):
+        a="""int main ( )
+             {
+                signed char a , b ;
+                unsigned char c , d ;
+                a = 300 ;
+                b = - 300 ;
+                c = 300 ;
+                d = - 300 ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[1],127)
+        temp=scope.findVariable('b')
+        self.assertEqual(temp[1],-128)
+        temp=scope.findVariable('c')
+        self.assertEqual(temp[1],255)
+        temp=scope.findVariable('d')
+        self.assertEqual(temp[1],0)
+
+    def test_int_limit_assign_after_declare_interpreter(self):
+        a="""int main ( )
+             {
+                short int a = 70000 , b = - 70000 ;
+                unsigned short int c = 70000 , d = - 70000 ;
+                unsigned int e = 5000000000 , f = - 5000000000 ;
+                int g = 5000000000 , h = - 5000000000 ;
+                long int i = 5000000000 , j = - 5000000000 ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[1],32767)
+        temp=scope.findVariable('b')
+        self.assertEqual(temp[1],-32768)
+        temp=scope.findVariable('c')
+        self.assertEqual(temp[1],65535)
+        temp=scope.findVariable('d')
+        self.assertEqual(temp[1],0)
+        temp=scope.findVariable('e')
+        self.assertEqual(temp[1],4294967295)
+        temp=scope.findVariable('f')
+        self.assertEqual(temp[1],0)
+        temp=scope.findVariable('g')
+        self.assertEqual(temp[1],2147483647)
+        temp=scope.findVariable('h')
+        self.assertEqual(temp[1],-2147483648)
+        temp=scope.findVariable('i')
+        self.assertEqual(temp[1],2147483647)
+        temp=scope.findVariable('j')
+        self.assertEqual(temp[1],-2147483648)
+
+    def test_char_limit_assign_after_declare_interpreter(self):
+        a="""int main ( )
+             {
+                signed char a = 300 , b = - 300 ;
+                unsigned char c = 300 , d = - 300 ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[1],127)
+        temp=scope.findVariable('b')
+        self.assertEqual(temp[1],-128)
+        temp=scope.findVariable('c')
+        self.assertEqual(temp[1],255)
+        temp=scope.findVariable('d')
+        self.assertEqual(temp[1],0)
+
+    def test_declare_function_have_variable_interpreter(self):
+        a="""int add ( int c , int d ) ;
+             int main ( )
+             {
+                int a ;
+                a = add ( 2 , 3 ) + add ( 3 , 4 ) ;
+                return 0 ;
+             }
+
+             int add ( int a , int b )
+             {
+                return a + b ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[1],12)
+
+
 ################################################################################
 ################################################################################
 if __name__=='__main__':

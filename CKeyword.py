@@ -854,7 +854,7 @@ def CkeywordGrammar():
                     temp2.first=temp.first.first
                     temp.first=temp2
                     return temp
-                elif temp.id == 'int':
+                else:
                     temp2.first=temp.first
                     return temp2
 
