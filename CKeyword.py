@@ -496,6 +496,7 @@ def CkeywordGrammar():
             configureType('double')
             configureType('char')
             configureType('float')
+            configureType('void')
 ################################################################################
 # return + break and continue std -> return std
 ################################################################################
@@ -794,6 +795,7 @@ def CkeywordGrammar():
 
             def REPR(self):
                     return '({0})'.format(self.first)
+
             sym=keyword('"')
             sym.std=std
             sym.first=None

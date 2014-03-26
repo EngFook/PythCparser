@@ -566,9 +566,12 @@ def CInterpreterGrammar():
                 function=scope.findVariable(functionname)
                 scope.addScope()
                 temp=0
-                while temp < function[1].second.__len__():
-                    scope.declareVariable(function[1].second[temp],self.second[temp].interpreter())
-                    temp=temp+1
+                if function[1].second.__class__() == []:
+                    while temp < function[1].second.__len__():
+                        scope.declareVariable(function[1].second[temp],self.second[temp].interpreter())
+                        temp=temp+1
+                else:
+                    scope.declareVariable(function[1].second,self.second.interpreter())
                 temp=function[1].third.interpreter('function')
                 scope.deleteCurrentScope()
                 return temp
@@ -582,13 +585,23 @@ def CInterpreterGrammar():
                         token=root[temp]
                         break
                     temp=temp-1
-                if token == self or token.second.__len__() != self.second.__len__() or token.first.id != self.first.id :
+                if token.second.__class__() == []:
+                    if token.second.__len__() != self.second.__len__() :
+                        raise SyntaxError('Function has not declared correctly.')
+                else:
+                    if self.second.__class__() == []:
+                        raise SyntaxError('Function has not declared correctly.')
+                if token == self or token.first.id != self.first.id :
                     raise SyntaxError('Function has not declared correctly.')
                 temp=0
-                while temp < self.second.__len__():
-                    if self.second[temp].id != token.second[temp].id:
+                if self.second.__class__() == []:
+                    while temp < self.second.__len__():
+                        if self.second[temp].id != token.second[temp].id:
+                            raise SyntaxError('Function has not declared correctly.')
+                        temp=temp+1
+                else:
+                     if self.second.id != token.second.id:
                         raise SyntaxError('Function has not declared correctly.')
-                    temp=temp+1
                 scope.declareVariable(self,token)
             else:
                 self.third.interpreter('main')

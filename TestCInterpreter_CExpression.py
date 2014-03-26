@@ -198,6 +198,9 @@ class TestInterpreter_CExpression(unittest.TestCase):
         five=root[0].first[1].interpreter()
         self.assertEqual(three,3)
         self.assertEqual(five,5)
+
+    def test_array_interpreter(self):
+        a="""int a [ ] ;"""
 ################################################################################
 ################################################################################
 if __name__=='__main__':
