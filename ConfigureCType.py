@@ -50,7 +50,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         arraysecond=[]
         Passonce=False
 #  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" #
-        if hasattr(self,'attribute') :
+        if hasattr(self,'attribute'):
             for word in check_for_redeclaration:
                 if tokenizer.peepahead().first == word.first and self.attribute!='(enum)':
                     raise SyntaxError('Do not expect redeclaration of "{0}".'.format(word.first))

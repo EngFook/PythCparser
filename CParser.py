@@ -73,11 +73,11 @@ def Parse(str):
 
 
 
-a=parse(''' char name [ 7 ] = " hello xxx " ; ''')
+a=parse(''' func [ a ] [ b ] ; ''')
 
 print(a)
 
-##clearParseEnviroment()
+clearParseEnviroment()
 ##a=Parse(""" typedef struct
 ##            {
 ##                int a ;
@@ -90,14 +90,14 @@ print(a)
 ##                int b ;
 ##            } Data2 ;
 ##
-##            void foo ( Data2 ) ;
-##            void foo ( Data2 data ) ;
+##            // void foo ( Data2 ) ;
+##            /* void foo ( Data2 data ) ;
 ##
 ##             int main ( )
 ##            {
 ##                int data ;
 ##                foo ( data ) ;
-##            }  """)
+##            } */ """)
 ##print(a)
 ####CInterperter.Runinterpreter(a)
 
