@@ -654,6 +654,8 @@ def CkeywordGrammar():
                     self.second=None
                     return self
                 else:
+                        if hasattr(CheckAhead,'topass'):
+                            CheckAhead.topass=True
                         token=tokenizer.advance()
                         token2=None
                         if tokenizer.peepahead().id=='*':

@@ -180,12 +180,15 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                                 self.second=arraysecond
                                 return self
                             self=expression.expression(0)
-        if hasattr(self,'type') or (self.id=='=' and hasattr(self.first,'type')):
-            if hasattr(storetemp,'first') or storetemp==None:
-                if storetemp==None:
-                    raise SyntaxError('Expected ";"')
-                if storetemp.first!=';':
-                    raise SyntaxError('Expected ";"')
+        if hasattr(self,'type') or (self.id=='=' and hasattr(self,'topass')):
+            if hasattr(self,'topass'):
+                pass
+            else:
+                if hasattr(storetemp,'first') or storetemp==None:
+                    if storetemp==None:
+                        raise SyntaxError('Expected ";"')
+                    if storetemp.first!=';':
+                        raise SyntaxError('Expected ";"')
         return self
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
 #Type Declaration                                                             ##
@@ -234,10 +237,8 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                 sym.assign=symbolTable['enum'].assign
 
     else:
-        if type=='char':
-            pass
-        else:
-            sym.type=None
+        sym.topass=None
+        sym.type=None
         sym.std=std
         sym.first=None
         sym.second=None

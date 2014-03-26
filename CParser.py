@@ -70,5 +70,4 @@ def Parse(str):
 """
                             Manual Test here.
                                                                              """
-a=Parse("""int a [ ] ;""")
-print(a)
+
