@@ -71,6 +71,7 @@ def Parse(str):
                             Manual Test here.
                                                                              """
 
+<<<<<<< HEAD
 a=Parse("""int main ( )
              {
                 short int a = 70000 , b = - 70000 ;
@@ -83,3 +84,13 @@ a=Parse("""int main ( )
 print(a)
 CInterperter.Runinterpreter(a)
 CScope.scope.scopes
+=======
+a=parse('''  int main ( ) {
+
+               int z = a ;
+               data . d . x = 3 ;
+               z = data . d . x ; } ''')
+
+print(a)
+
+>>>>>>> 7d521ef61a785388f790c71fc2905f0dd22a45b1

@@ -266,10 +266,14 @@ def CexpressionGrammar():
 
             def led(self,leftToken):
                 if(leftToken.id == '(identifier)') or leftToken.id == '.':
-                    tokenizer.advance()
+                    temp=tokenizer.advance()
                     token=expression(self.leftBindingPower)
                     self.first=leftToken
                     self.second=token
+                    check=tokenizer.peepahead()
+                    if hasattr(check,'id'):
+                        if check.id!='=' and check.id!='.' and check.id=='}' and temp.id=='.':
+                            tokenizer.advance(';')
                     return self
                 else:
                     raise SyntaxError("Input should be identifier!")

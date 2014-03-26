@@ -455,22 +455,6 @@ class TestExperession(unittest.TestCase):
         self.assertEqual(valueof(y),'y')
         self.assertEqual(y.id,'(identifier)')
 
-    def testxdoty(self):
-        a='x . y ;'
-        """     .
-               / \
-              x   y """
-
-        root=CParser.parse(a)
-        self.assertEqual(root[0].id,'.')
-        self.assertEqual(root[0].arity,'binary')
-        x=root[0].first
-        self.assertEqual(valueof(x),'x')
-        self.assertEqual(x.id,'(identifier)')
-        y=root[0].second
-        self.assertEqual(valueof(y),'y')
-        self.assertEqual(y.id,'(identifier)')
-
     def testbracketforerror(self):
         a='func ( a ) ( b ) ;'
         self.assertRaises(SyntaxError,CParser.parse,a)
