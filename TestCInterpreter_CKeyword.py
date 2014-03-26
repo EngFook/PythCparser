@@ -334,11 +334,10 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[0],symbolTable['int'])
         self.assertEqual(temp[1], 6)
 
-
     def test_do_while_loop_interpreter(self):
-        a="""int x = 0
+        a="""int x = 0 ;
                 do {  x ++ ; }
-             while ( x < 3 ) ;"""
+             while ( x < 3 ) ;  """
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
@@ -369,8 +368,8 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root[0].interpreter()
         self.assertRaises(SyntaxError,root[1].interpreter)
 
-    def test_do_while_loop_interpreter(self):
-        a="""int x = 0
+    def test_do_while_loop_interpreter_2nd(self):
+        a="""int x = 0 ;
                 do { }
              while ( x < 3 ) ;"""
         root=CParser.oneTimeParse(a)
@@ -664,17 +663,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('x')
         self.assertEqual(temp[1]['b'][1],4)
 
-##    def test_struct_point_with_undeclared_variable_raise_error_interpreter(self):
-##        a="""
-##            struct test {
-##                int a ;
-##                int b ; } ;
-##                struct test x ;
-##                x . c = 2 ;"""
-##        root=CParser.parse(a)
-##        root[0].interpreter()
-##        root[1].interpreter()
-##        self.assertRaises(SyntaxError,root[2].interpreter)
 
     def test_struct_with_declaration_interpreter(self):
         a=""" struct Datatype {
@@ -952,7 +940,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
                    Data data ;
                    int z ;
                    data . c = 3 ;
-                   z = data . c
+                   z = data . c ;
                                       } """
 
         root=CParser.Parse(a)

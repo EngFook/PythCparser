@@ -71,5 +71,11 @@ def Parse(str):
                             Manual Test here.
                                                                              """
 
+a=parse('''  int main ( ) {
 
+               int z = a ;
+               data . d . x = 3 ;
+               z = data . d . x ; } ''')
+
+print(a)
 

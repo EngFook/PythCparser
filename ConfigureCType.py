@@ -109,6 +109,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             return self
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
         else:
+                storetemp=None
                 Passonce=False
                 temp=[]
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
@@ -131,17 +132,22 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                     self.first=expression.expression(100)
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
                 self=self.limitedExpression(0)
-                checkahead=tokenizer.peepahead()
-                if checkahead.first == ';':
-                    tokenizer.advance()
+
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
                 if hasattr(self,'function_attribute'):
-                   return self
+                    checkahead=tokenizer.peepahead()
+                    if checkahead.first==';':
+                        tokenizer.advance()
+                    return self
                 if hasattr(self,'type'):
                     if hasattr(self,'second'):
                         Passonce=True
                 if hasattr(self,'first'):
                     if hasattr(self.first,'type') or Passonce==True:
+                        checkahead=tokenizer.peepahead()
+                        if checkahead.first==';':
+                            storetemp=tokenizer.advance()
+                        checkahead=tokenizer.peepahead()
                         while checkahead.first==',':
                             checkahead=tokenizer.advance()
                             if hasattr(self,'second'):
@@ -172,28 +178,14 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                                     self.first=arrayfirst
                                     return self
                                 self.second=arraysecond
-##                                temp1=0
-##                                if self.first.id == 'int':
-##                                    if token != 'unsigned':
-##                                        while temp1 < self.second.__len__():
-##                                            if self.second[temp1] == None :
-##                                                pass
-##                                            elif self.second[temp1].id == '-':
-##                                                if float(self.second[temp1].first.first)>2147483648:
-##                                                    self.second[temp1].first.first='2147483648'
-##                                            elif float(self.second[temp1].first)>2147483648:
-##                                                self.second[temp1].first='2147483648'
-##                                            temp1=temp1+1
                                 return self
                             self=expression.expression(0)
-##                if token != 'unsigned':
-##                    if self.first.id == 'int' and self.arity != 'function':
-##                        if self.second.id == '-':
-##                            if float(self.second.first.first)>2147483648:
-##                                self.second.first.first='2147483648'
-##                        elif float(self.second.first)>2147483648:
-##                            self.second.first='2147483648'
-
+        if hasattr(self,'type') or (self.id=='=' and hasattr(self.first,'type')):
+            if hasattr(storetemp,'first') or storetemp==None:
+                if storetemp==None:
+                    raise SyntaxError('Expected ";"')
+                if storetemp.first!=';':
+                    raise SyntaxError('Expected ";"')
         return self
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
 #Type Declaration                                                             ##
@@ -242,10 +234,13 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                 sym.assign=symbolTable['enum'].assign
 
     else:
+        if type=='char':
+            pass
+        else:
+            sym.type=None
         sym.std=std
         sym.first=None
         sym.second=None
-        sym.type=None
         sym.normal=None
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR

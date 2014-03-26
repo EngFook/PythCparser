@@ -289,6 +289,33 @@ class TestKeyword_type(unittest.TestCase):
         two=arraysecond[1]
         self.assertEqual(valueof(two),'2')
 
+# Test string:
+
+    def test_string(self):
+        a=''' char name [ 80 ] = " hello " ; '''
+        """
+                            =
+                          /   \
+                          [   'hello'
+                        /  \
+                      char   80
+                       |
+                      name
+                                                """
+        root=CParser.parse(a)
+        equal=root[0]
+        self.assertEqual(equal.id,'=')
+        braket=equal.first
+        self.assertEqual(braket.id,'[')
+        CHar=braket.first
+        self.assertEqual(CHar.id,'char')
+        name=CHar.first
+        self.assertEqual(valueof(name),'name')
+        eighty=braket.second
+        self.assertEqual(valueof(eighty),'80')
+        hello=root[0].second
+        self.assertEqual(valueof(hello),'hello')
+
 ################################################################################
 ################################################################################
 if __name__ == '__main__':
