@@ -70,4 +70,26 @@ def Parse(str):
 """
                             Manual Test here.
                                                                              """
-
+##clearParseEnviroment()
+##a=Parse(""" typedef struct
+##            {
+##                int a ;
+##                int b ;
+##            }  Data1 ;
+##
+##            typedef struct
+##            {
+##                int a ;
+##                int b ;
+##            } Data2 ;
+##
+##            void foo ( Data2 ) ;
+##            void foo ( Data2 data ) ;
+##
+##             int main ( )
+##            {
+##                int data ;
+##                foo ( data ) ;
+##            }  """)
+##print(a)
+####CInterperter.Runinterpreter(a)
