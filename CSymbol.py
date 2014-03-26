@@ -53,6 +53,7 @@ def createIndentifier(value): # create identifier
     sym.first=None
     sym.content=None
     sym.arity=None
+    sym.type=None
     sym.__repr__=printCharacter
     sym.nud=nud
     symObj=sym()
@@ -60,7 +61,7 @@ def createIndentifier(value): # create identifier
     return symObj
 ##"Create SystemToken when it is (end)."                                      ##
 def createSystemToken(value): # create identifier
-    sym=symbol('(SystemToken)')
+    sym=symbol('(systemToken)')
     sym.first=None
     sym.arity=None
     sym.__repr__=printCharacter

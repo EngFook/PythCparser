@@ -776,12 +776,16 @@ def CkeywordGrammar():
                         temp=temp+''.join(space + CheckAhead.id)
                     CheckAhead=tokenizer.advance()
                 length=len(temp)
+                if Tokenstore==None:
+                    temp=createIndentifier(temp)
+                    temp.type='string'
+                    return temp
                 while length>int(Tokenstore.second.first):
                     temp=temp[:-1]
                     length=length-1
                     temp=''.join(temp)
                     if length==int(Tokenstore.second.first):
-                        SyntaxWarning('array out of range.')
+                        print ("Warning : array out of range " )
                         break
                 tokenizer.advance(';')
                 string(Tokenstore.first.first.first,temp)

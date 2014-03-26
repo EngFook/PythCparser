@@ -72,6 +72,6 @@ def Parse(str):
                                                                              """
 
 
-a=parse('''  typedef char alias [ 80 ] ''')
+a=parse(''' char name [ 7 ] = " hello xxx " ; ''')
 
 print(a)
