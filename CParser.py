@@ -72,7 +72,32 @@ def Parse(str):
                                                                              """
 
 
+
 a=parse(''' char name [ 7 ] = " hello xxx " ; ''')
 
 print(a)
+
+##clearParseEnviroment()
+##a=Parse(""" typedef struct
+##            {
+##                int a ;
+##                int b ;
+##            }  Data1 ;
+##
+##            typedef struct
+##            {
+##                int a ;
+##                int b ;
+##            } Data2 ;
+##
+##            void foo ( Data2 ) ;
+##            void foo ( Data2 data ) ;
+##
+##             int main ( )
+##            {
+##                int data ;
+##                foo ( data ) ;
+##            }  """)
+##print(a)
+####CInterperter.Runinterpreter(a)
 

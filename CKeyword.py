@@ -781,11 +781,11 @@ def CkeywordGrammar():
                     temp=createIndentifier(temp)
                     temp.type='string'
                     return temp
-                while length>int(Tokenstore.second.first):
+                while length>int(Tokenstore.first.second.first):
                     temp=temp[:-1]
                     length=length-1
                     temp=''.join(temp)
-                    if length==int(Tokenstore.second.first):
+                    if length==int(Tokenstore.first.second.first):
                         print ("Warning : array out of range " )
                         break
                 tokenizer.advance(';')

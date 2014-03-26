@@ -385,7 +385,7 @@ def CexpressionGrammar():
                         comma=True
                     temp.append(token)
                     check=tokenizer.advance()
-                self.first=leftToken
+                self.first=leftToken.first
                 if(comma):
                     self.second=temp
                 else:
@@ -393,7 +393,8 @@ def CexpressionGrammar():
                         self.second=token
                     else:
                         tokenizer.advance(']')
-                return self
+                leftToken.first=self
+                return leftToken
 
             def REPR(self): #for print number or symbol instead of address
                 if(self.arity=='grouping'):

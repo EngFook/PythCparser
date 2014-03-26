@@ -296,20 +296,20 @@ class TestKeyword_type(unittest.TestCase):
         """
                             =
                           /   \
-                          [   'hello'
-                        /  \
-                      char   80
-                       |
-                      name
-                                                """
+                        char   'hello'
+                         |
+                         [
+                       /   \
+                     name   80                                                """
+
         root=CParser.parse(a)
         equal=root[0]
         self.assertEqual(equal.id,'=')
-        braket=equal.first
+        char=equal.first
+        self.assertEqual(char.id,'char')
+        braket=char.first
         self.assertEqual(braket.id,'[')
-        CHar=braket.first
-        self.assertEqual(CHar.id,'char')
-        name=CHar.first
+        name=braket.first
         self.assertEqual(valueof(name),'name')
         eighty=braket.second
         self.assertEqual(valueof(eighty),'80')

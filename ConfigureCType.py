@@ -46,8 +46,6 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         return self
 
     def std(self,token=None):
-        if self.id == "void":
-            print('o-o')
         arrayfirst=[]
         arraysecond=[]
         Passonce=False

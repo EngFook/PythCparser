@@ -462,7 +462,7 @@ class TestExperession(unittest.TestCase):
 
     def test_bracket(self):
         a='func [ a ] [ b ] ;'
-        """    [
+        """     [
                /  \
               [    b
              / \
