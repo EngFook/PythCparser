@@ -191,7 +191,11 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                             self=expression.expression(0)
         if hasattr(self,'type') or (self.id=='=' and hasattr(self,'topass')):
             if hasattr(self,'topass'):
-                pass
+                if storetemp==None:
+                    if self.topass==True:
+                        pass
+                    else:
+                        tokenizer.advance(';')
             else:
                 if hasattr(storetemp,'first') or storetemp==None:
                     if storetemp==None:

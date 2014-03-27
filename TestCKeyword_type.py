@@ -296,7 +296,7 @@ class TestKeyword_type(unittest.TestCase):
         """
                             =
                           /   \
-                        char   'hello'
+                        char   hello
                          |
                          [
                        /   \
@@ -313,7 +313,9 @@ class TestKeyword_type(unittest.TestCase):
         self.assertEqual(valueof(name),'name')
         eighty=braket.second
         self.assertEqual(valueof(eighty),'80')
-        hello=root[0].second
+        identifier=root[0].second
+        self.assertEqual(identifier.id,'(identifier)')
+        hello=root[0].second.first
         self.assertEqual(valueof(hello),'hello')
 
 ################################################################################

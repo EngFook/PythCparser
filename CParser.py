@@ -78,26 +78,17 @@ def Parse(str):
 ##print(a)
 
 clearParseEnviroment()
-a=Parse("""  typedef struct
-            {
-                int a ;
-                int b ;
-            }  Data1 ;
+a=Parse(''' #define max 20
+            int main ( ) {
 
-            typedef struct
-            {
-                int a ;
-                int b ;
-            } Data2 ;
+            char name [ 80 ] = " hello " ;
+            int a ;
+            double c ;
+            a = 5 ;
+            c = max / 5 ;
 
-             void foo ( Data2 ) ;
-             void foo ( Data2 data )  ;
-
-             int main ( )
-            {
-                int data ;
-                foo ( data ) ;
-            }  """)
+            }
+             ''' )
 print(a)
 #CInterperter.Runinterpreter(a)
 

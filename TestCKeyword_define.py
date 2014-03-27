@@ -26,10 +26,10 @@ class TestKeyword_define(unittest.TestCase):
         root=CParser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'10 + (')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'10 + (')
 
     def test_define_statement_with_spaces(self):
         a='#  define Str 10 + ('
@@ -45,10 +45,10 @@ class TestKeyword_define(unittest.TestCase):
         define=root[0].second
         self.assertEqual(valueof(define),'define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'10 + (')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'10 + (')
 
     def test_two_define_statement_with_no_spaces(self):
         a='''#define Str 10 + (
@@ -67,16 +67,16 @@ class TestKeyword_define(unittest.TestCase):
         root=CParser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'10 + (')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'10 + (')
         self.assertEqual(root[1].id,'#define')
         Strsymbol=root[1].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Strtwo')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'20 * y')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'20 * y')
 
     def test_two_define_statement_with_spaces(self):
         a='''# define Str 10 + (
@@ -101,18 +101,18 @@ class TestKeyword_define(unittest.TestCase):
         define=root[0].second
         self.assertEqual(valueof(define),'define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'10 + (')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'10 + (')
         self.assertEqual(root[1].id,'#')
         define=root[1].second
         self.assertEqual(valueof(define),'define')
         Strsymbol=root[1].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Strtwo')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'20 * y')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'20 * y')
 
     def test_two_define_statement_with_no_spaces_and_spaces(self):
         a='''#define Str 10 + (
@@ -133,18 +133,18 @@ class TestKeyword_define(unittest.TestCase):
         root=CParser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'10 + (')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'10 + (')
         self.assertEqual(root[1].id,'#')
         define=root[1].second
         self.assertEqual(valueof(define),'define')
         Strsymbol=root[1].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Strtwo')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'20 * y')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'20 * y')
 
     def test_two_define_statement_with_spaces_and_no_spaces(self):
         a='''# define Str 10 + (
@@ -167,16 +167,16 @@ class TestKeyword_define(unittest.TestCase):
         define=root[0].second
         self.assertEqual(valueof(define),'define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'10 + (')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'10 + (')
         self.assertEqual(root[1].id,'#define')
         Strsymbol=root[1].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Strtwo')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'20 * y')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'20 * y')
 
     def test_define_statement_with_backslash(self):
         a='''#define Str \
@@ -189,10 +189,10 @@ class TestKeyword_define(unittest.TestCase):
         root=CParser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'10 + (')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'10 + (')
 
     def test_define_statement_with_multiple_backslash(self):
         a='''#define Str \
@@ -207,10 +207,10 @@ class TestKeyword_define(unittest.TestCase):
         root=CParser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'10 + (')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'10 + (')
 
     def test_two_define_statement_with_same_constantidentifier_but_different_constant_raiseSyntax(self):
         a='''#define Str 10 + (
@@ -254,53 +254,53 @@ class TestKeyword_define(unittest.TestCase):
         root=CParser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'StrAAA')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'123 + 123')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'123 + 123')
 
         self.assertEqual(root[1].id,'#')
         define=root[1].second
         self.assertEqual(valueof(define),'define')
         Strsymbol=root[1].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'StrBBB')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'333')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'333')
 
         self.assertEqual(root[2].id,'#')
         define=root[2].second
         self.assertEqual(valueof(define),'define')
         Strsymbol=root[2].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'StrCCC')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'A1B2C3')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'A1B2C3')
 
         self.assertEqual(root[3].id,'#')
         define=root[3].second
         self.assertEqual(valueof(define),'define')
         Strsymbol=root[3].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'StrDDD')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'652')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'652')
 
         self.assertEqual(root[4].id,'#')
         define=root[4].second
         self.assertEqual(valueof(define),'define')
         Strsymbol=root[4].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'StrEEE')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'123')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'123')
 
         self.assertEqual(root[5].id,'#define')
         Strsymbol=root[5].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'StrFFF')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'zzzz')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'zzzz')
 
     def test_define_replace_constantidentifier_to_expression(self):
           a='''#define Str  2 + 3 +
@@ -327,10 +327,10 @@ class TestKeyword_define(unittest.TestCase):
           root=CParser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Str')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'2 + 3 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'2 + 3 +')
           brace=root[1]
           self.assertEqual(brace.id,'{')
           plus1=brace.first[0]
@@ -397,10 +397,10 @@ class TestKeyword_define(unittest.TestCase):
           root=CParser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Str')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'5 * 6 *')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'5 * 6 *')
           brace=root[1]
           self.assertEqual(brace.id,'{')
           plus1=brace.first[0]
@@ -477,10 +477,10 @@ class TestKeyword_define(unittest.TestCase):
         root=CParser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'if ( x')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'if ( x')
         brace=root[1]
         self.assertEqual(brace.id,'{')
         if_id=brace.first[0]
@@ -525,10 +525,10 @@ class TestKeyword_define(unittest.TestCase):
         root=CParser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'for ( x = 0 ; x')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'for ( x = 0 ; x')
         brace=root[1]
         self.assertEqual(brace.id,'{')
         for_id=brace.first[0]
@@ -582,10 +582,10 @@ class TestKeyword_define(unittest.TestCase):
         root=CParser.parse(a)
         self.assertEqual(root[0].id,'#define')
         Strsymbol=root[0].first
-        self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+        self.assertEqual((Strsymbol.id),'(identifier)')
         self.assertEqual(valueof(Strsymbol),'Str')
-        statement=Strsymbol.constantidentifier
-        self.assertEqual(Strsymbol.constantidentifier,'x = 0 ; x')
+        statement=Strsymbol.constantidentifiercontent
+        self.assertEqual(Strsymbol.constantidentifiercontent,'x = 0 ; x')
         brace=root[1]
         self.assertEqual(brace.id,'{')
         for_id=brace.first[0]
@@ -648,16 +648,16 @@ class TestKeyword_define(unittest.TestCase):
           root=CParser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strtwo')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'100 + 200 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'100 + 200 +')
           self.assertEqual(root[1].id,'#define')
           Strsymbol=root[1].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Str')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'2 + 3 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'2 + 3 +')
           brace=root[2]
           self.assertEqual(brace.id,'{')
           plus1=brace.first[0]
@@ -738,22 +738,22 @@ class TestKeyword_define(unittest.TestCase):
           root=CParser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strthree')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'12345 + 12345678 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'12345 + 12345678 +')
           self.assertEqual(root[1].id,'#define')
           Strsymbol=root[1].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Str')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'2 + 3 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'2 + 3 +')
           self.assertEqual(root[2].id,'#define')
           Strsymbol=root[2].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strtwo')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'100 + 200 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'100 + 200 +')
           brace=root[3]
           self.assertEqual(brace.id,'{')
           plus1=brace.first[0]
@@ -838,22 +838,22 @@ class TestKeyword_define(unittest.TestCase):
           root=CParser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Str')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'2 + 3 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'2 + 3 +')
           self.assertEqual(root[1].id,'#define')
           Strsymbol=root[1].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strthree')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'12345 + 12345678 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'12345 + 12345678 +')
           self.assertEqual(root[2].id,'#define')
           Strsymbol=root[2].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strtwo')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'100 + 200 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'100 + 200 +')
           brace=root[3]
           self.assertEqual(brace.id,'{')
           plus1=brace.first[0]
@@ -937,24 +937,24 @@ class TestKeyword_define(unittest.TestCase):
           root=CParser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strtwo')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'100 + 200 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'100 + 200 +')
           self.assertEqual(root[1].id,'#define')
           Strsymbol=root[1].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strthree')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'12345 + 12345678 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'12345 + 12345678 +')
           self.assertEqual(root[2].id,'#')
           define=root[2].second
           self.assertEqual(valueof(define),'define')
           Strsymbol=root[2].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Str')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'4 + 5 *')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'4 + 5 *')
           brace=root[3]
           self.assertEqual(brace.id,'{')
           plus1=brace.first[0]
@@ -1038,24 +1038,24 @@ class TestKeyword_define(unittest.TestCase):
           root=CParser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strtwo')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'100 + 200 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'100 + 200 +')
           self.assertEqual(root[1].id,'#define')
           Strsymbol=root[1].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strthree')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'12345 + 12345678 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'12345 + 12345678 +')
           self.assertEqual(root[2].id,'#')
           define=root[2].second
           self.assertEqual(valueof(define),'define')
           Strsymbol=root[2].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Str')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'2 + 3 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'2 + 3 +')
           plus1=root[3]
           self.assertEqual(plus1.id,'+')
           self.assertEqual(plus1.arity,'binary')
@@ -1136,26 +1136,26 @@ class TestKeyword_define(unittest.TestCase):
           root=CParser.parse(a)
           self.assertEqual(root[0].id,'#define')
           Strsymbol=root[0].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strtwo')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'100 + 200 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'100 + 200 +')
           self.assertEqual(root[1].id,'#')
           define=root[1].second
           self.assertEqual(valueof(define),'define')
           Strsymbol=root[1].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Str')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'for ( x = 0 ; x')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'for ( x = 0 ; x')
           self.assertEqual(root[2].id,'#')
           define=root[2].second
           self.assertEqual(valueof(define),'define')
           Strsymbol=root[2].first
-          self.assertEqual((Strsymbol.id),'ConstantIdentifier')
+          self.assertEqual((Strsymbol.id),'(identifier)')
           self.assertEqual(valueof(Strsymbol),'Strthree')
-          statement=Strsymbol.constantidentifier
-          self.assertEqual(Strsymbol.constantidentifier,'2 + 3 +')
+          statement=Strsymbol.constantidentifiercontent
+          self.assertEqual(Strsymbol.constantidentifiercontent,'2 + 3 +')
           for_id=root[3]
           self.assertEqual(for_id.id,'for')
           equal=for_id.first

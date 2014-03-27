@@ -595,7 +595,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
     def test_define_only_one_statement_interpreter(self):
         a="""#define Str  2 + 3 +
             int a = 0 ;
-           { a = Str 4 }"""
+           { a = Str 4 ; }"""
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
