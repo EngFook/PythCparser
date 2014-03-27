@@ -61,6 +61,13 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
+        print('o-o')
+        return
+
+    sym=CExpression.infix('[',50)
+    sym.interpreter=interpreter
+
+    def interpreter(self):
         return float(self.first)
 
     sym=symbol('(literal)')
@@ -205,20 +212,33 @@ def CInterpreterGrammar():
     sym=CExpression.prefix('~',90)
     sym.interpreter=interpreter
 
-    def interpreter(self,main=None):
+    def interpreter(self,main=None,ReturnDataType=None):
         temp=[]
+        hasreturn=False
         a=0
         if main != 'main':
             scope.addScope()
         for index in self.first:
             if index.id == 'case':
                 break
-            temp=index.interpreter()
+            if index.id == 'return':
+                hasreturn=True
+                temp=index.interpreter(ReturnDataType)
+            else:
+                temp=index.interpreter()
             if main == 'function':
                 scope.deleteCurrentScope()
-                return temp
+                if ReturnDataType != 'void' and not hasreturn:
+                    raise SyntaxError('Should return somthing')
+                else:
+                    return temp
         if main != 'main':
             scope.deleteCurrentScope()
+            if main == 'function':
+                if ReturnDataType != 'void' and not hasreturn:
+                    raise SyntaxError('Should return something')
+                else:
+                    return temp
 
     sym=CKeyword.keyword('{')
     sym.interpreter=interpreter
@@ -232,7 +252,7 @@ def CInterpreterGrammar():
             temp=self.first.interpreter()
         else:
             temp=scope.findVariable(self.first.first)
-        temp[0].assign(self.first,self)
+        temp[0][0].assign(self.first,self)
         return "has changed value to the object"
 
     sym=CExpression.infix('=',10)
@@ -572,7 +592,7 @@ def CInterpreterGrammar():
                         temp=temp+1
                 else:
                     scope.declareVariable(function[1].second,self.second.interpreter())
-                temp=function[1].third.interpreter('function')
+                temp=function[1].third.interpreter('function',function[1].first.id)
                 scope.deleteCurrentScope()
                 return temp
             if scope.checkVariable(functionname):
@@ -609,8 +629,11 @@ def CInterpreterGrammar():
     sym=CExpression.infix('(',50)
     sym.interpreter=interpreter
 
-    def interpreter(self):
-        return self.first.interpreter()
+    def interpreter(self,ReturnDataType):
+        if ReturnDataType=='void':
+            raise SyntaxError('Void functin do not return anything.')
+        else:
+            return self.first.interpreter()
 
     sym=CKeyword.keyword('return')
     sym.interpreter=interpreter
@@ -654,18 +677,18 @@ def CInterpreterGrammar():
                 mainvariable=scope.GoToVariable(root.second)
                 temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
                 temp1=scope.findVariable(self.first)
-                if temp > (temp1[0].value-1)/2:
-                    temp=(temp1[0].value-1)/2
-                elif temp < -1*(temp1[0].value+1)/2:
-                    temp=-1*(temp1[0].value+1)/2
+                if temp > (temp1[0][0].value-1)/2:
+                    temp=(temp1[0][0].value-1)/2
+                elif temp < -1*(temp1[0][0].value+1)/2:
+                    temp=-1*(temp1[0][0].value+1)/2
                 scope.changeValueOfVariable(root,int(temp))
             else:
                 temp=root.second.interpreter()
                 temp1=scope.findVariable(self.first)
-                if temp > (temp1[0].value-1)/2:
-                    temp=(temp1[0].value-1)/2
-                elif temp < -1*(temp1[0].value+1)/2:
-                    temp=-1*(temp1[0].value+1)/2
+                if temp > (temp1[0][0].value-1)/2:
+                    temp=(temp1[0][0].value-1)/2
+                elif temp < -1*(temp1[0][0].value+1)/2:
+                    temp=-1*(temp1[0][0].value+1)/2
                 scope.changeValueOfVariable(root,int(temp))
 
     sym=CKeyword.keyword('short')
@@ -703,16 +726,16 @@ def CInterpreterGrammar():
                 mainvariable=scope.GoToVariable(root.second)
                 temp = scope.findValueOfVariableOfStruct(root.second,mainvariable)
                 temp1=scope.findVariable(self.first)
-                if temp > (temp1[0].value):
-                    temp=(temp1[0].value)
+                if temp > (temp1[0][0].value):
+                    temp=(temp1[0][0].value)
                 elif temp <  0:
                     temp=0
                 scope.changeValueOfVariable(root,int(temp))
             else:
                 temp=root.second.interpreter()
                 temp1=scope.findVariable(self.first)
-                if temp > (temp1[0].value):
-                    temp=(temp1[0].value)
+                if temp > (temp1[0][0].value):
+                    temp=(temp1[0][0].value)
                 elif temp < 0:
                     temp=0
                 scope.changeValueOfVariable(root,int(temp))
@@ -761,17 +784,19 @@ def CInterpreterGrammar():
             else:
                 temp=root.second.interpreter()
                 temp1=scope.findVariable(self.first)
-                if temp1[0].value != None:
-                    if temp > (temp1[0].value-1)/2:
-                        temp=(temp1[0].value-1)/2
-                    elif temp < -1*(temp1[0].value+1)/2:
-                        temp=-1*(temp1[0].value+1)/2
+                if temp1[0][0].value != None:
+                    if temp > (temp1[0][0].value-1)/2:
+                        temp=(temp1[0][0].value-1)/2
+                    elif temp < -1*(temp1[0][0].value+1)/2:
+                        temp=-1*(temp1[0][0].value+1)/2
                     temp=int(temp)
                 scope.changeValueOfVariable(root,temp)
 
     sym=CKeyword.keyword('long')
     sym.interpreter=interpreter
     sym.assign=assign
+
+
 
 ################################################################################
 ################################################################################

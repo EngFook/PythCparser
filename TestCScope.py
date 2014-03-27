@@ -34,7 +34,7 @@ class TestScope(unittest.TestCase):
         scope.declareVariable(root[0],int(root[0].second.interpreter()))
         temp=scope.findVariable('b')
         self.assertEqual(temp[1],2)
-        self.assertEqual(temp[0],symbolTable[root[0].first.id])
+        self.assertEqual(temp[0][0],symbolTable[root[0].first.id])
 
     def test_find_the_variable_in_diff_scope(self):
         scope=Scope()
@@ -44,7 +44,7 @@ class TestScope(unittest.TestCase):
         scope.addScope()
         temp=scope.findVariable('a')
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],symbolTable[root[0].first.id])
+        self.assertEqual(temp[0][0],symbolTable[root[0].first.id])
 
     def test_find_the__variable_from_diff_scope_with_variables(self):
         scope=Scope()
@@ -54,14 +54,14 @@ class TestScope(unittest.TestCase):
         scope.addScope()
         temp=scope.findVariable('a')
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],symbolTable[root[0].first.id])
+        self.assertEqual(temp[0][0],symbolTable[root[0].first.id])
         b="double b = 4 ;"
         root=CParser.parse(b)
         scope.declareVariable(root[0],int(root[0].second.interpreter()))
         scope.addScope()
         temp=scope.findVariable('b')
         self.assertEqual(temp[1],4)
-        self.assertEqual(temp[0],symbolTable[root[0].first.id])
+        self.assertEqual(temp[0][0],symbolTable[root[0].first.id])
 
     def test_change_variable(self):
         scope=Scope()
@@ -72,7 +72,7 @@ class TestScope(unittest.TestCase):
         scope.changeValueOfVariable(root[1],int(root[1].second.interpreter()))
         temp=scope.findVariable('a')
         self.assertEqual(temp[1],3)
-        self.assertEqual(temp[0],symbolTable[root[0].id])
+        self.assertEqual(temp[0][0],symbolTable[root[0].id])
 
     def test_cannot_declare_twice(self):
         scope=Scope()

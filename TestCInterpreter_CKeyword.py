@@ -33,10 +33,10 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],2)
         temp=scope.findVariable('b')
-        self.assertEqual(temp[0],symbolTable['double'])
+        self.assertEqual(temp[0][0],symbolTable['double'])
         self.assertEqual(temp[1],3)
 
     def test_with_assigened_indentfier_interpreter(self):
@@ -100,7 +100,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         root[0].interpreter()
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],0)
 
     def test_declate_twice_raise_error_interpreter(self):
@@ -118,7 +118,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],1)
 
     def test_int_a_with_a_divide_by_two_interpreter(self):
@@ -128,7 +128,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],0)
 
     def test_equal_with_int_zero_point_nine_interpreter(self):
@@ -139,7 +139,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],0)
 
     def test_equal_with_double_zero_point_nine_interpreter(self):
@@ -150,7 +150,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['double'])
+        self.assertEqual(temp[0][0],symbolTable['double'])
         self.assertEqual(temp[1],0.9)
 
 
@@ -162,7 +162,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],-1)
 
     def test_int_a_b_c_interpreter(self):
@@ -171,13 +171,13 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         root[0].interpreter()
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],0.)
         temp=scope.findVariable('b')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],0.)
         temp=scope.findVariable('c')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],0.)
 
     def test_int_a_with_value_plusplus_interpreter(self):
@@ -186,7 +186,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1] , 2 )
 
     def test_if_false_interpreter(self):
@@ -197,7 +197,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5 )
 
 
@@ -209,7 +209,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 4 )
 
     def test_if_with_else_interpreter(self):
@@ -221,7 +221,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 3 )
 
 
@@ -234,7 +234,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 3 )
 
     def test_if_with_else_if_false_interpreter(self):
@@ -247,7 +247,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5 )
 
     def test_if_with_condition_interpreter(self):
@@ -258,7 +258,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5 )
 
     def test_if_with_condition_many_statement_interpreter(self):
@@ -273,7 +273,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5 )
 
     def test_while_interpreter(self):
@@ -283,7 +283,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 1 )
 
     def test_while_infinity_lopp_raise_syntax_interpreter(self):
@@ -307,7 +307,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 4 )
 
     def test_while_loop_with_many_statment_diff_variable_interpreter(self):
@@ -325,13 +325,13 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 4 )
         temp=scope.findVariable('b')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5)
         temp=scope.findVariable('c')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 6)
 
     def test_do_while_loop_interpreter(self):
@@ -341,7 +341,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 3)
 
     def test_do_while_loop_with_many_statement_interpreter(self):
@@ -354,10 +354,10 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 3)
         temp=scope.findVariable('b')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 4)
 
     def test_while_loop_None_interpreter(self):
@@ -387,7 +387,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5)
 
 
@@ -401,7 +401,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('b')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5)
 
     def test_for_loop_with_multiple_working_interpreter(self):
@@ -415,10 +415,10 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('b')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['double'])
+        self.assertEqual(temp[0][0],symbolTable['double'])
         self.assertEqual(temp[1], 4)
 
     def test_switch_case_chose_default_interpreter(self):
@@ -431,7 +431,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 3 )
 
     def test_switch_case_chose_default_interpreter(self):
@@ -444,7 +444,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 4 )
 
     def test_switch_case_chose_case1_interpreter(self):
@@ -458,7 +458,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 1 )
 
     def test_switch_case_chose_case1_multiple_statement_interpreter(self):
@@ -472,7 +472,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 2 )
 
 
@@ -487,7 +487,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 4 )
 
     def test_switch_case_with_if_loop_interpreter(self):
@@ -507,7 +507,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 3 )
 
     def test_switch_case_with_if_loop_true_interpreter(self):
@@ -527,7 +527,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 2 )
 
     def test_switch_case_with_if_loop_chose_case_in_if_loop_interpreter(self):
@@ -547,7 +547,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 4 )
 
     def test_switch_case_with_if_loop_run_statement_outside_if_interpreter(self):
@@ -568,7 +568,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5 )
 
     def test_switch_case_with_if_loop_chose_default_interpreter(self):
@@ -589,7 +589,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 6 )
 
     def test_define_only_one_statement_interpreter(self):
@@ -599,7 +599,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 9 )
 
     def test_define_two_statement_interpreter(self):
@@ -609,10 +609,10 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 5 )
         temp=scope.findVariable('z')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1], 6 )
 
     def test_struct_interpreter(self):
@@ -625,7 +625,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['struct test'])
+        self.assertEqual(temp[0][0],symbolTable['struct test'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
 
@@ -640,11 +640,11 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['struct test'])
+        self.assertEqual(temp[0][0],symbolTable['struct test'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
         temp=scope.findVariable('y')
-        self.assertEqual(temp[0],symbolTable['struct test'])
+        self.assertEqual(temp[0][0],symbolTable['struct test'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
 
@@ -663,7 +663,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('x')
         self.assertEqual(temp[1]['b'][1],4)
 
-
     def test_struct_with_declaration_interpreter(self):
         a=""" struct Datatype {
                 int a ;
@@ -672,7 +671,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('data1')
-        self.assertEqual(temp[0],symbolTable['struct Datatype'])
+        self.assertEqual(temp[0][0],symbolTable['struct Datatype'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
 
@@ -684,11 +683,11 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('data1')
-        self.assertEqual(temp[0],symbolTable['struct Datatype'])
+        self.assertEqual(temp[0][0],symbolTable['struct Datatype'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
         temp=scope.findVariable('data2')
-        self.assertEqual(temp[0],symbolTable['struct Datatype'])
+        self.assertEqual(temp[0][0],symbolTable['struct Datatype'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
 
@@ -726,9 +725,9 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['Data2'])
+        self.assertEqual(temp[0][0],symbolTable['Data2'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
-        self.assertEqual(temp[1]['b'][0],symbolTable['int'])
+##        self.assertEqual(temp[1]['b'][0],symbolTable['int'])
 
     def test_typedef_struct_with_two_declaration_interpreter(self):
         a="""typedef struct {
@@ -740,11 +739,11 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['Data3'])
+        self.assertEqual(temp[0][0],symbolTable['Data3'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
         temp=scope.findVariable('y')
-        self.assertEqual(temp[0],symbolTable['Data3'])
+        self.assertEqual(temp[0][0],symbolTable['Data3'])
         self.assertEqual(temp[1]['a'][0],symbolTable['int'])
         self.assertEqual(temp[1]['b'][0],symbolTable['int'])
 
@@ -757,7 +756,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         Runinterpreter(root)
         self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
         temp=scope.findVariable('workday')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],None)
 
     def test_enum_with_two_variable_interpreter(self):
@@ -769,10 +768,10 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         Runinterpreter(root)
         self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
         temp=scope.findVariable('workday')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],None)
         temp=scope.findVariable('weekend')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],None)
 
     def test_enum_with_no_variable_interpreter(self):
@@ -797,7 +796,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         Runinterpreter(root)
         self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],0)
 
     def test_enum_with_variable_assign_with_integer_directly_interpreter(self):
@@ -813,7 +812,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         Runinterpreter(root)
         self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],1)
 
     def test_enum_with_variable_assign_with_integer_interpreter(self):
@@ -830,7 +829,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         Runinterpreter(root)
         self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],1)
 
     def test_enum_with_variable_assign_with_integer_interpreter(self):
@@ -846,7 +845,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         Runinterpreter(root)
         self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],0)
 
     def test_enum_with_two_variable_assign_with_integer_interpreter(self):
@@ -863,10 +862,10 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         Runinterpreter(root)
         self.assertEqual(symbolTable['enum DAY'].id,'enum DAY')
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],0)
         temp=scope.findVariable('y')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],1)
         CParser.clearParseEnviroment()
 
@@ -890,7 +889,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.Parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('data')
-        self.assertEqual(temp[0],symbolTable['Data'])
+        self.assertEqual(temp[0][0],symbolTable['Data'])
         self.assertEqual(temp[1]['d'][0],symbolTable['coordinate'])
         self.assertEqual(temp[1]['d'][1]['x'][0],symbolTable['float'])
         self.assertEqual(temp[1]['d'][1]['y'][0],symbolTable['float'])
@@ -916,7 +915,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.Parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('data')
-        self.assertEqual(temp[0],symbolTable['Data'])
+        self.assertEqual(temp[0][0],symbolTable['Data'])
         self.assertEqual(temp[1]['d'][0],symbolTable['coordinate'])
         self.assertEqual(temp[1]['d'][1]['x'][0],symbolTable['float'])
         self.assertEqual(temp[1]['d'][1]['x'][1],3)
@@ -946,11 +945,11 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.Parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('data')
-        self.assertEqual(temp[0],symbolTable['Data'])
+        self.assertEqual(temp[0][0],symbolTable['Data'])
         self.assertEqual(temp[1]['c'][0],symbolTable['double'])
         self.assertEqual(temp[1]['c'][1],3)
         temp=scope.findVariable('z')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],3)
 
     def test_struct_assign_struct_to_variable_struct_in_sturct_interpreter(self):
@@ -976,7 +975,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.Parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('z')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],3)
 
     def test_enum_with_x_and_y_interpreter(self):
@@ -988,10 +987,10 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.Parse(a)
         Runinterpreter(root)
         temp=scope.findVariable('x')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],0)
         temp=scope.findVariable('y')
-        self.assertEqual(temp[0],symbolTable['enum DAY'])
+        self.assertEqual(temp[0][0],symbolTable['enum DAY'])
         self.assertEqual(temp[1],0)
 
 
@@ -1004,7 +1003,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],3)
 
     def test_add_function_declaration_interpreter(self):
@@ -1013,7 +1012,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('add')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],root[1])
 
     def test_add_function_declaration_raise_error_interpreter(self):
@@ -1056,7 +1055,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],5)
 
     def test_call_function_twice_interpreter(self):
@@ -1075,7 +1074,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],12)
 
 
@@ -1084,13 +1083,13 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],1)
         temp=scope.findVariable('b')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],0)
         temp=scope.findVariable('c')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],4)
 
     def test_int_limit_interpreter(self):
@@ -1221,9 +1220,52 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         Runinterpreter(root)
         temp=scope.findVariable('a')
-        self.assertEqual(temp[0],symbolTable['int'])
+        self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],12)
 
+    def test_return_for_void_interpreter(self):
+        a="""void donothing ( int c , int d ) ;
+             int main ( )
+             {
+                donothing ( 3 , 4 ) ;
+                return 0 ;
+             }
+
+             void donothing ( int a , int b )
+             {
+                return 0 ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        self.assertRaises(SyntaxError,Runinterpreter,root)
+
+    def test_retrun_for_int_interpreter(self):
+        a="""int donothing ( int c , int d ) ;
+             int main ( )
+             {
+                donothing ( 3 , 4 ) ;
+                return 0 ;
+             }
+
+             int donothing ( int a , int b )
+             {
+               a = b  ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        self.assertRaises(SyntaxError,Runinterpreter,root)
+
+    def test_main_interpreter(self):
+        a="""int donothing ( int c , int d ) ;
+             int main ( )
+             {
+                donothing ( 3 , 4 ) ;
+             }
+
+             int donothing ( int a , int b )
+             {
+               return a  ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
 
 ################################################################################
 ################################################################################

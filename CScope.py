@@ -24,17 +24,24 @@ class Scope():
         del self.scopes[-1]
 
     def declareVariable(self,root,value=0,Datatype=None,index=None):
+        List=[]
+        temp=root.first
+        if hasattr(temp,'id'):
+            while temp.id == '[' or temp.id=='*':
+                List.append(temp)
+                temp=temp.first
         temp=self.GoToVariable(root,index)
-        if self.checkCurrnetScope(temp) != None :
-            raise SyntaxError ('"{0}" cannot defined twice. '.format(temp))
-        if Datatype == None:
+        if Datatype==None :
             temp1=root
             while not hasattr(temp1,'std'):
-                temp1=root.first
-            self.scopes[-1][temp]=(symbolTable[temp1.id],value)
-            return
+                    temp1=root.first
+            List.insert(0,symbolTable[temp1.id])
         else:
-            self.scopes[-1][temp]=(symbolTable[Datatype],value)
+            List.insert(0,symbolTable[Datatype])
+        if self.checkCurrnetScope(temp) != None :
+            raise SyntaxError ('"{0}" cannot defined twice. '.format(temp))
+        self.scopes[-1][temp]=(List,value)
+        return
 
     def checkVariable(self,variable):
         self.index=self.scopes.__len__()

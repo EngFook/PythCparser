@@ -73,31 +73,18 @@ def Parse(str):
 
 
 
-##a=parse(''' func [ a ] [ b ] ; ''')
+##a=parse("""int donothing ( int c , int d ) ;
+##             int main ( )
+##             {
+##                donothing ( 3 , 4 ) ;
+##             }
+##
+##             int donothing ( int a , int b )
+##             {
+##               a = b  ;
+##             }""")
 ##
 ##print(a)
+##CInterperter.Runinterpreter(a)
 
-clearParseEnviroment()
-a=Parse("""  typedef struct
-            {
-                int a ;
-                int b ;
-            }  Data1 ;
-
-            typedef struct
-            {
-                int a ;
-                int b ;
-            } Data2 ;
-
-             void foo ( Data2 ) ;
-             void foo ( Data2 data )  ;
-
-             int main ( )
-            {
-                int data ;
-                foo ( data ) ;
-            }  """)
-print(a)
-#CInterperter.Runinterpreter(a)
 
