@@ -54,21 +54,24 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             for word in check_for_redeclaration:
                 if tokenizer.peepahead().first == word.first and self.attribute!='(enum)':
                     raise SyntaxError('Do not expect redeclaration of "{0}".'.format(word.first))
-            if self.attribute=='(configureStructType)' or self.attribute=='(enum)' or self.attribute=='(typedef)':
-                if tokenizer.peepahead().id=='(identifier)':
-                    self.first=tokenizer.advance()
-                    check_for_redeclaration.append(self.first)
-                    if self.attribute=='(typedef)':
-                        tokenizer.advance(';')
-                else:
-                    if tokenizer.peepahead().id in symbolTable:
-                        raise SyntaxError ('Do not expect redeclaration of "{0}".'.format(self.id))
-                    raise SyntaxError ('Expected an "identifier" after {0}'.format(self.id))
+            if hasattr(self,'dofunction'):
+                pass
+            else:
+                if self.attribute=='(configureStructType)' or self.attribute=='(enum)' or self.attribute=='(typedef)':
+                    if tokenizer.peepahead().id=='(identifier)':
+                        self.first=tokenizer.advance()
+                        check_for_redeclaration.append(self.first)
+                        if self.attribute=='(typedef)':
+                            tokenizer.advance(';')
+                    else:
+                        if tokenizer.peepahead().id in symbolTable:
+                            raise SyntaxError ('Do not expect redeclaration of "{0}".'.format(self.id))
+                        raise SyntaxError ('Expected an "identifier" after {0}'.format(self.id))
 #  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" #
             self=self.limitedExpression(0)
             checkahead=tokenizer.peepahead()
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
-            if self.attribute=='void':
+            if hasattr(self,'dofunction'):
                 if checkahead.id==")":
                     return self.id
                 else:

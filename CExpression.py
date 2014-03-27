@@ -331,7 +331,7 @@ def CexpressionGrammar():
                             tokenizer.peepahead().function_attribute=None
                         functiondeclare=True
                         if hasattr(check,'origin'):
-                            check.attribute='void'
+                            check.dofunction=None
                         token=Keyword.parseStatement()
                         functiondeclare=False
                     else:
