@@ -65,22 +65,25 @@ def oneTimeParse(str):
 def Parse(str):
     return parse(str)
 
+
 ################################################################################
 ################################################################################
 """
                             Manual Test here.
                                                                              """
-zip
 
+def Initialization():
+    a=""" void printf (  ) ;
+          void printf (  )
+          {
+          }"""
+    root=Parse(a)
+    CInterperter.Runinterpreter(root)
+Initialization()
 
-a=parse("""
-            char name [ 80 ] = " Hello " ;
-            int a ;
-            double c ;
-            a = 5 ;
-            c = max / 5 ; """)
+a=parse("""     int a = 100 , b = 0 ;
 
-print(a)
-##CInterperter.Runinterpreter(a)
+                printf ( " Feifook is %d years old with %d IQ . " , a , b , " haha \n " ) ; """)
+CInterperter.Runinterpreter(a)
 
 

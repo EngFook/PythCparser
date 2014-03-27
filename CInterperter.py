@@ -26,7 +26,36 @@ def Runinterpreter(self):
         else:
             self[index].interpreter()
         index = index + 1
-##                                                                            ##
+##
+
+def FunctionForPrintf(self,content):
+    temp = 0 ;
+    value=[]
+    ForPrint=''
+    while temp < content.__len__() :
+        if content[temp].type == 'string':
+            if value != []:
+                PrintMany(ForPrint,value)
+                value=[]
+                ForPrint=''
+            ForPrint=ForPrint+'"'+content[temp].first+'"'
+        else:
+            value.append(scope.findVariable(content[temp].first)[1])
+        temp=temp+1
+    PrintMany(ForPrint,value)
+    ForPrint=' '
+    value=[]
+
+def PrintMany(ForPrint,value):
+    if value == []:
+        print(ForPrint)
+    elif value.__len__() == 1:
+        print(ForPrint % value[0])
+    elif value.__len__()==2:
+        print(ForPrint % (value[0],value[1]))
+    elif value.__len__()==3:
+        print(ForPrint % (value[0],value[1],value[2]))
+                                                         ##
 def CInterpreterGrammar():
     def interpreter(self):
         if self.arity == 'binary':
@@ -76,7 +105,10 @@ def CInterpreterGrammar():
     def interpreter(self):
         temp=scope.findVariable(self.first)
         if temp[1] != None:
-            return int(temp[1])
+            if temp[1].__class__()=={}:
+                return temp[1]
+            else:
+                return int(temp[1])
         else: return None
 
     sym=symbol('(identifier)')
@@ -584,6 +616,9 @@ def CInterpreterGrammar():
             functionname=scope.GoToVariable(self)
             if not hasattr(self.first,'std'):
                 function=scope.findVariable(functionname)
+                if functionname == "printf":
+                    FunctionForPrintf(function,self.second)
+                    return
                 scope.addScope()
                 temp=0
                 if function[1].second.__class__() == []:
@@ -610,18 +645,19 @@ def CInterpreterGrammar():
                         raise SyntaxError('Not same number of argument as defined in function prototype')
                 else:
                     if self.second.__class__() == []:
-                        raise SyntaxError('Function has not declared correctly.')
-                if token == self or token.first.id != self.first.id :
-                    raise SyntaxError('Function has not declared correctly.')
+                        raise SyntaxError('Not same number of argument as defined in function prototype')
+                if token.first.id != self.first.id :
+                    raise SyntaxError('The return data type not same')
                 temp=0
                 if self.second.__class__() == []:
                     while temp < self.second.__len__():
                         if self.second[temp].id != token.second[temp].id:
-                            raise SyntaxError('Function has not declared correctly.')
+                            raise SyntaxError('The datatype of the argument not same')
                         temp=temp+1
                 else:
+                    if self.second != None : # For those who do not pass in any argument
                      if self.second.id != token.second.id:
-                        raise SyntaxError('Function has not declared correctly.')
+                        raise SyntaxError('The datatype of the argument not same')
                 scope.declareVariable(self,token)
             else:
                 self.third.interpreter('main')
