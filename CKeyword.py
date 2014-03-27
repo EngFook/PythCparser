@@ -76,7 +76,7 @@ def CkeywordGrammar():
                 else:
                     token.second=None
                 token.first=tokenizer.advance()
-                token.first.id='ConstantIdentifier'
+                token.first.type='constantIdentifier'
                 constant_token=[]
                 checkAhead=tokenizer.peepahead()
                 tokenizer.checkdefine(True)
@@ -95,30 +95,30 @@ def CkeywordGrammar():
                 while checkAhead.first=='(newline)':
                     tokenizer.advance()
                     checkAhead=tokenizer.peepahead()
-                token.first.constantidentifier=' '.join(constant_token)
+                token.first.constantidentifiercontent=' '.join(constant_token)
                 checkAhead=tokenizer.peepahead()
                 if checkAhead.first=='(end)':
-                    token.first.constantidentifier=' '.join(constant_token)
+                    token.first.constantidentifiercontent=' '.join(constant_token)
                     return token
                 if hasattr(checkAhead,'std'):
                     if checkAhead.id=='#' or checkAhead.id=='#define':
-                        token.first.constantidentifier=' '.join(constant_token)
+                        token.first.constantidentifiercontent=' '.join(constant_token)
                         return token
-                    token.first.constantidentifier=' '.join(constant_token)
+                    token.first.constantidentifiercontent=' '.join(constant_token)
                     tokenizer.finishdefine(True)
                     return token
                 else:
                     tokenizer.finishdefine(True)
-                    token.first.constantidentifier=' '.join(constant_token)
+                    token.first.constantidentifiercontent=' '.join(constant_token)
                     tokenizer.specialcondition(True)
                     checkAhead=tokenizer.peepahead()
                     return token
 
             def REPR(self):
                 if self.second==None:
-                    return '({0} {1} {2})'.format(self.id, self.first,self.first.constantidentifier)
+                    return '({0} {1} {2})'.format(self.id, self.first,self.first.constantidentifiercontent)
                 else:
-                    return '({0}{1} {2} {3})'.format(self.id,self.second, self.first,self.first.constantidentifier)
+                    return '({0}{1} {2} {3})'.format(self.id,self.second, self.first,self.first.constantidentifiercontent)
 
             sym=keyword('#')
             sym.std=std
@@ -369,6 +369,7 @@ def CkeywordGrammar():
             previous=-1
             rootindex=0
 
+
             def std(self,symboltoken=None):
                 if symboltoken==None or symboltoken=='(enum)':
                     global previous
@@ -391,7 +392,10 @@ def CkeywordGrammar():
                                 if check.id=='(identifier)' and tokenizer.peepahead().first==',':
                                     tokenizer.advance(',')
                                 elif check.id=='(identifier)' and tokenizer.peepahead().id=='}':
-                                    pass
+                                        if symboltoken==None:
+                                            tokenizer.advance(';')
+                                        else:
+                                            pass
                                 else:
                                     tokenizer.advance(';')
                             array.append(temp)
@@ -778,6 +782,7 @@ def CkeywordGrammar():
                     CheckAhead=tokenizer.advance()
                 length=len(temp)
                 if Tokenstore==None:
+                    tokenizer.advance(';')
                     temp=createIndentifier(temp)
                     temp.type='string'
                     return temp
@@ -789,8 +794,10 @@ def CkeywordGrammar():
                         print ("Warning : array out of range " )
                         break
                 tokenizer.advance(';')
-                string(Tokenstore.first.first.first,temp)
-                self.first=temp
+                string(Tokenstore.first.first.first,createIndentifier(temp))
+                self.first=createIndentifier(temp)
+                self.id='(identifier)'
+                self.type='stringIdentifier'
                 return self.first
 
             def REPR(self):
@@ -800,7 +807,9 @@ def CkeywordGrammar():
             sym.std=std
             sym.first=None
             sym.__repr__=REPR
-
+################################################################################
+# Type std
+################################################################################
             def REPR(self):
                 if hasattr (self,'first'):
                     return '({0} {1})'.format(self.id,self.first)
