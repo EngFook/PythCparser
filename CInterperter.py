@@ -607,7 +607,7 @@ def CInterpreterGrammar():
                     temp=temp-1
                 if token.second.__class__() == []:
                     if token.second.__len__() != self.second.__len__() :
-                        raise SyntaxError('Function has not declared correctly.')
+                        raise SyntaxError('Not same number of argument as defined in function prototype')
                 else:
                     if self.second.__class__() == []:
                         raise SyntaxError('Function has not declared correctly.')

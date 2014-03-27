@@ -73,7 +73,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
             if hasattr(self,'dofunction'):
                 if checkahead.id==")":
-                    return self.id
+                    return self
                 else:
                     self.first=tokenizer.advance()
                     return self

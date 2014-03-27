@@ -782,7 +782,6 @@ def CkeywordGrammar():
                     CheckAhead=tokenizer.advance()
                 length=len(temp)
                 if Tokenstore==None:
-                    tokenizer.advance(';')
                     temp=createIndentifier(temp)
                     temp.type='string'
                     return temp

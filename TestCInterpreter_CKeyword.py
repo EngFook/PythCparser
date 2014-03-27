@@ -1040,7 +1040,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertRaises(SyntaxError,root[0].interpreter,root)
 
     def test_call_function_interpreter(self):
-        a="""int add ( int , int ) ;
+        a="""int add ( double , int ) ;
              int main ( )
              {
                 int a ;
@@ -1048,7 +1048,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
                 return 0 ;
              }
 
-             int add ( int a , int b )
+             int add ( double a , int b )
              {
                 return a + b ;
              }"""

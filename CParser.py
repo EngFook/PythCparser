@@ -70,21 +70,17 @@ def Parse(str):
 """
                             Manual Test here.
                                                                              """
+zip
 
 
+a=parse("""
+            char name [ 80 ] = " Hello " ;
+            int a ;
+            double c ;
+            a = 5 ;
+            c = max / 5 ; """)
 
-##a=parse("""int donothing ( int c , int d ) ;
-##             int main ( )
-##             {
-##                donothing ( 3 , 4 ) ;
-##             }
-##
-##             int donothing ( int a , int b )
-##             {
-##               a = b  ;
-##             }""")
-##
-##print(a)
+print(a)
 ##CInterperter.Runinterpreter(a)
 
 
