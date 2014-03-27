@@ -25,6 +25,9 @@ CKeyword.configure_C_Keyword(CExpression)
 CExpression.configure_C_Expression(CKeyword)
 ##"Global Tokenizer."                                                         ##
 global tokenizer
+
+
+
 ##"Refresh the SymbolTable when user defined."                                ##
 def clearParseEnviroment():
     temp1=[]
@@ -65,13 +68,6 @@ def oneTimeParse(str):
 def Parse(str):
     return parse(str)
 
-
-################################################################################
-################################################################################
-"""
-                            Manual Test here.
-                                                                             """
-
 def Initialization():
     a=""" void printf (  ) ;
           void printf (  )
@@ -81,9 +77,24 @@ def Initialization():
     CInterperter.Runinterpreter(root)
 Initialization()
 
-a=parse("""     int a = 100 , b = 0 ;
 
-                printf ( " Feifook is %d years old with %d IQ . " , a , b , " haha \n " ) ; """)
-CInterperter.Runinterpreter(a)
+################################################################################
+################################################################################
+"""
+                            Manual Test here.
+                                                                             """
+
+##a=parse(""" int feifok ( int ) ;
+##            int feifok ( double ) ;
+##            int feifok ( int a )
+##            {
+##                return a ;
+##            }
+##        """)
+##a=parse('''typedef struct {
+##                    int a ;
+##                    int b ;
+##                            } Data ;''')
+##CInterperter.Runinterpreter(a)
 
 

@@ -10,6 +10,9 @@ def valueof(symObj):
                                                                              """
 ##"Test start here."                                                          ##
 class TestKeyword_typedef(unittest.TestCase):
+    def setUp(self):
+        CParser.clearParseEnviroment()
+        CParser.Initialization()
 
     def test_typedef_struct(self):
         a='''typedef struct {
