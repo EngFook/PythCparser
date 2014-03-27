@@ -73,31 +73,31 @@ def Parse(str):
 
 
 
-a=parse(''' func [ a ] [ b ] ; ''')
-
-print(a)
+##a=parse(''' func [ a ] [ b ] ; ''')
+##
+##print(a)
 
 clearParseEnviroment()
-##a=Parse(""" typedef struct
-##            {
-##                int a ;
-##                int b ;
-##            }  Data1 ;
-##
-##            typedef struct
-##            {
-##                int a ;
-##                int b ;
-##            } Data2 ;
-##
-##            // void foo ( Data2 ) ;
-##            /* void foo ( Data2 data ) ;
-##
-##             int main ( )
-##            {
-##                int data ;
-##                foo ( data ) ;
-##            } */ """)
-##print(a)
-####CInterperter.Runinterpreter(a)
+a=Parse("""  typedef struct
+            {
+                int a ;
+                int b ;
+            }  Data1 ;
+
+            typedef struct
+            {
+                int a ;
+                int b ;
+            } Data2 ;
+
+             void foo ( Data2 ) ;
+             void foo ( Data2 data )  ;
+
+             int main ( )
+            {
+                int data ;
+                foo ( data ) ;
+            }  """)
+print(a)
+#CInterperter.Runinterpreter(a)
 

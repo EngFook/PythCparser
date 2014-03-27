@@ -330,6 +330,8 @@ def CexpressionGrammar():
                         if hasattr(tokenizer.peepahead(),'type') and hasattr(tokenizer.peepahead(),'normal'):
                             tokenizer.peepahead().function_attribute=None
                         functiondeclare=True
+                        if hasattr(check,'origin'):
+                            check.attribute='void'
                         token=Keyword.parseStatement()
                         functiondeclare=False
                     else:

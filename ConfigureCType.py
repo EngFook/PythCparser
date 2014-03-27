@@ -68,6 +68,12 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
             self=self.limitedExpression(0)
             checkahead=tokenizer.peepahead()
 # """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""'#
+            if self.attribute=='void':
+                if checkahead.id==")":
+                    return self.id
+                else:
+                    self.first=tokenizer.advance()
+                    return self
             if hasattr (self ,'type'):
                     if hasattr(self,'second'):
                             Passonce=True
@@ -228,6 +234,7 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
         sym.first=None
         sym.second=content
         sym.type=userDefined
+        sym.origin=None
         sym.attribute='(enum)'
         sym.limitedExpression=limitedExpression
         sym.__repr__=REPR
