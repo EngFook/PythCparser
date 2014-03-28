@@ -84,17 +84,46 @@ Initialization()
                             Manual Test here.
                                                                              """
 
-##a=parse(""" int feifok ( int ) ;
-##            int feifok ( double ) ;
-##            int feifok ( int a )
-##            {
-##                return a ;
-##            }
-##        """)
-##a=parse('''typedef struct {
-##                    int a ;
-##                    int b ;
-##                            } Data ;''')
-##CInterperter.Runinterpreter(a)
+a=oneTimeParse("""typedef struct {
+                    int a ;
+                    int b ;
+                            } Data ;
+
+           void function ( Data ) ;
+
+           void function ( Data  data )
+           {
+                data . a = 2 ;
+           }
+
+           int main ( )
+           {
+                Data data ;
+                function ( data ) ;
+                return 0 ;
+           }
+             """)
+
+print(a)
+
+b=oneTimeParse("""  typedef struct {
+                    int a ;
+                    int b ;
+                            } Data ;
+
+           void function ( Data ) ;
+
+             int main ( )
+           {
+                Data data ;
+                function ( data ) ;
+                return 0 ;
+           }
 
 
+           void function ( Data  data )
+           {
+                data . a = 2 ;
+                        } """)
+
+print(b)
