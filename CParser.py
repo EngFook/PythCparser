@@ -84,17 +84,14 @@ Initialization()
                             Manual Test here.
                                                                              """
 
-##a=parse(""" int feifok ( int ) ;
-##            int feifok ( double ) ;
-##            int feifok ( int a )
-##            {
-##                return a ;
-##            }
-##        """)
-##a=parse('''typedef struct {
-##                    int a ;
-##                    int b ;
-##                            } Data ;''')
-##CInterperter.Runinterpreter(a)
+a=parse("""
+            int add ( int ) ;
+            int add ( int ) ;
+            int add ( int a )
+            {
+                return a ;
+            }
+        """)
+CInterperter.Runinterpreter(a)
 
 

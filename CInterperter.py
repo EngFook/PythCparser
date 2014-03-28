@@ -20,8 +20,16 @@ assignTable={}
 ##"Interpreter the array root[i],i=1,2,3,...                                  ##
 def Runinterpreter(self):
     index=0
+    List=[]
     while index < self.__len__():
         if self[index].arity == 'function':
+            if self[index].third != None:
+                temp=0
+                while temp < List.__len__():
+                    if self[index].first.id == List[temp]:
+                        raise SyntaxError('There are two same function.')
+                    temp=temp+1
+                List.append(self[index].first.id)
             self[index].interpreter(self)
         else:
             self[index].interpreter()
@@ -631,6 +639,23 @@ def CInterpreterGrammar():
                 scope.deleteCurrentScope()
                 return temp
             if scope.checkVariable(functionname):
+                temp=scope.findVariable(functionname)[1]
+                if self.third == None :
+                    if temp.first.id != self.first.id :
+                        raise SyntaxError("Wrong Retrun Datatype of Redeclaration")
+                    elif temp.second.__class__() != []:
+                        if temp.second.id != self.second.id:
+                            raise SyntaxError("Argument of Redeclaration not same.")
+                    elif temp.second.__class__() == []:
+                        if self.second.__class__() != []:
+                            raise SyntaxError("Number argument of Redeclaration not same.")
+                        if temp.second.__len__()!= self.second.__len__():
+                            raise SyntaxError("Number argument of Redeclaration not same.")
+                        temp1=0
+                        while temp1<temp.second.__len__():
+                            if temp.second[temp1].id != self.second[temp1].id:
+                                raise SyntaxError("Wrong datatype of argument of Redeclaration")
+                            temp1=temp1+1
                 return
             if functionname != 'main':
                 temp=root.__len__()-1
