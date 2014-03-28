@@ -1039,45 +1039,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         self.assertRaises(SyntaxError,root[0].interpreter,root)
 
-    def test_call_function_interpreter(self):
-        a="""int add ( double , int ) ;
-             int main ( )
-             {
-                int a ;
-                a = add ( 2 , 3 ) ;
-                return 0 ;
-             }
-
-             int add ( double a , int b )
-             {
-                return a + b ;
-             }"""
-        root=CParser.oneTimeParse(a)
-        Runinterpreter(root)
-        temp=scope.findVariable('a')
-        self.assertEqual(temp[0][0],symbolTable['int'])
-        self.assertEqual(temp[1],5)
-
-    def test_call_function_twice_interpreter(self):
-        a="""int add ( int , int ) ;
-             int main ( )
-             {
-                int a ;
-                a = add ( 2 , 3 ) + add ( 3 , 4 ) ;
-                return 0 ;
-             }
-
-             int add ( int a , int b )
-             {
-                return a + b ;
-             }"""
-        root=CParser.oneTimeParse(a)
-        Runinterpreter(root)
-        temp=scope.findVariable('a')
-        self.assertEqual(temp[0][0],symbolTable['int'])
-        self.assertEqual(temp[1],12)
-
-
     def test_int_a_b_c_equal_2_3_interpreter(self):
         a="""int a = 1 , b , c = 4 ; """
         root=CParser.oneTimeParse(a)
@@ -1204,25 +1165,6 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         temp=scope.findVariable('d')
         self.assertEqual(temp[1],0)
 
-    def test_declare_function_have_variable_interpreter(self):
-        a="""int add ( int c , int d ) ;
-             int main ( )
-             {
-                int a ;
-                a = add ( 2 , 3 ) + add ( 3 , 4 ) ;
-                return 0 ;
-             }
-
-             int add ( int a , int b )
-             {
-                return a + b ;
-             }"""
-        root=CParser.oneTimeParse(a)
-        Runinterpreter(root)
-        temp=scope.findVariable('a')
-        self.assertEqual(temp[0][0],symbolTable['int'])
-        self.assertEqual(temp[1],12)
-
     def test_return_for_void_interpreter(self):
         a="""void donothing ( int c , int d ) ;
              int main ( )
@@ -1253,19 +1195,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.oneTimeParse(a)
         self.assertRaises(SyntaxError,Runinterpreter,root)
 
-    def test_main_interpreter(self):
-        a="""int donothing ( int c , int d ) ;
-             int main ( )
-             {
-                donothing ( 3 , 4 ) ;
-             }
 
-             int donothing ( int a , int b )
-             {
-               return a  ;
-             }"""
-        root=CParser.oneTimeParse(a)
-        Runinterpreter(root)
 
 ################################################################################
 ################################################################################

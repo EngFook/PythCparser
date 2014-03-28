@@ -75,6 +75,7 @@ def Initialization():
           }"""
     root=Parse(a)
     CInterperter.Runinterpreter(root)
+
 Initialization()
 
 
@@ -83,46 +84,17 @@ Initialization()
 """
                             Manual Test here.
                                                                              """
-a=oneTimeParse("""typedef struct {
-                    int a ;
-                    int b ;
-                            } Data ;
+a=Parse("""int donothing ( int c , int d ) ;
+             int main ( )
+             {
+                donothing ( 3 , 4 ) ;
+             }
 
-           void function ( Data ) ;
-
-           void function ( Data  data )
-           {
-                data . a = 2 ;
-           }
-
-           int main ( )
-           {
-                Data data ;
-                function ( data ) ;
-                return 0 ;
-           }
-             """)
+             int donothing ( int a , int b )
+             {
+               return a  ;
+             }
+""")
 
 print(a)
-
-b=oneTimeParse("""  typedef struct {
-                    int a ;
-                    int b ;
-                            } Data ;
-
-           void function ( Data ) ;
-
-             int main ( )
-           {
-                Data data ;
-                function ( data ) ;
-                return 0 ;
-           }
-
-
-           void function ( Data  data )
-           {
-                data . a = 2 ;
-                        } """)
-
-print(b)
+CInterperter.Runinterpreter(a)

@@ -13,7 +13,7 @@ def valueof(symObj):
 
 
 ##"Test start."                                                               ##
-class TestInterpreter_CKeyword(unittest.TestCase):
+class TestInterpreter_CKeywordForFunction(unittest.TestCase):
     def setUp(self):
         scope.__init__()
         CParser.clearParseEnviroment()
@@ -101,9 +101,81 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         root=CParser.Parse(a)
         self.assertRaises(SyntaxError,Runinterpreter,root)
 
+    def test_main_interpreter(self):
+        a="""int donothing ( int c , int d ) ;
+             int main ( )
+             {
+                donothing ( 3 , 4 ) ;
+             }
+
+             int donothing ( int a , int b )
+             {
+               return a  ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+
+    def test_declare_function_have_variable_interpreter(self):
+        a="""int add ( int c , int d ) ;
+             int main ( )
+             {
+                int a ;
+                a = add ( 2 , 3 ) + add ( 3 , 4 ) ;
+                return 0 ;
+             }
+
+             int add ( int a , int b )
+             {
+                return a + b ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0][0],symbolTable['int'])
+        self.assertEqual(temp[1],12)
+
+    def test_call_function_twice_interpreter(self):
+        a="""int add ( int , int ) ;
+             int main ( )
+             {
+                int a ;
+                a = add ( 2 , 3 ) + add ( 3 , 4 ) ;
+                return 0 ;
+             }
+
+             int add ( int a , int b )
+             {
+                return a + b ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0][0],symbolTable['int'])
+        self.assertEqual(temp[1],12)
+
+    def test_call_function_interpreter(self):
+        a="""int add ( double , int ) ;
+             int main ( )
+             {
+                int a ;
+                a = add ( 2 , 3 ) ;
+                return 0 ;
+             }
+
+             int add ( double a , int b )
+             {
+                return a + b ;
+             }"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0][0],symbolTable['int'])
+        self.assertEqual(temp[1],5)
+
+
 
 ################################################################################
 ################################################################################
 if __name__=='__main__':
-        suite = unittest.TestLoader().loadTestsFromTestCase(TestInterpreter_CKeyword)
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestInterpreter_CKeywordForFunction)
         unittest.TextTestRunner(verbosity=2).run(suite)

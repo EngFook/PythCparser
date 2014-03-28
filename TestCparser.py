@@ -17,7 +17,7 @@ from TestCKeyword_for_loop import *
 from TestCKeyword_switch_case import *
 from TestCInterpreter_CKeyword import *
 from TestCInterpreter_CExpression import *
-##from TestCInterpreter_CKeywordForFunction import *
+from TestCInterpreter_CKeywordForFunction import *
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """
                                 Test start here

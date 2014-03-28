@@ -26,10 +26,10 @@ def Runinterpreter(self):
             if self[index].third != None:
                 temp=0
                 while temp < List.__len__():
-                    if self[index].first.id == List[temp]:
+                    if self[index].first.first.first == List[temp]:
                         raise SyntaxError('There are two same function.')
                     temp=temp+1
-                List.append(self[index].first.id)
+                List.append(self[index].first.first.first)
             self[index].interpreter(self)
         else:
             self[index].interpreter()
@@ -644,8 +644,9 @@ def CInterpreterGrammar():
                     if temp.first.id != self.first.id :
                         raise SyntaxError("Wrong Retrun Datatype of Redeclaration")
                     elif temp.second.__class__() != []:
-                        if temp.second.id != self.second.id:
-                            raise SyntaxError("Argument of Redeclaration not same.")
+                        if temp.second != None:
+                            if temp.second.id != self.second.id:
+                                raise SyntaxError("Argument of Redeclaration not same.")
                     elif temp.second.__class__() == []:
                         if self.second.__class__() != []:
                             raise SyntaxError("Number argument of Redeclaration not same.")
