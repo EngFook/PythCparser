@@ -76,7 +76,7 @@ def Initialization():
     root=Parse(a)
     CInterperter.Runinterpreter(root)
 
-##Initialization()
+Initialization()
 
 
 ################################################################################
@@ -87,15 +87,19 @@ def Initialization():
 a=Parse("""
 
 
-
-
-        int a [ ] ;
-        int a [ 8 ] ;
-        int a [ ] = { 1 } ;
-        int a [ ] = { 1 , 3  , 4 } ;
-
-""")
-
+int main ( ) {   float a , b , c ;
+      printf ( " Enter three numbers : " ) ;
+      a = 8 ;
+      b = 9 ;
+      c = 5 ;
+      if ( a >= b && a >= c )
+        printf ( " Largest number = %.2f " , a ) ;
+      if ( b >= a && b >= c )
+         printf ( " Largest number = %.2f " , b ) ;
+      if ( c >= a && c >= b )
+         printf ( " Largest number = %.2f " , c ) ;
+      return 0 ;  }                                           """)
+##
 
 print(a)
-##CInterperter.Runinterpreter(a)
+CInterperter.Runinterpreter(a)

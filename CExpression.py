@@ -200,6 +200,8 @@ def CexpressionGrammar():
 
             sym=infix('**',70)
             sym.led=led
+            sym=infix('&&',5)
+            sym.led=led
             sym.__repr__=REPR
             sym=infix('==',10)
             sym.led=led
