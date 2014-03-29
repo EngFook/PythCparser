@@ -76,7 +76,7 @@ def Initialization():
     root=Parse(a)
     CInterperter.Runinterpreter(root)
 
-Initialization()
+##Initialization()
 
 
 ################################################################################
@@ -85,6 +85,17 @@ Initialization()
                             Manual Test here.
                                                                              """
 a=Parse("""
-           int a [ ] , b [ ] ; """)
+
+
+
+
+        int a [ ] ;
+        int a [ 8 ] ;
+        int a [ ] = { 1 } ;
+        int a [ ] = { 1 , 3  , 4 } ;
+
+""")
+
+
 print(a)
 ##CInterperter.Runinterpreter(a)

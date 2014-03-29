@@ -93,7 +93,7 @@ class TestInterpreter_CKeywordForFunction(unittest.TestCase):
             {
                 return a ;
             }
-            int add ( int a )
+            int add ( int b )
             {
                 return b ;
             }
@@ -171,6 +171,7 @@ class TestInterpreter_CKeywordForFunction(unittest.TestCase):
         temp=scope.findVariable('a')
         self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],5)
+
 
 
 
