@@ -489,7 +489,6 @@ def CkeywordGrammar():
             sym.back={}
             sym.address={}
             sym.first=None
-            sym.test='o-o'
             sym.second=None
             sym.__repr__=REPR
 ################################################################################
