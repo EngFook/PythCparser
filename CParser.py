@@ -76,7 +76,7 @@ def Initialization():
     root=Parse(a)
     CInterperter.Runinterpreter(root)
 
-##Initialization()
+Initialization()
 
 
 ################################################################################
@@ -84,4 +84,5 @@ def Initialization():
 """
                             Manual Test here.
                                                                              """
+
 

@@ -40,16 +40,22 @@ def FunctionForPrintf(self,content):
     temp = 0 ;
     value=[]
     ForPrint=''
-    while temp < content.__len__() :
-        if content[temp].type == 'string':
-            if value != []:
-                PrintMany(ForPrint,value)
-                value=[]
-                ForPrint=''
-            ForPrint=ForPrint+'"'+content[temp].first+'"'
-        else:
-            value.append(scope.findVariable(content[temp].first)[1])
-        temp=temp+1
+    if hasattr(content,'type'):
+        if content.type=='string':
+            ForPrint=ForPrint+'"'+content.first+'"'
+    else:
+        length=content.__len__()
+        while temp < length :
+            if content[temp].type=='string':
+                ForPrint=ForPrint+'"'+content[temp].first+'"'
+            elif value != []:
+                    PrintMany(ForPrint,value)
+                    value=[]
+                    ForPrint=''
+                    ForPrint=ForPrint+'"'+content.first+'"'
+            else:
+                value.append(scope.findVariable(content[temp].first)[1])
+            temp=temp+1
     PrintMany(ForPrint,value)
     ForPrint=' '
     value=[]
@@ -87,6 +93,12 @@ def CInterpreterGrammar():
         return self.first.interpreter() / self.second.interpreter()
 
     sym=CExpression.infix('/',60)
+    sym.interpreter=interpreter
+
+    def interpreter(self):
+        return self.first.interpreter() and self.second.interpreter()
+
+    sym=CExpression.infix('&&',5)
     sym.interpreter=interpreter
 
     def interpreter(self):
