@@ -84,17 +84,7 @@ Initialization()
 """
                             Manual Test here.
                                                                              """
-a=Parse("""int donothing ( int c , int d ) ;
-             int main ( )
-             {
-                donothing ( 3 , 4 ) ;
-             }
-
-             int donothing ( int a , int b )
-             {
-               return a  ;
-             }
-""")
-
+a=Parse("""
+           int a [ ] = { 1 , 3  , 4 } ; """)
 print(a)
-CInterperter.Runinterpreter(a)
+##CInterperter.Runinterpreter(a)

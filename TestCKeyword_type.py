@@ -289,6 +289,99 @@ class TestKeyword_type(unittest.TestCase):
         two=arraysecond[1]
         self.assertEqual(valueof(two),'2')
 
+    """
+        bingran look here
+    """
+# Test type with array:
+    def test_type_with_array(self):
+        a=''' int a [ ] ; '''
+        """
+                int
+                 |
+                 [
+                /
+               a            """
+        root=CParser.parse(a)
+        INT=root[0]
+        self.assertEqual(INT.id,'int')
+        braket=root[0].first
+        self.assertEqual(braket.id,'[')
+        a=braket.first
+        self.assertEqual(valueof(a),'a')
+
+    def test_type_with_array_with_value(self):
+        a=''' int a [ 8 ] ; '''
+        """
+                int
+                 |
+                 [
+                / \
+               a   8         """
+        root=CParser.parse(a)
+        INT=root[0]
+        self.assertEqual(INT.id,'int')
+        braket=root[0].first
+        self.assertEqual(braket.id,'[')
+        a=braket.first
+        self.assertEqual(valueof(a),'a')
+        eight=braket.second
+        self.assertEqual(valueof(eight),'8')
+
+    def test_type_with_assign_value_to_array(self):
+        a=''' int a [ 8 ] = { 2 } ; '''
+        """
+                    =
+                  /   \
+                int    {--2
+                 |
+                 [
+                / \
+               a   8         """
+        root=CParser.parse(a)
+        equal=root[0]
+        self.assertEqual(equal.id,'=')
+        INT=root[0].first
+        self.assertEqual(INT.id,'int')
+        braket=INT.first
+        self.assertEqual(braket.id,'[')
+        a=braket.first
+        self.assertEqual(valueof(a),'a')
+        eight=braket.second
+        self.assertEqual(valueof(eight),'8')
+        brace=root[0].second
+        self.assertEqual(brace.id,'{')
+        two=brace.first[0]
+        self.assertEqual(valueof(two),'2')
+
+
+    def test_type_with_assign_value_more_than_one_to_array(self):
+        a=''' int a [ 8 ] = { 2 , 3 } ; '''
+        """
+                    =
+                  /   \
+                int    {--2
+                 |     |--3
+                 [
+                / \
+               a   8         """
+        root=CParser.parse(a)
+        equal=root[0]
+        self.assertEqual(equal.id,'=')
+        INT=root[0].first
+        self.assertEqual(INT.id,'int')
+        braket=INT.first
+        self.assertEqual(braket.id,'[')
+        a=braket.first
+        self.assertEqual(valueof(a),'a')
+        eight=braket.second
+        self.assertEqual(valueof(eight),'8')
+        brace=root[0].second
+        self.assertEqual(brace.id,'{')
+        two=brace.first[0]
+        self.assertEqual(valueof(two),'2')
+        three=brace.first[1]
+        self.assertEqual(valueof(three),'3')
+
 # Test string:
 
     def test_string(self):
