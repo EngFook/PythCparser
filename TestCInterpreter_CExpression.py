@@ -13,6 +13,10 @@ def valueof(symObj):
 
 ##"Test start."                                                               ##
 class TestInterpreter_CExpression(unittest.TestCase):
+    def setUp(self):
+        scope.__init__()
+        CParser.clearParseEnviroment()
+
     def test_plus_interpreter(self):
         a=" 2 + 3 ;"
         root=CParser.oneTimeParse(a)
@@ -199,8 +203,54 @@ class TestInterpreter_CExpression(unittest.TestCase):
         self.assertEqual(three,3)
         self.assertEqual(five,5)
 
-    def test_array_interpreter(self):
+    def test_array_raise_error1_interpreter(self):
         a="""int a [ ] ;"""
+        root=CParser.oneTimeParse(a)
+        self.assertRaises(SyntaxError,root[0].interpreter)
+
+    def test_array_raise_error2_interpreter(self):
+        a="""int a [ 2 ] ;
+             a [ 2 ] = 5 ;"""
+        root=CParser.oneTimeParse(a)
+        self.assertRaises(SyntaxError,Runinterpreter,root)
+
+    def test_array_interpreter(self):
+        a="""int a [ 2 ] ;"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0][0],symbolTable['int'])
+        self.assertEqual(temp[0][1].id,'[')
+        self.assertEqual(temp[1][0],None)
+        self.assertEqual(temp[1][1],None)
+
+    def test_array_asign_interpreter(self):
+        a="""int a [ 2 ] ;
+             a [ 1 ] = 3 ;
+             a [ 0 ] = 1 ;"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0][0],symbolTable['int'])
+        self.assertEqual(temp[0][1].id,'[')
+        self.assertEqual(temp[1][0],1)
+        self.assertEqual(temp[1][1],3)
+
+    def test_array_assign_value_interpreter(self):
+        a="""int a [ 2 ] , b ;
+             a [ 1 ] = 5 ;
+             b = a [ 1 ] + 1 ;"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0][0],symbolTable['int'])
+        self.assertEqual(temp[0][1].id,'[')
+        self.assertEqual(temp[1][1],5)
+        temp=scope.findVariable('b')
+        self.assertEqual(temp[0][0],symbolTable['int'])
+        self.assertEqual(temp[1],6)
+
+
 ################################################################################
 ################################################################################
 if __name__=='__main__':

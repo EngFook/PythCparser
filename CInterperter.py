@@ -98,8 +98,8 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
-        print('o-o')
-        return
+        temp=scope.findVariable(self.first.first)
+        return temp[1][int(self.second.first)]
 
     sym=CExpression.infix('[',50)
     sym.interpreter=interpreter
@@ -290,6 +290,11 @@ def CInterpreterGrammar():
             return "has assigned value to the object"
         elif self.first.id == '.':
             temp=self.first.interpreter()
+        elif self.first.id == '[':
+            index=int(self.first.second.first)
+            temp=scope.findVariable(self.first.first.first)
+            if temp[1].__len__() <=index:
+                raise SyntaxError('array size not correct')
         else:
             temp=scope.findVariable(self.first.first)
         temp[0][0].assign(self.first,self)
@@ -308,6 +313,9 @@ def CInterpreterGrammar():
                 scope.declareVariable(self)
                 temp=temp+1
         else:
+            if self.first.id == '[':
+                if self.first.second == None :
+                    raise SyntaxError('Array size missing')
             scope.declareVariable(self)
 
     def assign(self,root):

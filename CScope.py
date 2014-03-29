@@ -40,6 +40,13 @@ class Scope():
             List.insert(0,symbolTable[Datatype])
         if self.checkCurrnetScope(temp) != None :
             raise SyntaxError ('"{0}" cannot defined twice. '.format(temp))
+        if List.__len__() != 1:
+            temp1=0
+            List2=[]
+            while temp1 <= int(List[1].second.first)-1:
+                List2.append(None)
+                temp1=temp1+1
+            value=List2
         self.scopes[-1][temp]=(List,value)
         return
 
@@ -77,7 +84,12 @@ class Scope():
     def changeValueOfVariable(self,root,value=0):
         temp=self.GoToVariable(root)
         temp1=self.findVariable(temp)
-        self.scopes[self.index][temp]=(temp1[0],value)
+        if temp1[0].__len__() != 1 :
+            index=int(root.first.second.first)
+            temp1[1][index]=value
+            self.scopes[self.index][temp]=(temp1[0],temp1[1])
+        else:
+            self.scopes[self.index][temp]=(temp1[0],value)
         pass
 
     def GoToVariable(self,root,index=0):
