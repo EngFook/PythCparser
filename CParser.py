@@ -85,6 +85,6 @@ Initialization()
                             Manual Test here.
                                                                              """
 a=Parse("""
-           int a [ ] = { 1 , 3  , 4 } ; """)
+           int a [ ] , b [ ] ; """)
 print(a)
 ##CInterperter.Runinterpreter(a)

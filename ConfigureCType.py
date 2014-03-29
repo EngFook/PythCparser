@@ -167,7 +167,10 @@ def configureType(type,attribute=None,content=None,userDefined=None,setorigin=No
                                     arrayfirst.append(self)
                                     arraysecond.append(None)
                                 else:
-                                    arrayfirst.append(self.first)
+                                    if self.id=='[':
+                                        arrayfirst.append(self)
+                                    else:
+                                        arrayfirst.append(self.first)
                                     arraysecond.append(self.second)
                             else:
                                 arrayfirst.append(self)
