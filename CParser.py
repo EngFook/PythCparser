@@ -85,6 +85,7 @@ def Initialization():
                             Manual Test here.
                                                                              """
 a=Parse("""
+
         int a [ ] ;
         int a [ 8 ] ;
         int a [ ] = { 1 } ;

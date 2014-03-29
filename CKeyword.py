@@ -371,12 +371,13 @@ def CkeywordGrammar():
 
 
             def std(self,symboltoken=None):
-                if symboltoken==None or symboltoken=='(enum)':
+                if symboltoken==None or symboltoken=='(enum)' or hasattr (symboltoken,'topass'):
                     global previous
                     global rootindex
                     global root
                     previous=previous+1
                     array=[]
+                    arrayinput=False
                     check=tokenizer.peepahead()
                     while check.id !='}':
                             if hasattr(check,'std'):
@@ -397,8 +398,28 @@ def CkeywordGrammar():
                                         else:
                                             pass
                                 else:
-                                    tokenizer.advance(';')
-                            array.append(temp)
+                                    if check.id=='(literal)' and tokenizer.peepahead().first==',':
+                                        array.append(check)
+                                        check=tokenizer.peepahead()
+                                        tokenizer.advance()
+                                        while check.first == ',':
+                                            array.append(tokenizer.advance())
+                                            if tokenizer.peepahead().first!=',':
+                                                arrayinput=True
+                                                break
+                                            else:
+                                                check=tokenizer.advance()
+
+
+                                    if check.id=='(literal)' and tokenizer.peepahead().id=='}':
+                                        if hasattr (symboltoken,'topass'):
+                                            pass
+                                        else:
+                                            tokenizer.advance(';')
+                                    else:
+                                        tokenizer.advance(';')
+                            if arrayinput!=True:
+                                array.append(temp)
                             index=array.index(temp)
                             if previous :
                                 if temp.id == 'case':
