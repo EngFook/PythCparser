@@ -78,6 +78,16 @@ def Initialization():
 
 Initialization()
 
+def Initializationscan():
+    a=""" void scanf (  ) ;
+          void scanf (  )
+          {
+          }"""
+    root=Parse(a)
+    CInterperter.Runinterpreter(root)
+
+Initializationscan()
+
 
 ################################################################################
 ################################################################################
@@ -85,34 +95,159 @@ Initialization()
                             Manual Test here.
                                                                              """
 
+### Bubble sort
+##a=Parsea=Parse("""int main ( )
+##                {
+##                    int a [ 5 ] , n , c , d , swap , i ;
+##                    for ( i = 0 ; i < 5 ; i ++ )
+##                    {
+##                        scanf ( " %d " , a [ i ] ) ;
+##                    }
+##                    n = 5 ;
+##                    printf ( " before: " ) ;
+##                    for ( d = 0 ; d < n ; d ++ )
+##                    {
+##                        printf ( " %d " , a [ d ] ) ;
+##                    }
+##                    for ( c = 0 ; c < ( n - 1 ) ; c ++ )
+##                    {
+##                        for ( d = 0 ; d < n - c - 1 ; d ++ )
+##                        {
+##                            if ( a [ d ] > a [ d + 1 ] )
+##                            {
+##                                swap = a [ d ] ;
+##                                a [ d ] = a [ d + 1 ] ;
+##                                a [ d + 1 ] = swap ;
+##                            }
+##                        }
+##                    }
+##                    printf ( " after: " ) ;
+##                    for ( d = 0 ; d < n ; d ++ )
+##                    {
+##                        printf ( " %d " , a [ d ] ) ;
+##                    }
+##                } """)
+##
+##CInterperter.Runinterpreter(a)
 
-a=Parse("""int main ( )
+
+###find the greatest number
+##a=Parse("""
+##
+##
+##int main ( ) {   float a , b , c ;
+##      printf ( " Enter three numbers : " ) ;
+##      scanf ( " %d %d %d " , & a , & b , & c ) ;
+##      if ( a >= b && a >= c )
+##        printf ( " Largest number = %.5f " , a ) ;
+##      if ( b >= a && b >= c )
+##         printf ( " Largest number = %.5f " , b ) ;
+##      if ( c >= a && c >= b )
+##         printf ( " Largest number = %.5f " , c ) ;
+##      return 0 ;  }                                           """)
+##
+##
+##
+##CInterperter.Runinterpreter(a)
+
+###check leap year
+##c=Parse(""" int main ( )
+##{
+##      int year ;
+##       printf ( " Enter a year: " ) ;
+##       scanf ( " %d " , year ) ;
+##      if ( year % 4 == 0 )
+##      {
+##          if ( year % 100 == 0 )
+##          {
+##              if ( year % 400 == 0 )
+##                 printf ( " %d is a leap year. " , year ) ;
+##              else
+##                 printf ( " %d is not a leap year. " , year ) ;
+##          }
+##          else
+##             printf ( " %d is a leap year. " , year ) ;
+##      }
+##      else
+##         printf ( " %d is not a leap year. " , year ) ;
+##      return 0 ;  }                       """ )
+##
+##CInterperter.Runinterpreter(c)
+
+###C program to insert an element in an array
+##d=parse(""" int main ( )
+##{
+##   int array [ 100 ] , position , c , n , value , d ;
+##
+##   printf ( " Enter number of elements in array " ) ;
+##   scanf ( " %d " ,  n ) ;
+##
+##   printf ( " Enter %d elements " , n ) ;
+##
+##   for ( c = 0 ; c < n ; c ++ )
+##      scanf ( " %d " , array [ c ] ) ;
+##
+##   printf ( " Enter the location where you wish to insert an element " ) ;
+##   scanf ( " %d " , position ) ;
+##
+##   printf ( " Enter the value to insert " ) ;
+##   scanf ( " %d " , value ) ;
+##
+##    for ( c = n - 1 ; c >= position - 1 ; c -- )
+##      array [ c + 1 ] = array [ c ] ;
+##
+##   array [ position - 1 ] = value ;
+##
+##   printf ( " Resultant array is " ) ;
+##
+##   for ( d = 0 ; d <= n ; d ++ )
+##      printf ( " %d " , array [ d ] ) ;
+##
+##   return 0 ;
+##} """ )
+##
+##CInterperter.Runinterpreter(d)
+
+###check even or odd
+##e=parse(""" int main ( )
+##{
+##   int n ;
+##
+##   printf ( " Enter an integer " ) ;
+##   scanf ( " %d " , & n ) ;
+##
+##   if ( n % 2 == 0 )
+##      printf ( " Even " ) ;
+##   else
+##      printf ( " Odd " ) ;
+##
+##   return 0 ;
+##} """ )
+##
+##CInterperter.Runinterpreter(e)
+
+f=parse(""" int main ( )
 {
-  int a [ 5 ] , n , c , d , swap ;
+   int number , sum = 0 , temp , remainder ;
 
-    a [ 0 ] = 11 ;
-    a [ 1 ] = 10 ;
-    a [ 2 ] = 3 ;
-    a [ 3 ] = 4 ;
-    a [ 4 ] = 1 ;
-    n = 5 ;
-    for ( c = 0 ; c < ( n - 1 ) ; c ++ )
-    {
-        for ( d = 0 ; d < n - c - 1 ; d ++ )
-        {
-            if ( a [ d ] > a [ d + 1 ] )
-            {
-                swap       = a [ d ] ;
-                a [ d ]  = a [ d + 1 ] ;
-                a [ d + 1 ] = swap ;
-            }
-        }
-    }
-    for ( d = 0 ; d < n ; d ++ )
-    {
-    	printf ( " %d " , a [ d ] ) ;
-    }
-}
-  """)
+   printf ( " Enter an integer " ) ;
+   scanf ( " %d " ,  number ) ;
 
-CInterperter.Runinterpreter(a)
+   temp = number ;
+
+   while ( temp != 0 )
+   {
+      remainder = temp % 10 ;
+      sum = sum + remainder * remainder * remainder ;
+      temp = temp / 10 ;
+   }
+
+   if ( number == sum )
+      printf ( " Entered number is an armstrong number. " ) ;
+   else
+      printf ( " Entered number is not an armstrong number.  " ) ;
+
+   return 0 ;
+} """ )
+
+CInterperter.Runinterpreter(f)

@@ -88,7 +88,10 @@ class Scope():
         temp=self.GoToVariable(root)
         temp1=self.findVariable(temp)
         if temp1[0].__len__() != 1 :
-            index=int(root.first.second.interpreter())
+            if root.id != '=':
+                index=int(root.second.interpreter())
+            else:
+                index=int(root.first.second.interpreter())
             temp1[1][index]=value
             self.scopes[self.index][temp]=(temp1[0],temp1[1])
         else:

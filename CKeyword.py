@@ -76,7 +76,7 @@ def CkeywordGrammar():
                 else:
                     token.second=None
                 token.first=tokenizer.advance()
-                token.first.type='constantIdentifier'
+                token.first.type='constant'
                 constant_token=[]
                 checkAhead=tokenizer.peepahead()
                 tokenizer.checkdefine(True)

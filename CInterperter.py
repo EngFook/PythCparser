@@ -67,6 +67,31 @@ def FunctionForPrintf(self,content):
     ForPrint=' '
     value=[]
 
+def FunctionForScanf(self,content):
+    temp = 0 ;
+    value=[]
+    ForPrint=''
+    length=content.__len__()
+    while temp < length :
+        if content[temp].id == '[':
+            temp1=content[temp].first.first
+        else:
+            temp1=content[temp].first
+        if temp1.startswith('%'):
+            pass
+        else:
+            if content[temp].id == '[':
+                key_in=input("{0} [ {1} ]: ".format(content[temp].first,content[temp].second.interpreter()))
+                key_in=float(key_in)
+                scope.changeValueOfVariable(content[temp],key_in)
+            else:
+                key_in=input("{0}: ".format(content[temp]))
+                key_in=float(key_in)
+                scope.changeValueOfVariable(content[temp],key_in)
+        temp=temp+1
+
+
+
 def PrintMany(ForPrint,value):
     if value == []:
         print(ForPrint)
@@ -78,6 +103,14 @@ def PrintMany(ForPrint,value):
         print(ForPrint % (value[0],value[1],value[2]))
                                                          ##
 def CInterpreterGrammar():
+
+    def interpreter(self):
+        pass
+        return self
+
+    sym=CKeyword.keyword('break')
+    sym.interpreter=interpreter
+
     def interpreter(self):
         if self.arity == 'binary':
             return self.first.interpreter() + self.second.interpreter()
@@ -100,6 +133,12 @@ def CInterpreterGrammar():
         return self.first.interpreter() / self.second.interpreter()
 
     sym=CExpression.infix('/',60)
+    sym.interpreter=interpreter
+
+    def interpreter(self):
+        return self.first.interpreter() % self.second.interpreter()
+
+    sym=CExpression.infix('%',60)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -196,6 +235,14 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
+        if self.first.interpreter() != self.second.interpreter() :
+            return True
+        else: False
+
+    sym=CExpression.infix('!=',10)
+    sym.interpreter=interpreter
+
+    def interpreter(self):
         if self.first.interpreter() < self.second.interpreter() :
             return True
         else: False
@@ -218,7 +265,7 @@ def CInterpreterGrammar():
             return True
         return False
 
-    sym=CExpression.infix('>=',10)
+    sym=CExpression.infix('<=',10)
     sym.interpreter=interpreter
 
     def interpreter(self):
@@ -418,6 +465,7 @@ def CInterpreterGrammar():
         if self.first.interpreter() :
             if self.second != None:
                 self.second.interpreter()
+                return
         if self.third != None :
             temp=self.third
             if temp.first != None:
@@ -653,6 +701,9 @@ def CInterpreterGrammar():
             functionname=scope.GoToVariable(self)
             if not hasattr(self.first,'std'):
                 function=scope.findVariable(functionname)
+                if functionname == "scanf":
+                    FunctionForScanf(function,self.second)
+                    return
                 if functionname == "printf":
                     FunctionForPrintf(function,self.second)
                     return

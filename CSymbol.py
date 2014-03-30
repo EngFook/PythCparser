@@ -53,7 +53,7 @@ def createIndentifier(value): # create identifier
     sym.first=None
     sym.content=None
     sym.arity=None
-    sym.type='nameIdentifier'
+    sym.type='name'
     sym.__repr__=printCharacter
     sym.nud=nud
     symObj=sym()
