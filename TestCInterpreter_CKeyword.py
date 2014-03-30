@@ -613,7 +613,7 @@ class TestInterpreter_CKeyword(unittest.TestCase):
         self.assertEqual(temp[1], 5 )
         temp=scope.findVariable('z')
         self.assertEqual(temp[0][0],symbolTable['int'])
-        self.assertEqual(temp[1], 6 )
+        self.assertEqual(temp[1], 5 )
 
     def test_struct_interpreter(self):
         a="""

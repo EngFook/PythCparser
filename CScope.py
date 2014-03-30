@@ -25,7 +25,10 @@ class Scope():
 
     def declareVariable(self,root,value=0,Datatype=None,index=None):
         List=[]
-        temp=root.first
+        if index != None:
+            temp=root.first.first[index]
+        else:
+            temp=root.first
         if hasattr(temp,'id'):
             while temp.id == '[' or temp.id=='*':
                 List.append(temp)
@@ -85,7 +88,7 @@ class Scope():
         temp=self.GoToVariable(root)
         temp1=self.findVariable(temp)
         if temp1[0].__len__() != 1 :
-            index=int(root.first.second.first)
+            index=int(root.first.second.interpreter())
             temp1[1][index]=value
             self.scopes[self.index][temp]=(temp1[0],temp1[1])
         else:

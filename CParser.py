@@ -86,3 +86,33 @@ Initialization()
                                                                              """
 
 
+a=Parse("""int main ( )
+{
+  int a [ 5 ] , n , c , d , swap ;
+
+    a [ 0 ] = 11 ;
+    a [ 1 ] = 10 ;
+    a [ 2 ] = 3 ;
+    a [ 3 ] = 4 ;
+    a [ 4 ] = 1 ;
+    n = 5 ;
+    for ( c = 0 ; c < ( n - 1 ) ; c ++ )
+    {
+        for ( d = 0 ; d < n - c - 1 ; d ++ )
+        {
+            if ( a [ d ] > a [ d + 1 ] )
+            {
+                swap       = a [ d ] ;
+                a [ d ]  = a [ d + 1 ] ;
+                a [ d + 1 ] = swap ;
+            }
+        }
+    }
+    for ( d = 0 ; d < n ; d ++ )
+    {
+    	printf ( " %d " , a [ d ] ) ;
+    }
+}
+  """)
+
+CInterperter.Runinterpreter(a)

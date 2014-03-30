@@ -54,7 +54,14 @@ def FunctionForPrintf(self,content):
                     ForPrint=''
                     ForPrint=ForPrint+'"'+content.first+'"'
             else:
-                value.append(scope.findVariable(content[temp].first)[1])
+                if content[temp].id == "[":
+                    arrayList=scope.findVariable(content[temp].first.first)[1]
+                    temp1=arrayList[int(content[temp].second.interpreter())]
+                    if temp1==None:
+                        temp1=0
+                    value.append(temp1)
+                else:
+                    value.append(scope.findVariable(content[temp].first)[1])
             temp=temp+1
     PrintMany(ForPrint,value)
     ForPrint=' '
@@ -111,7 +118,9 @@ def CInterpreterGrammar():
 
     def interpreter(self):
         temp=scope.findVariable(self.first.first)
-        return temp[1][int(self.second.first)]
+        if temp[1][int(self.second.interpreter())] == None:
+            return 0
+        return temp[1][int(self.second.interpreter())]
 
     sym=CExpression.infix('[',50)
     sym.interpreter=interpreter
@@ -303,7 +312,7 @@ def CInterpreterGrammar():
         elif self.first.id == '.':
             temp=self.first.interpreter()
         elif self.first.id == '[':
-            index=int(self.first.second.first)
+            index=int(self.first.second.interpreter())
             temp=scope.findVariable(self.first.first.first)
             if temp[1].__len__() <=index:
                 raise SyntaxError('array size not correct')
@@ -457,10 +466,10 @@ def CInterpreterGrammar():
             self.first.interpreter()
         temp=0
         while self.second.interpreter():
-            if self.third != None :
-                self.third.interpreter()
             if self.four != None :
                 self.four.interpreter()
+            if self.third != None :
+                self.third.interpreter()
             temp=temp+1
             if temp > 300 :
                 raise SyntaxError('Infinity loop')

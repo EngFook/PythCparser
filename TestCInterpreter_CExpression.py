@@ -250,6 +250,22 @@ class TestInterpreter_CExpression(unittest.TestCase):
         self.assertEqual(temp[0][0],symbolTable['int'])
         self.assertEqual(temp[1],6)
 
+    def test_array_assign_value_double_interpreter(self):
+        a="""double a [ 2 ] , b ;
+             a [ 1 ] = 5 ;
+             a [ 0 ] = 1 ;
+             b = a [ 1 ] + a [ 0 ] ;"""
+        root=CParser.oneTimeParse(a)
+        Runinterpreter(root)
+        temp=scope.findVariable('a')
+        self.assertEqual(temp[0][0],symbolTable['double'])
+        self.assertEqual(temp[0][1].id,'[')
+        self.assertEqual(temp[1][1],5)
+        temp=scope.findVariable('b')
+        self.assertEqual(temp[0][0],symbolTable['double'])
+        self.assertEqual(temp[1],6)
+
+
 
 ################################################################################
 ################################################################################

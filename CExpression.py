@@ -416,6 +416,7 @@ def CexpressionGrammar():
             sym.__repr__=REPR
             sym.nud=nud
             sym.led=led
+            sym.type=None
 
             def REPR(self):
                 return '{0}'.format(self.id)
