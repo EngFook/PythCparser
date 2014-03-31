@@ -132,10 +132,8 @@ Initializationscan()
 
 
 ###find the greatest number
-##a=Parse("""
-##
-##
-##int main ( ) {   float a , b , c ;
+##a=Parse(""" int main ( )
+##{   float a , b , c ;
 ##      printf ( " Enter three numbers : " ) ;
 ##      scanf ( " %d %d %d " , & a , & b , & c ) ;
 ##      if ( a >= b && a >= c )
@@ -144,8 +142,8 @@ Initializationscan()
 ##         printf ( " Largest number = %.5f " , b ) ;
 ##      if ( c >= a && c >= b )
 ##         printf ( " Largest number = %.5f " , c ) ;
-##      return 0 ;  }                                           """)
-##
+##      return 0 ;
+##}                                           """)
 ##
 ##
 ##CInterperter.Runinterpreter(a)
@@ -155,7 +153,7 @@ Initializationscan()
 ##{
 ##      int year ;
 ##       printf ( " Enter a year: " ) ;
-##       scanf ( " %d " , year ) ;
+##       scanf ( " %d " , & year ) ;
 ##      if ( year % 4 == 0 )
 ##      {
 ##          if ( year % 100 == 0 )
@@ -180,7 +178,7 @@ Initializationscan()
 ##   int array [ 100 ] , position , c , n , value , d ;
 ##
 ##   printf ( " Enter number of elements in array " ) ;
-##   scanf ( " %d " ,  n ) ;
+##   scanf ( " %d " , & n ) ;
 ##
 ##   printf ( " Enter %d elements " , n ) ;
 ##
@@ -188,10 +186,10 @@ Initializationscan()
 ##      scanf ( " %d " , array [ c ] ) ;
 ##
 ##   printf ( " Enter the location where you wish to insert an element " ) ;
-##   scanf ( " %d " , position ) ;
+##   scanf ( " %d " , & position ) ;
 ##
 ##   printf ( " Enter the value to insert " ) ;
-##   scanf ( " %d " , value ) ;
+##   scanf ( " %d " , & value ) ;
 ##
 ##    for ( c = n - 1 ; c >= position - 1 ; c -- )
 ##      array [ c + 1 ] = array [ c ] ;
@@ -226,28 +224,86 @@ Initializationscan()
 ##
 ##CInterperter.Runinterpreter(e)
 
-f=parse(""" int main ( )
+##f=parse(""" int main ( )
+##{
+##   int number , sum = 0 , temp , remainder ;
+##
+##   printf ( " Enter an integer " ) ;
+##   scanf ( " %d " , & number ) ;
+##
+##   temp = number ;
+##
+##   while ( temp != 0 )
+##   {
+##      remainder = temp % 10 ;
+##      sum = sum + remainder * remainder * remainder ;
+##      temp = temp / 10 ;
+##   }
+##
+##   if ( number == sum )
+##      printf ( " Entered number is an armstrong number. " ) ;
+##   else
+##      printf ( " Entered number is not an armstrong number.  " ) ;
+##
+##   return 0 ;
+##} """ )
+##
+##CInterperter.Runinterpreter(f)
+
+##g=parse(""" #define MAX 20
+##            int main ( ) {
+##            int a  = 0 ;
+##            for ( a = 0 ; a <= MAX ; a ++ )
+##                printf ( " %d " , a ) ;
+##
+##            } """ )
+##CInterperter.Runinterpreter(g)
+
+
+#C programming code for binary search
+f=oneTimeParse(""" int main ( )
 {
-   int number , sum = 0 , temp , remainder ;
+   int c , first , last , middle , n , search , array [ 100 ] ;
 
-   printf ( " Enter an integer " ) ;
-   scanf ( " %d " ,  number ) ;
+   printf ( " Enter number of elements " ) ;
+   scanf ( " %d " , & n ) ;
 
-   temp = number ;
+   printf ( " Enter %d integers " , & n ) ;
 
-   while ( temp != 0 )
+   for ( c = 0 ; c < n ; c ++ )
+      scanf ( " %d " , array [ c ] ) ;
+
+   printf ( " Enter value to find " ) ;
+   scanf ( " %d " , & search ) ;
+
+   first = 0 ;
+   last = n - 1 ;
+   middle = ( first + last ) / 2 ;
+
+   while ( first <= last )
    {
-      remainder = temp % 10 ;
-      sum = sum + remainder * remainder * remainder ;
-      temp = temp / 10 ;
-   }
+      if ( array [ middle ] < search )
+         first = middle + 1 ;
+      else if ( array [ middle ] == search )
+      {
+         printf ( " %d found at location %d . " , search , middle + 1 ) ;
+         break ;
+      }
+      else
+         last = middle - 1 ;
 
-   if ( number == sum )
-      printf ( " Entered number is an armstrong number. " ) ;
-   else
-      printf ( " Entered number is not an armstrong number.  " ) ;
+      middle = ( first + last ) / 2 ;
+   }
+   if ( first > last )
+      printf ( " %d Not found! is not present in the list. " , search ) ;
 
    return 0 ;
 } """ )
 
 CInterperter.Runinterpreter(f)
+
+
+
+
+
+

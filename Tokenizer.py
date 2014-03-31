@@ -103,7 +103,7 @@ class Tokenizer:
         elif self.word.isidentifier():
             self.current=createIndentifier(self.word)
         else:
-            self.current=createLiteral(self.word) # bingran change for 0.9 dun not change it back
+            self.current=createLiteral(self.word)
         self.storeforpeep=self.current
         return self.current
 ##"For check the next token."                                                 ##

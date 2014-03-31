@@ -46,13 +46,26 @@ def FunctionForPrintf(self,content):
     else:
         length=content.__len__()
         while temp < length :
-            if content[temp].type=='string':
-                ForPrint=ForPrint+'"'+content[temp].first+'"'
-            elif value != []:
+            if hasattr (content[temp],'type'):
+                if value != []:
                     PrintMany(ForPrint,value)
                     value=[]
                     ForPrint=''
                     ForPrint=ForPrint+'"'+content.first+'"'
+                if content[temp].type=='string':
+                    ForPrint=ForPrint+'"'+content[temp].first+'"'
+                else:
+                    if content[temp].id == "[":
+                        arrayList=scope.findVariable(content[temp].first.first)[1]
+                        temp1=arrayList[int(content[temp].second.interpreter())]
+                        if temp1==None:
+                            temp1=0
+                        value.append(temp1)
+                    else:
+                        if hasattr ( content[temp],'type'):
+                            value.append(scope.findVariable(content[temp].first)[1])
+                        else:
+                            value.append(int(content[temp].interpreter()))
             else:
                 if content[temp].id == "[":
                     arrayList=scope.findVariable(content[temp].first.first)[1]
@@ -61,36 +74,15 @@ def FunctionForPrintf(self,content):
                         temp1=0
                     value.append(temp1)
                 else:
-                    value.append(scope.findVariable(content[temp].first)[1])
+                    if hasattr ( content[temp],'type'):
+                        value.append(scope.findVariable(content[temp].first)[1])
+                    else:
+                        value.append(content[temp].interpreter())
+
             temp=temp+1
     PrintMany(ForPrint,value)
     ForPrint=' '
     value=[]
-
-def FunctionForScanf(self,content):
-    temp = 0 ;
-    value=[]
-    ForPrint=''
-    length=content.__len__()
-    while temp < length :
-        if content[temp].id == '[':
-            temp1=content[temp].first.first
-        else:
-            temp1=content[temp].first
-        if temp1.startswith('%'):
-            pass
-        else:
-            if content[temp].id == '[':
-                key_in=input("{0} [ {1} ]: ".format(content[temp].first,content[temp].second.interpreter()))
-                key_in=float(key_in)
-                scope.changeValueOfVariable(content[temp],key_in)
-            else:
-                key_in=input("{0}: ".format(content[temp]))
-                key_in=float(key_in)
-                scope.changeValueOfVariable(content[temp],key_in)
-        temp=temp+1
-
-
 
 def PrintMany(ForPrint,value):
     if value == []:
@@ -101,11 +93,51 @@ def PrintMany(ForPrint,value):
         print(ForPrint % (value[0],value[1]))
     elif value.__len__()==3:
         print(ForPrint % (value[0],value[1],value[2]))
+
+def FunctionForScanf(self,content):
+    temp = 0 ;
+    value=[]
+    ForPrint=''
+    length=content.__len__()
+    while temp < length :
+        if content[temp].id=='(identifier)' or content[temp].id== '&':
+            if hasattr(content[temp].first,'startswith'):
+                    if content[temp].first.startswith('%'):
+                        pass
+                    else:
+                        if content[temp].id == '&':
+                            content[temp]=content[temp].first
+                        else:
+                            raise SyntaxError ('Expected "&" reference to the address of {0}.'.format(content[temp]))
+            else:
+                if content[temp].id == '&':
+                    content[temp]=content[temp].first
+                else:
+                    raise SyntaxError ('Expected "&" reference to the address of {0}.'.format(content[temp]))
+        if content[temp].id == '[':
+            temp1=content[temp].first.first
+        else:
+            temp1=content[temp].first
+        if temp1.startswith('%'):
+            pass
+
+        else:
+            if content[temp].id == '[':
+                key_in=input("{0} [ {1} ]: ".format(content[temp].first,content[temp].second.interpreter()))
+                key_in=float(key_in)
+                scope.changeValueOfVariable(content[temp],key_in)
+            else:
+                key_in=input("{0}: ".format(content[temp]))
+                if  hasattr(key_in,'startswith'):
+                    if key_in.isidentifier():
+                        raise SyntaxError ('Expected an integer value.')
+                key_in=float(key_in)
+                scope.changeValueOfVariable(content[temp],key_in)
+        temp=temp+1
                                                          ##
 def CInterpreterGrammar():
 
     def interpreter(self):
-        pass
         return self
 
     sym=CKeyword.keyword('break')
@@ -304,7 +336,7 @@ def CInterpreterGrammar():
             else:
                 raise SyntaxError('value entered is not identifier')
         else:
-            return "this is the addresss of {0}".format(self.first.interpreter())
+            return self.first.interpreter()
     sym=CExpression.infix('&',60)
     sym.interpreter=interpreter
 
@@ -332,8 +364,13 @@ def CInterpreterGrammar():
             if index.id == 'return':
                 hasreturn=True
                 temp=index.interpreter(ReturnDataType)
+            elif index.id == 'break':
+                return index
             else:
                 temp=index.interpreter()
+            if hasattr (temp,'id'):
+                if temp.id == 'break':
+                    return temp
             if main == 'function':
                 scope.deleteCurrentScope()
                 if ReturnDataType != 'void' and not hasreturn:
@@ -347,6 +384,7 @@ def CInterpreterGrammar():
                     raise SyntaxError('Should return something')
                 else:
                     return temp
+        return temp
 
     sym=CKeyword.keyword('{')
     sym.interpreter=interpreter
@@ -464,12 +502,11 @@ def CInterpreterGrammar():
     def interpreter(self):
         if self.first.interpreter() :
             if self.second != None:
-                self.second.interpreter()
-                return
+                return self.second.interpreter()
         if self.third != None :
             temp=self.third
             if temp.first != None:
-                temp.first.interpreter()
+                return temp.first.interpreter()
         else :
             return
 
@@ -491,7 +528,10 @@ def CInterpreterGrammar():
             if temp > 300 :
                 raise SyntaxError('Infinity loop')
             if self.second != None:
-                self.second.interpreter()
+                temp1=self.second.interpreter()
+                if hasattr (temp1,'id'):
+                    if temp1.id == 'break':
+                        break
 
     sym=CKeyword.keyword('while')
     sym.interpreter=interpreter
