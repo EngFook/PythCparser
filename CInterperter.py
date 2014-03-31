@@ -94,7 +94,7 @@ def PrintMany(ForPrint,value):
         print(':[{0}] Cout >>'.format(line) +ForPrint)
         line=line+1
     elif value.__len__() == 1:
-        print(':[{0}] Cout >>'.format(line)+ForPrint % value[0])
+        print(':[{0}] Cout >>'.format(line)+ (ForPrint % value[0]))
         line=line+1
     elif value.__len__()==2:
         print(':[{0}] Cout >>'.format(line)+ ForPrint % (value[0],value[1]))
@@ -119,6 +119,7 @@ def FunctionForScanf(self,content):
                         if content[temp].id == '&':
                             content[temp]=content[temp].first
                         elif temp1.startswith('%s'):
+
                                 pass
                         else:
                             raise SyntaxError ('Expected "&" reference to the address of {0}.'.format(content[temp]))
@@ -142,10 +143,10 @@ def FunctionForScanf(self,content):
                 scope.changeValueOfVariable(content[temp],key_in)
             else:
                 key_in=input("{0}: ".format(content[temp]))
-                if type(key_in)()=='':
-                    key_in=str(key_in)
-                else:
+                if type(key_in)()=='' and key_in.isdigit():
                     key_in=float(key_in)
+                else:
+                    key_in=str(key_in)
                 scope.changeValueOfVariable(content[temp],key_in)
         temp=temp+1
                                                          ##
