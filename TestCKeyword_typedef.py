@@ -259,7 +259,7 @@ class TestKeyword_typedef(unittest.TestCase):
 
         self.assertRaises(SyntaxError,CParser.parse,a)
 
-    def test_typedef_char_alias(self):
+    def latertest_typedef_char_alias(self):
         a=''' typedef char alias [ 80 ]'''
 
         """                 typedef (root[0])
@@ -284,7 +284,7 @@ class TestKeyword_typedef(unittest.TestCase):
         eighty=bracket.first
         self.assertEqual(valueof(eighty),'80')
 
-    def test_typedef_char_alias_with_pointer(self):
+    def latertest_typedef_char_alias_with_pointer(self):
         a=''' typedef char * alias [ 80 ]'''
 
         """                 typedef (root[0])

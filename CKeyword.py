@@ -789,6 +789,7 @@ def CkeywordGrammar():
 ################################################################################
             def std(self,Tokenstore=None):
                 temp=''
+                tokenizer.checkdefine(True)
                 CheckAhead=tokenizer.advance()
                 while CheckAhead.id !='"':
                     if temp=='':
@@ -796,11 +797,15 @@ def CkeywordGrammar():
                     else:
                         space=' '
                     if CheckAhead.id == '(identifier)' or CheckAhead.id == '(literal)':
-                        temp=temp+''.join(space + CheckAhead.first)
+                        if CheckAhead.first=='(newline)':
+                            temp=temp+'\n\t\t\t'
+                        else:
+                            temp=temp+''.join(space + CheckAhead.first)
                     else:
                         temp=temp+''.join(space + CheckAhead.id)
                     CheckAhead=tokenizer.advance()
                 length=len(temp)
+                tokenizer.checkdefine(False)
                 if Tokenstore==None:
                     temp=createIndentifier(temp)
                     temp.type='string'
@@ -813,6 +818,7 @@ def CkeywordGrammar():
                         print ("Warning : array out of range " )
                         break
                 tokenizer.advance(';')
+
                 string(Tokenstore.first.first.first,createIndentifier(temp))
                 self.first=createIndentifier(temp)
                 self.id='(identifier)'

@@ -17,6 +17,9 @@ import CExpression
 ##"Global assignTable."                                                       ##
 global assignTable
 assignTable={}
+##Initialization                                                              ##
+global line
+line=0
 ##"Interpreter the array root[i],i=1,2,3,...                                  ##
 def Runinterpreter(self):
     index=0
@@ -67,8 +70,7 @@ def FunctionForPrintf(self,content):
                         else:
                             value.append(int(content[temp].interpreter()))
             else:
-##                if content.isidentifier():
-##                    ForPrint=ForPrint+'"'+content.first+'"
+
                 if content[temp].id == "[":
                     arrayList=scope.findVariable(content[temp].first.first)[1]
                     temp1=arrayList[int(content[temp].second.interpreter())]
@@ -87,14 +89,19 @@ def FunctionForPrintf(self,content):
     value=[]
 
 def PrintMany(ForPrint,value):
+    global line
     if value == []:
-        print('##'+ForPrint)
+        print(':[{0}] Cout >>'.format(line) +ForPrint)
+        line=line+1
     elif value.__len__() == 1:
-        print('##'+ForPrint % value[0])
+        print(':[{0}] Cout >>'.format(line)+ForPrint % value[0])
+        line=line+1
     elif value.__len__()==2:
-        print('##'+ ForPrint % (value[0],value[1]))
+        print(':[{0}] Cout >>'.format(line)+ ForPrint % (value[0],value[1]))
+        line=line+1
     elif value.__len__()==3:
-        print('##'+ ForPrint % (value[0],value[1],value[2]))
+        print(':[{0}] Cout >>'.format(line)+ ForPrint % (value[0],value[1],value[2]))
+        line=line+1
 
 def FunctionForScanf(self,content):
     temp = 0 ;
@@ -112,8 +119,7 @@ def FunctionForScanf(self,content):
                         if content[temp].id == '&':
                             content[temp]=content[temp].first
                         elif temp1.startswith('%s'):
-                            content=input("{0}: ".format(content[temp]))
-                            FunctionForPrintf(self,content)
+                                pass
                         else:
                             raise SyntaxError ('Expected "&" reference to the address of {0}.'.format(content[temp]))
             else:
@@ -136,10 +142,10 @@ def FunctionForScanf(self,content):
                 scope.changeValueOfVariable(content[temp],key_in)
             else:
                 key_in=input("{0}: ".format(content[temp]))
-                if  hasattr(key_in,'startswith'):
-                    if key_in.isidentifier():
-                        raise SyntaxError ('Expected an integer value.')
-                key_in=float(key_in)
+                if type(key_in)()=='':
+                    key_in=str(key_in)
+                else:
+                    key_in=float(key_in)
                 scope.changeValueOfVariable(content[temp],key_in)
         temp=temp+1
                                                          ##
