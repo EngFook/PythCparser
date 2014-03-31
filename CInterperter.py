@@ -67,6 +67,8 @@ def FunctionForPrintf(self,content):
                         else:
                             value.append(int(content[temp].interpreter()))
             else:
+##                if content.isidentifier():
+##                    ForPrint=ForPrint+'"'+content.first+'"
                 if content[temp].id == "[":
                     arrayList=scope.findVariable(content[temp].first.first)[1]
                     temp1=arrayList[int(content[temp].second.interpreter())]
@@ -86,13 +88,13 @@ def FunctionForPrintf(self,content):
 
 def PrintMany(ForPrint,value):
     if value == []:
-        print(ForPrint)
+        print('##'+ForPrint)
     elif value.__len__() == 1:
-        print(ForPrint % value[0])
+        print('##'+ForPrint % value[0])
     elif value.__len__()==2:
-        print(ForPrint % (value[0],value[1]))
+        print('##'+ ForPrint % (value[0],value[1]))
     elif value.__len__()==3:
-        print(ForPrint % (value[0],value[1],value[2]))
+        print('##'+ ForPrint % (value[0],value[1],value[2]))
 
 def FunctionForScanf(self,content):
     temp = 0 ;
@@ -102,11 +104,16 @@ def FunctionForScanf(self,content):
     while temp < length :
         if content[temp].id=='(identifier)' or content[temp].id== '&':
             if hasattr(content[temp].first,'startswith'):
-                    if content[temp].first.startswith('%'):
+                    if content[temp].first.startswith('%d'):
+                        pass
+                    elif content[temp].first.startswith('%s'):
                         pass
                     else:
                         if content[temp].id == '&':
                             content[temp]=content[temp].first
+                        elif temp1.startswith('%s'):
+                            content=input("{0}: ".format(content[temp]))
+                            FunctionForPrintf(self,content)
                         else:
                             raise SyntaxError ('Expected "&" reference to the address of {0}.'.format(content[temp]))
             else:
@@ -118,9 +125,10 @@ def FunctionForScanf(self,content):
             temp1=content[temp].first.first
         else:
             temp1=content[temp].first
-        if temp1.startswith('%'):
+        if temp1.startswith('%d'):
             pass
-
+        elif temp1.startswith('%s'):
+            pass
         else:
             if content[temp].id == '[':
                 key_in=input("{0} [ {1} ]: ".format(content[temp].first,content[temp].second.interpreter()))
@@ -189,9 +197,12 @@ def CInterpreterGrammar():
 
     def interpreter(self):
         temp=scope.findVariable(self.first.first)
-        if temp[1][int(self.second.interpreter())] == None:
-            return 0
-        return temp[1][int(self.second.interpreter())]
+        if self.second != None:
+            if temp[1][int(self.second.interpreter())] == None:
+                return 0
+            return temp[1][int(self.second.interpreter())]
+        else:
+            return temp[1]
 
     sym=CExpression.infix('[',50)
     sym.interpreter=interpreter
@@ -371,12 +382,12 @@ def CInterpreterGrammar():
             if hasattr (temp,'id'):
                 if temp.id == 'break':
                     return temp
-            if main == 'function':
-                scope.deleteCurrentScope()
-                if ReturnDataType != 'void' and not hasreturn:
-                    raise SyntaxError('Should return somthing')
-                else:
-                    return temp
+        if main == 'function':
+            scope.deleteCurrentScope()
+            if ReturnDataType != 'void' and not hasreturn:
+                raise SyntaxError('Should return somthing')
+            else:
+                return temp
         if main != 'main':
             scope.deleteCurrentScope()
             if main == 'function':

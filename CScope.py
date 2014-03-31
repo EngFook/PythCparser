@@ -46,10 +46,11 @@ class Scope():
         if List.__len__() != 1:
             temp1=0
             List2=[]
-            while temp1 <= int(List[1].second.first)-1:
-                List2.append(None)
-                temp1=temp1+1
-            value=List2
+            if List[1].second != None:
+                while temp1 <= int(List[1].second.first)-1:
+                    List2.append(None)
+                    temp1=temp1+1
+                value=List2
         self.scopes[-1][temp]=(List,value)
         return
 

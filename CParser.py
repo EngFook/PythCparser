@@ -95,43 +95,53 @@ Initializationscan()
                             Manual Test here.
                                                                              """
 
-### Bubble sort
-##a=Parsea=Parse("""int main ( )
-##                {
-##                    int a [ 5 ] , n , c , d , swap , i ;
-##                    for ( i = 0 ; i < 5 ; i ++ )
-##                    {
-##                        scanf ( " %d " , a [ i ] ) ;
-##                    }
-##                    n = 5 ;
-##                    printf ( " before: " ) ;
-##                    for ( d = 0 ; d < n ; d ++ )
-##                    {
-##                        printf ( " %d " , a [ d ] ) ;
-##                    }
-##                    for ( c = 0 ; c < ( n - 1 ) ; c ++ )
-##                    {
-##                        for ( d = 0 ; d < n - c - 1 ; d ++ )
-##                        {
-##                            if ( a [ d ] > a [ d + 1 ] )
-##                            {
-##                                swap = a [ d ] ;
-##                                a [ d ] = a [ d + 1 ] ;
-##                                a [ d + 1 ] = swap ;
-##                            }
-##                        }
-##                    }
-##                    printf ( " after: " ) ;
-##                    for ( d = 0 ; d < n ; d ++ )
-##                    {
-##                        printf ( " %d " , a [ d ] ) ;
-##                    }
-##                } """)
-##
-##CInterperter.Runinterpreter(a)
+# Bubble sort
+a=Parsea=Parse("""
+                void BubbleSort ( int [ ] , int ) ;
+                int main ( )
+                {
+                    int a [ 5 ] , n , c , d , swap , i ;
+                    for ( i = 0 ; i < 5 ; i ++ )
+                    {
+                        scanf ( " %d " , a [ i ] ) ;
+                    }
+                    n = 5 ;
+                    printf ( " before: " ) ;
+                    for ( d = 0 ; d < n ; d ++ )
+                    {
+                        printf ( " %d " , a [ d ] ) ;
+                    }
+                    BubbleSort ( a [ ] , n ) ;
+                    printf ( " after: " ) ;
+                    for ( d = 0 ; d < n ; d ++ )
+                    {
+                        printf ( " %d " , a [ d ] ) ;
+                    }
+                }
+                void BubbleSort ( int a [ ] , int size )
+                {
+                    int c , d ;
+
+                    for ( c = 0 ; c < (   size - 1 ) ; c ++ )
+                    {
+                        for ( d = 0 ; d < size - c - 1 ; d ++ )
+                        {
+                            if ( a [ d ] > a [ d + 1 ] )
+                            {
+                                swap = a [ d ] ;
+                                a [ d ] = a [ d + 1 ] ;
+                                a [ d + 1 ] = swap ;
+                            }
+                        }
+                    }
+                }
+""")
+
+CInterperter.Runinterpreter(a)
 
 
-###find the greatest number
+
+##find the greatest number
 ##a=Parse(""" int main ( )
 ##{   float a , b , c ;
 ##      printf ( " Enter three numbers : " ) ;
@@ -260,49 +270,59 @@ Initializationscan()
 ##CInterperter.Runinterpreter(g)
 
 
-#C programming code for binary search
-f=oneTimeParse(""" int main ( )
-{
-   int c , first , last , middle , n , search , array [ 100 ] ;
+###C programming code for binary search
+##h=oneTimeParse(""" int main ( )
+##{
+##   int c , first , last , middle , n , search , array [ 100 ] ;
+##
+##   printf ( " Enter number of elements " ) ;
+##   scanf ( " %d " , & n ) ;
+##
+##   printf ( " Enter %d integers " , & n ) ;
+##
+##   for ( c = 0 ; c < n ; c ++ )
+##      scanf ( " %d " , array [ c ] ) ;
+##
+##   printf ( " Enter value to find " ) ;
+##   scanf ( " %d " , & search ) ;
+##
+##   first = 0 ;
+##   last = n - 1 ;
+##   middle = ( first + last ) / 2 ;
+##
+##   while ( first <= last )
+##   {
+##      if ( array [ middle ] < search )
+##         first = middle + 1 ;
+##      else if ( array [ middle ] == search )
+##      {
+##         printf ( " %d found at location %d . " , search , middle + 1 ) ;
+##         break ;
+##      }
+##      else
+##         last = middle - 1 ;
+##
+##      middle = ( first + last ) / 2 ;
+##   }
+##   if ( first > last )
+##      printf ( " %d Not found! is not present in the list. " , search ) ;
+##
+##   return 0 ;
+##} """ )
+##
+##CInterperter.Runinterpreter(h)
 
-   printf ( " Enter number of elements " ) ;
-   scanf ( " %d " , & n ) ;
-
-   printf ( " Enter %d integers " , & n ) ;
-
-   for ( c = 0 ; c < n ; c ++ )
-      scanf ( " %d " , array [ c ] ) ;
-
-   printf ( " Enter value to find " ) ;
-   scanf ( " %d " , & search ) ;
-
-   first = 0 ;
-   last = n - 1 ;
-   middle = ( first + last ) / 2 ;
-
-   while ( first <= last )
-   {
-      if ( array [ middle ] < search )
-         first = middle + 1 ;
-      else if ( array [ middle ] == search )
-      {
-         printf ( " %d found at location %d . " , search , middle + 1 ) ;
-         break ;
-      }
-      else
-         last = middle - 1 ;
-
-      middle = ( first + last ) / 2 ;
-   }
-   if ( first > last )
-      printf ( " %d Not found! is not present in the list. " , search ) ;
-
-   return 0 ;
-} """ )
-
-CInterperter.Runinterpreter(f)
-
-
+##i=parse(""" int main ( )
+##{
+##    printf ( " Welcome to use PythCparser , What is ur name ? " ) ;
+##    scanf ( " %s " , name ) ;
+##    printf ( " thank you %s for using our program. " , a ) ;
+##
+##
+##
+##} """)
+##
+##CInterperter.Runinterpreter(i)
 
 
 

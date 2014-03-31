@@ -373,7 +373,12 @@ def CexpressionGrammar():
 ################################################################################
 # 7th function
 ################################################################################
-            def led(self,leftToken):
+            def nud(self):
+                self.arity='grouping'
+                tokenizer.advance()
+                return self
+
+            def led(self,leftToken=None):
                 self.arity='postunary'
                 tokenizer.advance()
                 temp=[]
@@ -407,8 +412,7 @@ def CexpressionGrammar():
 
             def REPR(self): #for print number or symbol instead of address
                 if(self.arity=='grouping'):
-
-                    return '{0}{1}]'.format(self.id,self.first)
+                    return '{0}{1}'.format(self.id,self.first)
                 else:
                     return '({0} [{1}] )'.format(self.first,self.second)
 
