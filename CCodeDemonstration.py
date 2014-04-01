@@ -280,6 +280,34 @@ def BinarySearch():
     }
     ''' )
     return a
+
+def SwitchCaseCheckResultGrade():
+    a=oneTimeParse('''
+    int main ( )
+                        {
+                            int Marks , choice ;
+                            printf ( " 8th C program is to Check Result Grade. " ) ;
+                            printf ( " Please enter your marks. " ) ;
+                            scanf ( " %d " , & Marks ) ;
+
+                            if ( Marks  > 90 && Marks  <= 100 ) choice = 1 ;
+                            else if ( Marks  > 70 && Marks  <= 90 ) choice = 2 ;
+                            else if ( Marks  > 50 && Marks  <= 70 ) choice = 3 ;
+                            else if ( Marks  > 30 && Marks  <= 50 ) choice = 4 ;
+                            else if ( Marks  > 0  && Marks  <= 30 ) choice = 5 ;
+                            printf ( " Your marks : %d " , Marks ) ;
+                             switch ( choice )
+                             {
+                                case 1 : printf ( " Get A! Excellent ! " ) ;
+                                case 2 : printf ( " Get B, Good " ) ;
+                                case 3 : printf ( " Get C.. OK ~ " ) ;
+                                case 4 : printf ( " Just a D.. Mmmmm....  Study harder please. " ) ;
+                                case 5 : printf ( " ByeBye... " ) ;
+                                default    :  printf ( " What is your marks anyway? " ) ;
+                             }
+                        }
+    ''')
+    return a
 ################################################################################
 ################################################################################
 """
@@ -287,16 +315,18 @@ def BinarySearch():
                                                                              """
 #start
 CInterperter.Runinterpreter(BubbleSort())
-clear()
-CInterperter.Runinterpreter(FindGreatestNumber())
-clear()
-CInterperter.Runinterpreter(CheckLeapYear())
-clear()
-CInterperter.Runinterpreter(ProgramToInsertAnElementInAnArray())
-clear()
-CInterperter.Runinterpreter(CheckEvenOdd())
-clear()
-CInterperter.Runinterpreter(CheckArmstrongNumber())
-clear()
-CInterperter.Runinterpreter(BinarySearch())
+##clear()
+##CInterperter.Runinterpreter(FindGreatestNumber())
+##clear()
+##CInterperter.Runinterpreter(CheckLeapYear())
+##clear()
+##CInterperter.Runinterpreter(ProgramToInsertAnElementInAnArray())
+##clear()
+##CInterperter.Runinterpreter(CheckEvenOdd())
+##clear()
+##CInterperter.Runinterpreter(CheckArmstrongNumber())
+##clear()
+##CInterperter.Runinterpreter(BinarySearch())
+##clear()
+##CInterperter.Runinterpreter(SwitchCaseCheckResultGrade())
 end()

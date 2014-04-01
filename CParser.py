@@ -98,3 +98,5 @@ def ParseAndInterpret(a):
                                                                              """
 
 
+a= oneTimeParse(""" int a = 4 ;""")
+CInterperter.Runinterpreter(a)
