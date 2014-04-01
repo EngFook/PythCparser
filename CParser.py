@@ -88,9 +88,13 @@ def Initializationscan():
 
 Initializationscan()
 
-
+def ParseAndInterpret(a):
+    b=Parse(a)
+    CInterperter.Runinterpreter(b)
 ################################################################################
 ################################################################################
 """
                             Manual Test here.
                                                                              """
+
+

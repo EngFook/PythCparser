@@ -45,10 +45,7 @@ def end():
 FirstRun=oneTimeParse('''
 int main ( )
 {   char Type_Any_Word_To_Continue ;
-    char name ;
-    printf ( " Hello! , welcome to use our PythCparser . What is your name ? " ) ;
-    scanf ( " %s " , & name ) ;
-    printf ( " Hi %s , thank you for viewing our program. \n We are going to show you more Clanguage program interpret by our PythCparser " , name ) ;
+    printf ( " These desmonstrations are without scanf. " ) ;
     scanf ( " %s " , Type_Any_Word_To_Continue  ) ;
 }
 ''')
@@ -63,11 +60,11 @@ def  BubbleSort():
                     int main ( )
                     {
                         int a [ 5 ] , n , c , d , swap , i ;
-                        printf ( " Please input the value into each array for sorting " ) ;
-                        for ( i = 0 ; i < 5 ; i ++ )
-                        {
-                            scanf ( " %d " , a [ i ] ) ;
-                        }
+                        a [ 0 ] = 35 ;
+                        a [ 1 ] = 2 ;
+                        a [ 2 ] = 3 ;
+                        a [ 3 ] = 14 ;
+                        a [ 4 ] = 42 ;
                         n = 5 ;
                         printf ( " Before sorting the array : " ) ;
                         for ( d = 0 ; d < n ; d ++ )
@@ -107,7 +104,9 @@ def FindGreatestNumber():
     {   float a , b , c ;
           printf ( " 2nd C program is to find "Greatest Number". " ) ;
           printf ( " Please enter three numbers : " ) ;
-          scanf ( " %d %d %d " , & a , & b , & c ) ;
+          a = 1 ;
+          b = 3 ;
+          c = 2 ;
           if ( a >= b && a >= c )
             printf ( " Largest number = %.5f " , a ) ;
           if ( b >= a && b >= c )
@@ -126,7 +125,7 @@ def CheckLeapYear():
           int year ;
           printf ( " 3rd C program is to Check Leap Year. " ) ;
           printf ( " Enter a year: " ) ;
-          scanf ( " %d " , & year ) ;
+          year = 1992 ;
           if ( year % 4 == 0 )
           {
               if ( year % 100 == 0 )
@@ -153,18 +152,21 @@ def ProgramToInsertAnElementInAnArray():
        int array [ 100 ] , position , c , n , value , d ;
        printf ( " 4th C program is to Insert An Element Into An Array. " ) ;
        printf ( " Enter number of elements in array " ) ;
-       scanf ( " %d " , & n ) ;
+       n = 5 ;
 
        printf ( " Enter %d elements " , n ) ;
 
-       for ( c = 0 ; c < n ; c ++ )
-          scanf ( " %d " , array [ c ] ) ;
+       array [ 0 ] = 1 ;
+       array [ 1 ] = 2 ;
+       array [ 2 ] = 3 ;
+       array [ 3 ] = 4 ;
+       array [ 4 ] = 5 ;
 
        printf ( " Enter the location where you wish to insert an element " ) ;
-       scanf ( " %d " , & position ) ;
+       position = 6 ;
 
        printf ( " Enter the value to insert " ) ;
-       scanf ( " %d " , & value ) ;
+       value = 1000 ;
 
         for ( c = n - 1 ; c >= position - 1 ; c -- )
           array [ c + 1 ] = array [ c ] ;
@@ -182,104 +184,6 @@ def ProgramToInsertAnElementInAnArray():
 
     return a
 
-def CheckEvenOdd():
-    a=parse('''
-    #define number 2
-    int main ( )
-    {
-       int n ;
-       printf ( " 5th C program is to check even or odd. " ) ;
-       printf ( " Enter an integer " ) ;
-       scanf ( " %d " , & n ) ;
-
-       if ( n % number == 0 )
-          printf ( " Even " ) ;
-       else
-          printf ( " %d is Odd " , n ) ;
-
-       return 0 ;
-    }
-    ''' )
-    return a
-
-# ------------------------------------------------------------------------------
-# This program computes all Armstrong numbers in the range of
-# 0 and 999.  An Armstrong number is a number such that the sum
-# of its digits raised to the third power is equal to the number
-# itself.  For example, 371 is an Armstrong number, since
-# 3**3 + 7**3 + 1**3 = 371.
-# ------------------------------------------------------------------------------
-def CheckArmstrongNumber():
-    a=parse('''
-    int main ( )
-    {
-       int number , sum = 0 , temp , remainder ;
-       printf ( " 6th C program is to check Armstrong Number. " ) ;
-       printf ( " Enter an integer " ) ;
-       scanf ( " %d " , & number ) ;
-
-       temp = number ;
-
-       while ( temp != 0 )
-       {
-          remainder = temp % 10 ;
-          sum = sum + remainder * remainder * remainder ;
-          temp = temp / 10 ;
-       }
-
-       if ( number == sum )
-          printf ( " Entered number is an armstrong number. " ) ;
-       else
-          printf ( " Entered number is not an armstrong number.  " ) ;
-
-       return 0 ;
-    }
-    ''' )
-    return a
-
-def BinarySearch():
-    a=oneTimeParse('''
-    int main ( )
-    {
-       int c , first , last , middle , n , search , array [ 100 ] ;
-
-       printf ( " 7th C program is binary search. " ) ;
-       printf ( " Enter number of elements " ) ;
-       scanf ( " %d " , & n ) ;
-
-       printf ( " Enter %d integers " , & n ) ;
-
-       for ( c = 0 ; c < n ; c ++ )
-          scanf ( " %d " , array [ c ] ) ;
-
-       printf ( " Enter value to find " ) ;
-       scanf ( " %d " , & search ) ;
-
-       first = 0 ;
-       last = n - 1 ;
-       middle = ( first + last ) / 2 ;
-
-       while ( first <= last )
-       {
-          if ( array [ middle ] < search )
-             first = middle + 1 ;
-          else if ( array [ middle ] == search )
-          {
-             printf ( " %d found at location %d . " , search , middle + 1 ) ;
-             break ;
-          }
-          else
-             last = middle - 1 ;
-
-          middle = ( first + last ) / 2 ;
-       }
-       if ( first > last )
-          printf ( " %d Not found! is not present in the list. " , search ) ;
-
-       return 0 ;
-    }
-    ''' )
-    return a
 ################################################################################
 ################################################################################
 """
@@ -294,9 +198,4 @@ CInterperter.Runinterpreter(CheckLeapYear())
 clear()
 CInterperter.Runinterpreter(ProgramToInsertAnElementInAnArray())
 clear()
-CInterperter.Runinterpreter(CheckEvenOdd())
-clear()
-CInterperter.Runinterpreter(CheckArmstrongNumber())
-clear()
-CInterperter.Runinterpreter(BinarySearch())
 end()
