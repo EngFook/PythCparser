@@ -49,7 +49,7 @@ def FunctionForPrintf(self,content):
     ForPrint=''
     if hasattr(content,'type'):
         if content.type=='string':
-            ForPrint=ForPrint+'"'+content.first+'"'
+            ForPrint=ForPrint+' '+content.first+' '
     else:
         length=content.__len__()
         while temp < length :
@@ -58,9 +58,9 @@ def FunctionForPrintf(self,content):
                     PrintMany(ForPrint,value)
                     value=[]
                     ForPrint=''
-                    ForPrint=ForPrint+'"'+content.first+'"'
+                    ForPrint=ForPrint+' '+content.first+' '
                 if content[temp].type=='string':
-                    ForPrint=ForPrint+'"'+content[temp].first+'"'
+                    ForPrint=ForPrint+' '+content[temp].first+' '
                 else:
                     if content[temp].id == "[":
                         arrayList=scope.findVariable(content[temp].first.first)[1]

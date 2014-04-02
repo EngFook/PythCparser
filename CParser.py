@@ -104,9 +104,9 @@ def ParseAndInterpret(a):
                             Manual Test here.
                                                                              """
 
-ParseAndInterpret("""
-                    int a;
-                    {
-                    a=2;
-                    }
-                    printf( "%d",a) ;""")
+##ParseAndInterpret("""
+##                    int a;
+##                    {
+##                    a=2;
+##                    }
+##                    printf( "%d",a) ;""")
