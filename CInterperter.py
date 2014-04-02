@@ -1,13 +1,17 @@
 #-------------------------------------------------------------------------------
-# Name:        PythCparser
-# Purpose:     To parse and interpret C language by using Python.
+# Name:         PythCparser
+# Purpose:      To parse and interpret C language by using Python.
 #
-# Author:      Goh Eng Fook
-#              Lim Bing Ran
+# Author:       Tunku Abdul Rahman University College
+#               Microelectronics and Physics Division 2014
+#               Goh Eng Fook
+#               Lim Bing Ran
 #
-# Created:     07/03/2013
-# Copyright:   (c) 2013-2014, Goh Eng Fook & Lim Bing Ran
-# Licence:     GPLv3
+# Supervise by: Dr. Poh Tze Ven
+#
+# Created:      07/03/2013
+# Copyright:    (c) 2013-2014, Goh Eng Fook & Lim Bing Ran
+# Licence:      GPLv3
 #-------------------------------------------------------------------------------
 ##"Files imported."                                                           ##
 from Tokenizer import *

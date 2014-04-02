@@ -1,14 +1,3 @@
-#-------------------------------------------------------------------------------
-# Name:        PythCparser
-# Purpose:     To parse and interpret C language by using Python.
-#
-# Author:      Goh Eng Fook
-#              Lim Bing Ran
-#
-# Created:     31/03/2013
-# Copyright:   (c) 2013-2014, Goh Eng Fook & Lim Bing Ran
-# Licence:     GPLv3
-#-------------------------------------------------------------------------------
 ##"Files imported."                                                           ##
 from CParser import *
 import CInterperter
