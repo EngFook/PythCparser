@@ -18,6 +18,10 @@ from CSymbol import *
 ##"Function to rebuild the string."                                           ##
 ##"This function is to reduce the sensitivity of the program but not all."    ##
 def Rebuildstring(str):
+    s=''
+    sentences=str.split('\n')
+    for sentence in sentences:
+        s=s+sentence +' (newline) '
     returnhere=False
     meet=False
     countright=0
@@ -25,11 +29,15 @@ def Rebuildstring(str):
     combine=False
     stringright=''
     arraysymtoken=[]
-    temp=str.split()
+    temp=s.split()
     temporary=[]
+    string=''
     temp1=None
     for word in temp:
-        if word in symbolTable and word is not '"' or word=='printf' or word == 'scanf':
+        if word == '(newline)':
+            string=string+' '.join(temporary)+' '+'\n'+' '
+            temporary=[]
+        elif word in symbolTable and word is not '"' or word=='printf' or word == 'scanf':
             temporary.append(word)
         else:
             store1=[]
@@ -96,6 +104,5 @@ def Rebuildstring(str):
                             keep.append(i)
                     word=''.join(keep)+semicolumn
                     temporary.append(word)
-    temp=' '.join(temporary)
-    return temp
+    return string
 ################################################################################
