@@ -11,7 +11,7 @@
 #
 # Created:      07/03/2013
 # Copyright:    (c) 2013-2014, Goh Eng Fook & Lim Bing Ran
-# Licence:      GPLv3
+# License:      GPLv3
 #-------------------------------------------------------------------------------
 ##"On/Off the debugger."                                                      ##
 DEBUG=True
@@ -24,7 +24,6 @@ import CInterperter
 import CExpression
 import CKeyword
 import CScope
-from CStringRebuilt import *
 ##"Injection from Ckeyword and Cexpression."                                  ##
 CKeyword.configure_C_Keyword(CExpression)
 CExpression.configure_C_Expression(CKeyword)
@@ -94,7 +93,6 @@ def Initializationscan():
 Initializationscan()
 
 def ParseAndInterpret(a):
-    a=Rebuildstring(a)
     b=Parse(a)
     CInterperter.Runinterpreter(b)
 
@@ -103,10 +101,3 @@ def ParseAndInterpret(a):
 """
                             Manual Test here.
                                                                              """
-
-##ParseAndInterpret("""
-##                    int a;
-##                    {
-##                    a=2;
-##                    }
-##                    printf( "%d",a) ;""")

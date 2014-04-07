@@ -11,7 +11,7 @@
 #
 # Created:      07/03/2013
 # Copyright:    (c) 2013-2014, Goh Eng Fook & Lim Bing Ran
-# Licence:      GPLv3
+# License:      GPLv3
 #-------------------------------------------------------------------------------
 ##"SymbolTable created."                                                      ##
 symbolTable={}
