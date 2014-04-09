@@ -199,6 +199,12 @@ def CInterpreterGrammar():
     sym.interpreter=interpreter
 
     def interpreter(self):
+        return self.first.interpreter() or self.second.interpreter()
+
+    sym=CExpression.infix('||',5)
+    sym.interpreter=interpreter
+
+    def interpreter(self):
         if self.arity == 'binary':
             return self.first.interpreter() * self.second.interpreter()
         else:
