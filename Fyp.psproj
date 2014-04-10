@@ -11,114 +11,106 @@ ClassName=TProjectFilesNode
 
 [Project\ChildNodes\Node0\ChildNodes\Node0]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]C language code\CCodeDemonstration.py
+FileName=$[Project-Path]Project\PythCparser\CExpression.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node1]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]C language code\CcodeDemonstration_without_scanf.py
+FileName=$[Project-Path]Project\PythCparser\CInterperter.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node2]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]PythCparser\CExpression.py
+FileName=$[Project-Path]Project\PythCparser\CKeyword.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node3]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]PythCparser\CInterperter.py
+FileName=$[Project-Path]Project\PythCparser\ConfigureCType.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node4]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]PythCparser\CKeyword.py
+FileName=$[Project-Path]Project\PythCparser\CParser.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node5]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]PythCparser\ConfigureCType.py
+FileName=$[Project-Path]Project\PythCparser\CScope.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node6]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]PythCparser\CParser.py
+FileName=$[Project-Path]Project\PythCparser\CSymbol.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node7]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]PythCparser\CScope.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCExpression.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node8]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]PythCparser\CSymbol.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCInterpreter_CExpression.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node9]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCExpression.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCInterpreter_CKeyword.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node10]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCInterpreter_CExpression.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCInterpreter_CKeywordForCombined.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node11]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCInterpreter_CKeyword.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCInterpreter_CKeywordForFunction.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node12]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCInterpreter_CKeywordForCombined.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCKeyword_define.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node13]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCInterpreter_CKeywordForFunction.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCKeyword_do_while.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node14]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCKeyword_define.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCKeyword_enum.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node15]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCKeyword_do_while.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCKeyword_for_loop.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node16]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCKeyword_enum.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCKeyword_if_else.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node17]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCKeyword_for_loop.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCKeyword_struct.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node18]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCKeyword_if_else.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCKeyword_switch_case.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node19]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCKeyword_struct.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCKeyword_type.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node20]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCKeyword_switch_case.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCKeyword_typedef.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node21]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCKeyword_type.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCparser.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node22]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCKeyword_typedef.py
+FileName=$[Project-Path]Project\Test Driven Development\TestCScope.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node23]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCparser.py
+FileName=$[Project-Path]Project\Test Driven Development\TestTokenizer.py
 
 [Project\ChildNodes\Node0\ChildNodes\Node24]
 ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestCScope.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node25]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]Test Driven Development\TestTokenizer.py
-
-[Project\ChildNodes\Node0\ChildNodes\Node26]
-ClassName=TProjectFileNode
-FileName=$[Project-Path]PythCparser\Tokenizer.py
+FileName=$[Project-Path]Project\PythCparser\Tokenizer.py
 
 [Project\ChildNodes\Node0\ChildNodes]
-Count=27
+Count=25
 
 [Project\ChildNodes\Node1]
 ClassName=TProjectRunConfiguationsNode
