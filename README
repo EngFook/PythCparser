@@ -1,0 +1,26 @@
+PythCparser is used to parse C language program into Abstract Syntax Tree (AST) 
+and implement an interpreter to execute the program statements on the AST by programmed in Python. 
+C language expressions were tokenized by using Pratt Parser which is Top Down Operator Precedence 
+algorithm to build the AST. AST of C language keywords were designed according to their behavior. 
+Once the AST formed, the program statements were able to interpret.
+
+PythCparser has ability:
+1)	To parse any Expression included function definition, declaration and call:
+
+                            expression = 2 + 3 * 4 ;
+                            value = 2 * 3 + value / 3 % 7 << 1 ;
+                            function ( a , b ) ;
+                            -- value +  - 1 ;
+
+2)	To parse keywords:
+                            if else
+                            while
+                            do while
+                            for loop
+                            switch case
+                            #define
+                            struct
+                            enum
+                            typedef 
+                            size of primitive types : e.g. int , double & float
+
