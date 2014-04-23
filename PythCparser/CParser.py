@@ -29,9 +29,6 @@ CKeyword.configure_C_Keyword(CExpression)
 CExpression.configure_C_Expression(CKeyword)
 ##"Global Tokenizer."                                                         ##
 global tokenizer
-
-
-
 ##"Refresh the SymbolTable when user defined."                                ##
 def clearParseEnviroment():
     temp1=[]
